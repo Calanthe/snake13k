@@ -14,7 +14,7 @@ Snake.FOOD;
 
 //this is to change the FPS of the requestAnimationFrame
 var stop = false;
-var fps = 20, fpsInterval, startTime, now, then, elapsed;
+var fps = 16, fpsInterval, startTime, now, then, elapsed;
 
 Snake.Game = {};
 
@@ -98,7 +98,7 @@ Snake.Game.initFood = function() {
 
 Snake.Game.paint = function() {
 	//paint the board
-	Snake.CTX.fillStyle = 'white';
+	Snake.CTX.fillStyle = '#1E1E1E';
 	Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 
 	//take the snake's head
@@ -132,17 +132,17 @@ Snake.Game.paint = function() {
 	//paint the walls
 	for (var i = 0; i < Snake.WALLS.length; i++) {
 		var cell = Snake.WALLS[i];
-		this.paintCell(cell.x, cell.y, '#803A3D');
+		this.paintCell(cell.x, cell.y, '#49A6DA');
 	}
 
 	//paint the snake
 	for (var i = 0; i < Snake.SNAKE.length; i++) {
 		var cell = Snake.SNAKE[i];
-		this.paintCell(cell.x, cell.y, 'blue');
+		this.paintCell(cell.x, cell.y, '#52DF4A');
 	}
 
 	//paint the food
-	this.paintCell(Snake.FOOD.x, Snake.FOOD.y, '#36C337');
+	this.paintCell(Snake.FOOD.x, Snake.FOOD.y, '#E2413A');
 
 	this.ui.paintScore();
 };
@@ -150,7 +150,7 @@ Snake.Game.paint = function() {
 Snake.Game.paintCell = function(x, y, colour) {
 	Snake.CTX.fillStyle = colour;
 	Snake.CTX.fillRect(x * Snake.CELL, y * Snake.CELL, Snake.CELL, Snake.CELL);
-	Snake.CTX.strokeStyle = 'white';
+	Snake.CTX.strokeStyle = '#393939';
 	Snake.CTX.strokeRect(x * Snake.CELL, y * Snake.CELL, Snake.CELL, Snake.CELL);
 };
 
