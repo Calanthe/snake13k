@@ -90,9 +90,15 @@ Snake.Game.initWalls = function() {
 };
 
 Snake.Game.initFood = function() {
-	Snake.FOOD = { //TODO make sure that its not generated on the wall, this should't work as a glitch
-		x: Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL),
-		y: Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL),
+	//make sure that the food is not generated on the wall
+	do {
+		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
+		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
+	} while (this.findWallIndex(randomX, randomY) !== -1);
+
+	Snake.FOOD = {
+		x: randomX,
+		y: randomY,
 		isGlitched: false
 	};
 };
@@ -138,7 +144,7 @@ Snake.Game.paint = function() {
 			var oppositeWall = this.getOppositeWall(Snake.FOOD.x, Snake.FOOD.y);
 			if (oppositeWall) { //TODO move this to the WALLS module
 				var wallIndex = this.findWallIndex(oppositeWall.x, oppositeWall.y);
-				if (wallIndex) {
+				if (wallIndex !== -1) {
 					Snake.WALLS.splice(wallIndex, 1);
 				}
 			}
@@ -192,6 +198,8 @@ Snake.Game.findWallIndex = function(x, y) {
 			return i;
 		}
 	}
+
+	return -1;
 };
 
 Snake.Game.addAGlitch = function() {
@@ -232,13 +240,6 @@ Snake.Game.paintCell = function(x, y, colour) {
 };
 
 Snake.Game.checkCollision = function(snakeX, snakeY) {
-	/*if (snakeX == -1 //if we will get out of the board
-		|| snakeX == Snake.CANVASW / Snake.CELL
-		|| snakeY == -1
-		|| snakeY == Snake.CANVASH / Snake.CELL
-		|| this.ifCollided(snakeX, snakeY, Snake.SNAKE) //if the snake will collide with itself
-		|| this.ifCollided(snakeX, snakeY, Snake.WALLS)) { //if the snake will collide with walls*/
-
 	if (this.ifCollided(snakeX, snakeY, Snake.SNAKE) //if the snake will collide with itself
 		|| this.ifCollided(snakeX, snakeY, Snake.WALLS)) { //if the snake will collide with walls
 
