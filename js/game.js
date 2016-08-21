@@ -11,6 +11,10 @@ Snake.SCORE;
 Snake.ANIMATIONID;
 Snake.FOOD;
 
+//this is to change the FPS of the requestAnimationFrame
+var stop = false;
+var fps = 5, fpsInterval, startTime, now, then, elapsed;
+
 Snake.Game = {};
 
 Snake.Game.init = function() {
@@ -30,6 +34,10 @@ Snake.Game.init = function() {
 	//initialise the food
 	this.initFood();
 
+	fpsInterval = 1000 / fps;
+	then = Date.now();
+	startTime = then;
+
 	//start the game
 	this.start();
 };
@@ -37,7 +45,19 @@ Snake.Game.init = function() {
 Snake.Game.start = function() {
 	//paint the board in the game loop
 	Snake.ANIMATIONID = window.requestAnimationFrame(this.start.bind(this)); //may change this to setInterval because right now I cant alter the speed of the snake
-	this.paint();
+
+	now = Date.now();
+	elapsed = now - then;
+
+	// if enough time has elapsed, draw the next frame
+	if (elapsed > fpsInterval) {
+
+		// Get ready for next frame by setting then=now, but also adjust for your
+		// specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+		then = now - (elapsed % fpsInterval);
+
+		this.paint();
+	}
 };
 
 Snake.Game.initSnake = function() {
