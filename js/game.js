@@ -4,8 +4,9 @@ Snake.CANVAS = document.getElementById('c');
 Snake.CTX = Snake.CANVAS.getContext('2d');
 Snake.CANVASW = 600;
 Snake.CANVASH = 600;
-Snake.CELL = 10; //dimension of one cell
+Snake.CELL = 20; //dimension of one cell
 Snake.SNAKE = [];
+Snake.WALLS = [];
 Snake.DIRECTION = 'right';
 Snake.SCORE;
 Snake.ANIMATIONID;
@@ -13,7 +14,7 @@ Snake.FOOD;
 
 //this is to change the FPS of the requestAnimationFrame
 var stop = false;
-var fps = 5, fpsInterval, startTime, now, then, elapsed;
+var fps = 20, fpsInterval, startTime, now, then, elapsed;
 
 Snake.Game = {};
 
@@ -33,6 +34,9 @@ Snake.Game.init = function() {
 
 	//initialise the food
 	this.initFood();
+
+	//initialise the walls
+	this.initWalls();
 
 	fpsInterval = 1000 / fps;
 	then = Date.now();
@@ -63,7 +67,25 @@ Snake.Game.start = function() {
 Snake.Game.initSnake = function() {
 	for(var i = 0; i < 5; i++) { //let's start with snake length 5
 		//horizontal snake starting from the top left
-		Snake.SNAKE.push({x: i, y: 0});
+		Snake.SNAKE.push({x: i, y: 1});
+	}
+};
+
+Snake.Game.initWalls = function() {
+	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
+		Snake.WALLS.push({x: i, y: 0});
+	}
+
+	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
+		Snake.WALLS.push({x: i, y: Snake.CANVASH / Snake.CELL - 1});
+	}
+
+	for (var i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
+		Snake.WALLS.push({x: 0, y: i});
+	}
+
+	for (var i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
+		Snake.WALLS.push({x: Snake.CANVASW / Snake.CELL - 1, y: i});
 	}
 };
 
@@ -78,8 +100,6 @@ Snake.Game.paint = function() {
 	//paint the board
 	Snake.CTX.fillStyle = 'white';
 	Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
-	Snake.CTX.strokeStyle = 'black';
-	Snake.CTX.strokeRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 
 	//take the snake's head
 	var snakeX = Snake.SNAKE[Snake.SNAKE.length - 1].x;
@@ -109,21 +129,28 @@ Snake.Game.paint = function() {
 
 	Snake.SNAKE.push(tail); //puts back the tail as the new head
 
+	//paint the walls
+	for (var i = 0; i < Snake.WALLS.length; i++) {
+		var cell = Snake.WALLS[i];
+		this.paintCell(cell.x, cell.y, '#803A3D');
+	}
+
+	//paint the snake
 	for (var i = 0; i < Snake.SNAKE.length; i++) {
 		var cell = Snake.SNAKE[i];
-		this.paintCell(cell.x, cell.y);
+		this.paintCell(cell.x, cell.y, 'blue');
 	}
 
 	//paint the food
-	this.paintCell(Snake.FOOD.x, Snake.FOOD.y);
+	this.paintCell(Snake.FOOD.x, Snake.FOOD.y, '#36C337');
 
 	this.ui.paintScore();
 };
 
-Snake.Game.paintCell = function(x, y) {
-	Snake.CTX.fillStyle = "blue";
+Snake.Game.paintCell = function(x, y, colour) {
+	Snake.CTX.fillStyle = colour;
 	Snake.CTX.fillRect(x * Snake.CELL, y * Snake.CELL, Snake.CELL, Snake.CELL);
-	Snake.CTX.strokeStyle = "white";
+	Snake.CTX.strokeStyle = 'white';
 	Snake.CTX.strokeRect(x * Snake.CELL, y * Snake.CELL, Snake.CELL, Snake.CELL);
 };
 
@@ -132,7 +159,8 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		|| snakeX == Snake.CANVASW / Snake.CELL
 		|| snakeY == -1
 		|| snakeY == Snake.CANVASH / Snake.CELL
-		|| this.ifHitItself(snakeX, snakeY)) { //if the snake will collide with itself
+		|| this.ifCollided(snakeX, snakeY, Snake.SNAKE) //if the snake will collide with itself
+		|| this.ifCollided(snakeX, snakeY, Snake.WALLS)) { //if the snake will collide with walls
 
 		//stop the game loop
 		window.cancelAnimationFrame(Snake.ANIMATIONID);
@@ -142,10 +170,10 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 	}
 };
 
-Snake.Game.ifHitItself = function(x, y) {
-	//check if the given x/y coordinates exist in the snake array
-	for (var i = 0; i < Snake.SNAKE.length; i++) {
-		if (Snake.SNAKE[i].x == x && Snake.SNAKE[i].y == y) {
+Snake.Game.ifCollided = function(x, y, array) {
+	//check if the x/y coordinates exist in the given array
+	for (var i = 0; i < array.length; i++) {
+		if (array[i].x == x && array[i].y == y) {
 			return true;
 		}
 	}

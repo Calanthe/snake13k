@@ -16,7 +16,7 @@ Snake.UI.updateScore = function() {
 
 Snake.UI.paintScore = function() {
 	var scoreText = "Score: " + Snake.SCORE;
-	Snake.CTX.fillText(scoreText, 5, Snake.CANVASH - 5);
+	Snake.CTX.fillText(scoreText, 30, Snake.CANVASH - 30);
 };
 
 Snake.UI.refreshScore = function() {
