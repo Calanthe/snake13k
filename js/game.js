@@ -7,10 +7,14 @@ Snake.CANVASH = 600;
 Snake.CELL = 20; //dimension of one cell
 Snake.SNAKE = [];
 Snake.WALLS = [];
+Snake.BUGGYBUG;
 Snake.DIRECTION = 'right';
 Snake.SCORE;
 Snake.ANIMATIONID;
 Snake.FOOD;
+Snake.ISGLITCHED = false;
+Snake.PREVLENGTH = null;
+Snake.NEWHEAD;
 
 //this is to change the FPS of the requestAnimationFrame
 var stop = false;
@@ -75,7 +79,8 @@ Snake.Game.initSnake = function() {
 };
 
 Snake.Game.initFood = function() {
-	//make sure that the food is not generated on the wall
+	//make sure that the food is not generated on the wall - no sure if this work
+	//TODO make sure that it's not generated on buggy bug or snake
 	do {
 		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
 		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
@@ -85,6 +90,20 @@ Snake.Game.initFood = function() {
 		x: randomX,
 		y: randomY,
 		isGlitched: false
+	};
+};
+
+Snake.Game.initBuggyBug = function() { //TODO this and above functions are almost the same - make one
+	//make sure that the buggy bug is not generated on the wall
+	//TODO make sure that it's not generated on food or snake
+	do {
+		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
+		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
+	} while (this.walls.findWallIndex(randomX, randomY) !== -1);
+
+	Snake.BUGGYBUG = {
+		x: randomX,
+		y: randomY
 	};
 };
 
@@ -102,7 +121,7 @@ Snake.Game.paint = function() {
 	else if (Snake.DIRECTION == 'up') snakeY--;
 	else if (Snake.DIRECTION == 'down') snakeY++;
 
-	//if we will get out of the board - when there is no walls
+	//if we will get out of the board
 	if (snakeX === -1) {
 		snakeX = Snake.CANVASW / Snake.CELL - 1;
 	} else if (snakeX === Snake.CANVASW / Snake.CELL) {
@@ -115,27 +134,42 @@ Snake.Game.paint = function() {
 
 	this.checkCollision(snakeX, snakeY);
 
-	//if the new head position matches the food,
-	//create a new head instead of moving the tail
+	//if the new head position matches the food
 	if (snakeX == Snake.FOOD.x && snakeY == Snake.FOOD.y) {
-		var tail = {
-			x: snakeX,
-			y: snakeY
-		};
-		this.ui.updateScore();
+		this.ui.updateScore(1);
 		if (Snake.FOOD.isGlitched) {
-			//TODO change directions for a few seconds?
-			//remove the opposite piece of the wall so the snake can come through
+			//glitch also the opposite piece of the wall so the snake can come through
 			this.walls.glitchOppositeWall();
 		}
+		Snake.ISGLITCHED = false; //fix the snake so the tail can move
 		this.addAGlitch(); //sasasasasa
+	} else if (Snake.BUGGYBUG && snakeX == Snake.BUGGYBUG.x && snakeY == Snake.BUGGYBUG.y) {
+		//if the head position matches the buggy bug,
+		//add extra points and enlarge snake without moving the tail
+		//until normal food is eaten
+		this.ui.updateScore(10);
+		Snake.ISGLITCHED = true;
+		Snake.BUGGYBUG = {};
+		Snake.PREVLENGTH = Snake.SNAKE.length; //need to remember the actual length of the snake
 	} else {
-		var tail = Snake.SNAKE.shift(); //take the first cell - tail
-		tail.x = snakeX;
-		tail.y = snakeY;
+		if (!Snake.ISGLITCHED) {
+			Snake.SNAKE.shift(); //remove the first cell - tail
+			//make it smaller in every paint
+			//TODO make the snake smaller immediately?
+			if (Snake.PREVLENGTH && Snake.SNAKE.length > Snake.PREVLENGTH) {
+				Snake.SNAKE.shift();
+			} else if (Snake.PREVLENGTH && Snake.SNAKE.length === Snake.PREVLENGTH) { //no need to make it smaller anymore
+				Snake.PREVLENGTH = null;
+			}
+		}
 	}
 
-	Snake.SNAKE.push(tail); //puts back the tail as the new head
+	Snake.NEWHEAD = {
+		x: snakeX,
+		y: snakeY
+	};
+
+	Snake.SNAKE.push(Snake.NEWHEAD);
 
 	//paint the walls
 	this.walls.paintWalls();
@@ -149,16 +183,23 @@ Snake.Game.paint = function() {
 	//paint the food
 	this.paintCell(Snake.FOOD.x, Snake.FOOD.y, '#E2413A');
 
+	//paint the buggy bug
+	if (Snake.BUGGYBUG) {
+		this.paintCell(Snake.BUGGYBUG.x, Snake.BUGGYBUG.y, 'white');
+	}
+
 	this.ui.paintScore();
 };
 
 Snake.Game.addAGlitch = function() {
-	var randomGlitchType = Math.round(Math.random() * (3 - 1) + 1); //1 - snake, 2 - wall, 3 - food
-
+	var randomGlitchType = Math.round(Math.random() * (3 - 1) + 1); //1 - buggy bug, 2 - wall, 3 - food
+	
 	console.log('randomGlitchType: ', randomGlitchType);
 
-	//TODO 1 - if snake is glitched - this has to be added to the WALLS array, I dont want to alter the SNAKE array
-	if (randomGlitchType === 2) { //place a glitched wall piece in a random place
+	if (randomGlitchType === 1 && !Snake.BUGGYBUG) {
+		this.initBuggyBug();
+		this.initFood();
+	} else if (randomGlitchType === 2) { //place a glitched wall piece in a random place
 		this.walls.addSingleWall(Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL), Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL));
 		//TODO the glitched wall should be at least one space from the border of the board
 		this.initFood();
