@@ -27,14 +27,14 @@ Snake.Walls.paintWalls = function() {
 	}
 };
 
-Snake.Walls.removeOppositeWall = function() {
+Snake.Walls.glitchOppositeWall = function() {
 	var oppositeWall = this.getOppositeWall(Snake.FOOD.x, Snake.FOOD.y);
 	if (oppositeWall) {
 		console.log('oppositeWall: ', oppositeWall);
 		var wallIndex = this.findWallIndex(oppositeWall.x, oppositeWall.y);
 		console.log('wallIndex: ', wallIndex);
 		if (wallIndex !== -1) {
-			this.removeSingleWall(wallIndex);
+			this.glitchSingleWall(wallIndex);
 		}
 	}
 };
@@ -68,10 +68,15 @@ Snake.Walls.getOppositeWall = function(foodX, foodY) {
 Snake.Walls.addSingleWall = function(x, y) {
 	Snake.WALLS.push({
 		x: x,
-		y: y
+		y: y,
+		isGlitched: false
 	});
 };
 
 Snake.Walls.removeSingleWall = function(i) {
 	Snake.WALLS.splice(i, 1);
+};
+
+Snake.Walls.glitchSingleWall = function(i) {
+	Snake.WALLS[i].isGlitched = true;
 };

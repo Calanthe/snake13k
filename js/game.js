@@ -126,7 +126,7 @@ Snake.Game.paint = function() {
 		if (Snake.FOOD.isGlitched) {
 			//TODO change directions for a few seconds?
 			//remove the opposite piece of the wall so the snake can come through
-			this.walls.removeOppositeWall();
+			this.walls.glitchOppositeWall();
 		}
 		this.addAGlitch(); //sasasasasa
 	} else {
@@ -153,8 +153,8 @@ Snake.Game.paint = function() {
 };
 
 Snake.Game.addAGlitch = function() {
-	var randomGlitchType = Math.round(Math.random() * (3 - 1) + 1); //1 - snake, 2 - wall, 3 - food, 4 - no glitch?
-
+	var randomGlitchType = Math.round(Math.random() * (3 - 1) + 1); //1 - snake, 2 - wall, 3 - food
+	
 	console.log('randomGlitchType: ', randomGlitchType);
 
 	//TODO 1 - if snake is glitched - this has to be added to the WALLS array, I dont want to alter the SNAKE array
@@ -188,23 +188,25 @@ Snake.Game.paintCell = function(x, y, colour) {
 };
 
 Snake.Game.checkCollision = function(snakeX, snakeY) {
-	if (this.ifCollided(snakeX, snakeY, Snake.SNAKE) //if the snake will collide with itself
-		|| this.ifCollided(snakeX, snakeY, Snake.WALLS)) { //if the snake will collide with the walls
+	if (this.ifCollided(snakeX, snakeY, 'SNAKE') //if the snake will collide with itself
+		|| this.ifCollided(snakeX, snakeY, 'WALLS')) { //if the snake will collide with the walls
 
 		//stop the game loop
 		window.cancelAnimationFrame(Snake.ANIMATIONID);
-		console.log('ifCollidedWithItself', this.ifCollided(snakeX, snakeY, Snake.SNAKE));
-		console.log('ifCollidedWithWalls', this.ifCollided(snakeX, snakeY, Snake.WALLS));
+		console.log('ifCollidedWithItself', this.ifCollided(snakeX, snakeY, 'SNAKE'));
+		console.log('ifCollidedWithWalls', this.ifCollided(snakeX, snakeY, 'WALLS'));
 		this.ui.showEndGame();
 		//restart game ?
 		//this.Game.init();
 	}
 };
 
-Snake.Game.ifCollided = function(x, y, array) {
+Snake.Game.ifCollided = function(x, y, arrayType) {
+	var array = Snake[arrayType]; //either Snake.SNAKE or Snake.WALLS
 	//check if the x/y coordinates exist in the given array
 	for (var i = 0; i < array.length; i++) {
-		if (array[i].x == x && array[i].y == y) {
+		if (array[i].x === x && array[i].y === y
+			&& (arrayType === 'SNAKE' || (arrayType === 'WALLS' && !array[i].isGlitched))) {
 			return true;
 		}
 	}
