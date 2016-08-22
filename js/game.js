@@ -154,7 +154,7 @@ Snake.Game.paint = function() {
 
 Snake.Game.addAGlitch = function() {
 	var randomGlitchType = Math.round(Math.random() * (3 - 1) + 1); //1 - snake, 2 - wall, 3 - food
-	
+
 	console.log('randomGlitchType: ', randomGlitchType);
 
 	//TODO 1 - if snake is glitched - this has to be added to the WALLS array, I dont want to alter the SNAKE array
