@@ -21,6 +21,9 @@ Snake.Game = {};
 Snake.Game.init = function() {
 	this.ui = Snake.UI;
 	this.controls = Snake.Controls;
+	this.walls = Snake.Walls;
+
+	Snake.Walls.Game = this;
 
 	this.ui.initScore();
 
@@ -36,7 +39,7 @@ Snake.Game.init = function() {
 	this.initFood();
 
 	//initialise the walls
-	this.initWalls();
+	this.walls.initWalls();
 
 	fpsInterval = 1000 / fps;
 	then = Date.now();
@@ -47,7 +50,6 @@ Snake.Game.init = function() {
 };
 
 Snake.Game.start = function() {
-	//paint the board in the game loop
 	Snake.ANIMATIONID = window.requestAnimationFrame(this.start.bind(this)); //may change this to setInterval because right now I cant alter the speed of the snake
 
 	now = Date.now();
@@ -60,6 +62,7 @@ Snake.Game.start = function() {
 		// specified fpsInterval not being a multiple of RAF's interval (16.7ms)
 		then = now - (elapsed % fpsInterval);
 
+		//paint the board in the game loop
 		this.paint();
 	}
 };
@@ -71,30 +74,12 @@ Snake.Game.initSnake = function() {
 	}
 };
 
-Snake.Game.initWalls = function() {
-	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
-		Snake.WALLS.push({x: i, y: 0});
-	}
-
-	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
-		Snake.WALLS.push({x: i, y: Snake.CANVASH / Snake.CELL - 1});
-	}
-
-	for (var i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
-		Snake.WALLS.push({x: 0, y: i});
-	}
-
-	for (var i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
-		Snake.WALLS.push({x: Snake.CANVASW / Snake.CELL - 1, y: i});
-	}
-};
-
 Snake.Game.initFood = function() {
 	//make sure that the food is not generated on the wall
 	do {
 		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
 		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
-	} while (this.findWallIndex(randomX, randomY) !== -1);
+	} while (this.walls.findWallIndex(randomX, randomY) !== -1);
 
 	Snake.FOOD = {
 		x: randomX,
@@ -105,7 +90,7 @@ Snake.Game.initFood = function() {
 
 Snake.Game.paint = function() {
 	//paint the board
-	Snake.CTX.fillStyle = '#1E1E1E';
+	Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
 	Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 
 	//take the snake's head
@@ -141,13 +126,7 @@ Snake.Game.paint = function() {
 		if (Snake.FOOD.isGlitched) {
 			//TODO change directions for a few seconds?
 			//remove the opposite piece of the wall so the snake can come through
-			var oppositeWall = this.getOppositeWall(Snake.FOOD.x, Snake.FOOD.y);
-			if (oppositeWall) { //TODO move this to the WALLS module
-				var wallIndex = this.findWallIndex(oppositeWall.x, oppositeWall.y);
-				if (wallIndex !== -1) {
-					Snake.WALLS.splice(wallIndex, 1);
-				}
-			}
+			this.walls.removeOppositeWall();
 		}
 		this.addAGlitch(); //sasasasasa
 	} else {
@@ -159,10 +138,7 @@ Snake.Game.paint = function() {
 	Snake.SNAKE.push(tail); //puts back the tail as the new head
 
 	//paint the walls
-	for (var i = 0; i < Snake.WALLS.length; i++) {
-		var cell = Snake.WALLS[i];
-		this.paintCell(cell.x, cell.y, '#49A6DA');
-	}
+	this.walls.paintWalls();
 
 	//paint the snake
 	for (var i = 0; i < Snake.SNAKE.length; i++) {
@@ -176,32 +152,6 @@ Snake.Game.paint = function() {
 	this.ui.paintScore();
 };
 
-Snake.Game.getOppositeWall = function(foodX, foodY) {
-	var oppositeWall;
-
-	if (foodY === 0) { //if it's at the top wall
-		oppositeWall = {x: foodX, y: Snake.CANVASH / Snake.CELL - 1};
-	} else if (foodY === Snake.CANVASH / Snake.CELL - 1) { //if it's at the bottom wall
-		oppositeWall = {x: foodX, y: 0};
-	} else if (foodX === 0) { //if on the left wall
-		oppositeWall = {x: Snake.CANVASW / Snake.CELL - 1, y: foodY};
-	} else if (foodX === Snake.CANVASW / Snake.CELL - 1) { //if on the right wall
-		oppositeWall = {x: 0, y: foodY};
-	}
-
-	return oppositeWall;
-};
-
-Snake.Game.findWallIndex = function(x, y) {
-	for (var i = 0; i < Snake.WALLS.length; i++) {
-		if (Snake.WALLS[i].x === x && Snake.WALLS[i].y === y) {
-			return i;
-		}
-	}
-
-	return -1;
-};
-
 Snake.Game.addAGlitch = function() {
 	var randomGlitchType = Math.round(Math.random() * (3 - 1) + 1); //1 - snake, 2 - wall, 3 - food, 4 - no glitch?
 
@@ -209,21 +159,19 @@ Snake.Game.addAGlitch = function() {
 
 	//TODO 1 - if snake is glitched - this has to be added to the WALLS array, I dont want to alter the SNAKE array
 	if (randomGlitchType === 2) { //place a glitched wall piece in a random place
-		Snake.WALLS.push({ //TODO move this to the WALLS module
-			x: Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL),
-			y: Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL)
-		});
+		this.walls.addSingleWall(Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL), Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL));
+		//TODO the glitched wall should be at least one space from the border of the board
 		this.initFood();
 	} else if (randomGlitchType === 3) { //food generated somewhere on the wall - if there is any wall left
 		if (Snake.WALLS.length) {
 			var randomWall = Math.round(Math.random() * (Snake.WALLS.length - 1) / 1); //TODO it cant be in the corner or next to the margin walls
-			Snake.FOOD = { //TODO move this to the FOOD module
+			Snake.FOOD = {
 				x: Snake.WALLS[randomWall - 1].x,
 				y: Snake.WALLS[randomWall - 1].y,
 				isGlitched: true
 			};
 			//now remove that piece from the WALLS array, otherwise snake will crash
-			Snake.WALLS.splice(randomWall - 1, 1);
+			this.walls.removeSingleWall(randomWall - 1);
 		} else {
 			this.initFood();
 		}
@@ -241,10 +189,12 @@ Snake.Game.paintCell = function(x, y, colour) {
 
 Snake.Game.checkCollision = function(snakeX, snakeY) {
 	if (this.ifCollided(snakeX, snakeY, Snake.SNAKE) //if the snake will collide with itself
-		|| this.ifCollided(snakeX, snakeY, Snake.WALLS)) { //if the snake will collide with walls
+		|| this.ifCollided(snakeX, snakeY, Snake.WALLS)) { //if the snake will collide with the walls
 
 		//stop the game loop
 		window.cancelAnimationFrame(Snake.ANIMATIONID);
+		console.log('ifCollidedWithItself', this.ifCollided(snakeX, snakeY, Snake.SNAKE));
+		console.log('ifCollidedWithWalls', this.ifCollided(snakeX, snakeY, Snake.WALLS));
 		this.ui.showEndGame();
 		//restart game ?
 		//this.Game.init();
