@@ -35,7 +35,7 @@ Snake.Game.init = function() {
 	//TODO show menu or info
 	//this.ui.showMainMenu();
 
-	this.controls.addListeners(this.moveSnake);
+	this.controls.addListeners(this.onInput);
 
 	//initialise the snake
 	this.initSnake();
@@ -121,6 +121,11 @@ Snake.Game.update = function() {
 	//take the snake's head
 	var snakeX = Snake.SNAKE[Snake.SNAKE.length - 1].x;
 	var snakeY = Snake.SNAKE[Snake.SNAKE.length - 1].y;
+
+	// update direction based on input
+	if (Snake.NEWDIRECTION) {
+		Snake.DIRECTION = Snake.NEWDIRECTION;
+	}
 
 	if (Snake.DIRECTION == 'right') snakeX++;
 	else if (Snake.DIRECTION == 'left') snakeX--;
@@ -266,8 +271,14 @@ Snake.Game.ifCollided = function(x, y, arrayType) {
 	return false;
 };
 
-Snake.Game.moveSnake = function(newDirection) {
-	Snake.DIRECTION = newDirection;
+Snake.Game.onInput = function(newDirection) {
+	// don't accept input with direction oposite to current
+	if ((newDirection == 'right' && Snake.DIRECTION !== 'left') ||
+			(newDirection == 'left' && Snake.DIRECTION !== 'right') ||
+			(newDirection == 'up' && Snake.DIRECTION !== 'down') ||
+			(newDirection == 'down' && Snake.DIRECTION !== 'up')) {
+		Snake.NEWDIRECTION = newDirection;
+	}
 };
 
 Snake.Game.init();
