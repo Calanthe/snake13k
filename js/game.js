@@ -72,7 +72,7 @@ Snake.Game.start = function() {
 		then = now - (elapsed % fpsInterval);
 
 		//paint the board in the game loop
-		this.paint();
+		this.tick();
 	}
 };
 
@@ -112,11 +112,12 @@ Snake.Game.initBuggyBug = function() { //TODO this and above functions are almos
 	};
 };
 
-Snake.Game.paint = function() {
-	//paint the board
-	Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
-	Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
+Snake.Game.tick = function() {
+	this.update();
+	this.paint();
+};
 
+Snake.Game.update = function() {
 	//take the snake's head
 	var snakeX = Snake.SNAKE[Snake.SNAKE.length - 1].x;
 	var snakeY = Snake.SNAKE[Snake.SNAKE.length - 1].y;
@@ -175,6 +176,12 @@ Snake.Game.paint = function() {
 	};
 
 	Snake.SNAKE.push(Snake.NEWHEAD);
+}
+
+Snake.Game.paint = function() {
+	//paint the board
+	Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
+	Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 
 	//paint the walls
 	this.walls.paintWalls();
