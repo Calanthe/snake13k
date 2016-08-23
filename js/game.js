@@ -17,8 +17,9 @@ Snake.PREVLENGTH = null;
 Snake.NEWHEAD;
 
 //this is to change the FPS of the requestAnimationFrame
+// FIXME: global vars
 var stop = false;
-var fps = 16, fpsInterval, startTime, now, then, elapsed;
+var fps, fpsInterval, startTime, now, then, elapsed;
 
 Snake.Game = {};
 
@@ -45,7 +46,6 @@ Snake.Game.init = function() {
 	//initialise the walls
 	this.walls.initWalls();
 
-	fpsInterval = 1000 / fps;
 	then = Date.now();
 	startTime = then;
 
@@ -58,6 +58,11 @@ Snake.Game.start = function() {
 
 	now = Date.now();
 	elapsed = now - then;
+
+	// make speed depend on snake length
+	// TODO: it speeds up a little bit too quickly
+	fps = Snake.PREVLENGTH || Snake.SNAKE.length;
+	fpsInterval = 1000 / fps;
 
 	// if enough time has elapsed, draw the next frame
 	if (elapsed > fpsInterval) {
@@ -193,7 +198,7 @@ Snake.Game.paint = function() {
 
 Snake.Game.addAGlitch = function() {
 	var randomGlitchType = Math.round(Math.random() * (3 - 1) + 1); //1 - buggy bug, 2 - wall, 3 - food
-	
+
 	console.log('randomGlitchType: ', randomGlitchType);
 
 	if (randomGlitchType === 1 && !Snake.BUGGYBUG) {
