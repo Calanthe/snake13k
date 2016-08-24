@@ -2,9 +2,9 @@ var Snake = Snake || {};
 
 Snake.CANVAS = document.getElementById('c');
 Snake.CTX = Snake.CANVAS.getContext('2d');
-Snake.CANVASW = 720;
-Snake.CANVASH = 720;
-Snake.CELL = 24; //dimension of one cell
+Snake.CANVASW = 630;
+Snake.CANVASH = 630;
+Snake.CELL = 21; //dimension of one cell
 Snake.SNAKE = [];
 Snake.WALLS = [];
 Snake.BUGGYBUG;
@@ -188,6 +188,14 @@ Snake.Game.paint = function() {
 	//Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
 	//Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 	Snake.CTX.clearRect(0, 0, Snake.CANVASW, Snake.CANVASH);
+	// paint pixels on whole screen
+	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
+		for (var j = 0; j < Snake.CANVASH / Snake.CELL; j++) {
+			this.paintCell(i, j, 'rgba(0,0,0,0.05)', true);
+		}
+	}
+
+
 	//paint the walls
 	this.walls.paintWalls();
 
@@ -238,7 +246,7 @@ Snake.Game.addAGlitch = function() {
 	}
 };
 
-Snake.Game.paintCell = function(x, y, colour) {
+Snake.Game.paintCell = function(x, y, colour, forcePaint) {
 	// FIXME: decide on one paint mode and use it
 	var mode = document.querySelector('[name=paintMode]:checked').value || 'big';
 
@@ -254,7 +262,7 @@ Snake.Game.paintCell = function(x, y, colour) {
 		for (var i = 0; i < 3; i++) {
 			for (var j = 0; j < 3; j++) {
 				// if paint mode is 'glitched' hide random pixels
-				if (mode === 'small' || Math.random() < 0.99) {
+				if (mode === 'small' || forcePaint || Math.random() < 0.995) {
 					Snake.CTX.fillRect(x * Snake.CELL + 1 + i * (pixelWidth + 2), y * Snake.CELL + 1 + j * (pixelWidth + 2), pixelWidth, pixelWidth);
 				}
 			}

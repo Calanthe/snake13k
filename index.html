@@ -5,12 +5,19 @@
 	<title>Sn@Ķ€</title>
 	<style>
 		body { background: rgb(150,200,50); }
-		canvas { display: block; margin: 0 auto; }
+		canvas {
+			display: block;
+			margin: 0 auto;
+			box-shadow:
+			inset 0px 50px 100px rgba(255,255,255,0.2),
+			inset 0px -50px 100px rgba(255,255,255,0.2),
+						0px 0px 100px 20px rgba(255,255,255,0.2);
+		}
 		#controls { text-align: center; }
 	</style>
 </head>
 <body>
-<canvas id="c" width="720" height="720"></canvas>
+<canvas id="c" width="630" height="630"></canvas>
 
 <div id="controls">
 	<label><input type=radio name=paintMode value="big">Big pixels</label>
