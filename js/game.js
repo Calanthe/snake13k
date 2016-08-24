@@ -62,6 +62,9 @@ Snake.Game.start = function() {
 	// make speed depend on snake length
 	// TODO: it speeds up a little bit too quickly
 	fps = Snake.PREVLENGTH || Snake.SNAKE.length;
+	// speed up in tron mode
+	if (Snake.ISGLITCHED) fps += 2;
+
 	fpsInterval = 1000 / fps;
 
 	// if enough time has elapsed, draw the next frame
@@ -188,10 +191,12 @@ Snake.Game.paint = function() {
 	//Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
 	//Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 	Snake.CTX.clearRect(0, 0, Snake.CANVASW, Snake.CANVASH);
+
 	// paint pixels on whole screen
 	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
 		for (var j = 0; j < Snake.CANVASH / Snake.CELL; j++) {
-			this.paintCell(i, j, 'rgba(0,0,0,0.05)', true);
+			// TODO: special tron backgroun? bigger squares? only blue lines?
+			this.paintCell(i, j, Snake.ISGLITCHED ? 'rgba(0,0,255,0.2)' : 'rgba(0,0,0,0.05)', true, Snake.ISGLITCHED);
 		}
 	}
 
@@ -264,8 +269,7 @@ Snake.Game.paintCell = function(x, y, colour, forcePaint) {
 	if (mode === 'big') {
 		Snake.CTX.fillRect(x * Snake.CELL + 1, y * Snake.CELL + 1, pixelWidth, pixelWidth);
 	}
-  else {
-
+	else {
 		for (var i = 0; i < 3; i++) {
 			for (var j = 0; j < 3; j++) {
 				// if paint mode is 'glitched' hide random pixels
