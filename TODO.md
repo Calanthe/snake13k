@@ -1,7 +1,7 @@
 ### GLITCHES:
 
 - [ ] make glitches visible (background colour change or blinking/overflowing pixels)
-  - [ ] backround colour change
+  - [ ] background colour change
   - [ ] blinking pixels
   - [ ] overflowing pixels of glitches snake
 - [ ] random walls shouldn't have totally random positions
@@ -13,7 +13,7 @@
 - [ ] apple on a wall glitch improvements
   - [ ] if regular apple gets randomly on wall it works as glitches (no special glitched apples)
   - [ ] snake that eats apple on a wall can then move through walls or eat walls until eating normal apple
-  - [ ] if apples are to rare on walls maybe make probability a bit bigger (still random)
+  - [ ] if apples are too rare on walls maybe make probability a bit bigger (still random)
 - [ ] fix issue with apple in the corner
   - [ ] don't show apples there
   - [ ] or let snake go through walls
@@ -21,7 +21,7 @@
   - [ ] or if allow snake going outside and around the border? (still needs a hole to get out)
   - [ ] or make a 'joystick' point that lets snake move apples (?)
   - [ ] or hide walls in tron mode and let eat that apple in tron mode (after eating that apple still need to move through walls not to kill itself)
-- [ ] don't render apple on snake or buggy buggy
+- [x] don't render apple on snake or buggy bug
   - [ ] or make apple on snake eatable with some nice bonus or another glitch? ;)
 
 
@@ -45,6 +45,7 @@
   - [ ] move scores on top of the board
   - [ ] draw pixel numbers for score
   - [ ] countdown for bugs
+  - [ ] make it possible to get there with a snake?
 - [ ] mobile controls
 
 

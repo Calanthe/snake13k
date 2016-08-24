@@ -87,12 +87,14 @@ Snake.Game.initSnake = function() {
 };
 
 Snake.Game.initFood = function() {
-	//make sure that the food is not generated on the wall - no sure if this work
-	//TODO make sure that it's not generated on buggy bug or snake
+	//make sure that the food is not generated on the wall -> no sure if this work
+	//neither on buggy bug nor snake
 	do {
 		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
 		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
-	} while (this.walls.findWallIndex(randomX, randomY) !== -1);
+	} while (this.walls.findWallIndex(randomX, randomY) !== -1
+		|| (Snake.BUGGYBUG && randomX === Snake.BUGGYBUG.x && randomY === Snake.BUGGYBUG.y)
+		|| Snake.Game.ifCollided(randomX, randomY, 'SNAKE'));
 
 	Snake.FOOD = {
 		x: randomX,
@@ -103,11 +105,13 @@ Snake.Game.initFood = function() {
 
 Snake.Game.initBuggyBug = function() { //TODO this and above functions are almost the same - make one
 	//make sure that the buggy bug is not generated on the wall
-	//TODO make sure that it's not generated on food or snake
+	//neither on food nor snake
 	do {
 		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
 		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
-	} while (this.walls.findWallIndex(randomX, randomY) !== -1);
+	} while (this.walls.findWallIndex(randomX, randomY) !== -1
+		|| (Snake.FOOD && randomX === Snake.FOOD.x && randomY === Snake.FOOD.y)
+		|| Snake.Game.ifCollided(randomX, randomY, 'SNAKE'));
 
 	Snake.BUGGYBUG = {
 		x: randomX,
@@ -188,14 +192,14 @@ Snake.Game.update = function() {
 
 Snake.Game.paint = function() {
 	//paint the board
-	//Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
+	//Snake.CTX.fillStyle = '#1E1E1E'; //TODO move colour variables to the UI module
 	//Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 	Snake.CTX.clearRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 
 	// paint pixels on whole screen
 	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
 		for (var j = 0; j < Snake.CANVASH / Snake.CELL; j++) {
-			// TODO: special tron backgroun? bigger squares? only blue lines?
+			// TODO: special tron background? bigger squares? only blue lines?
 			this.paintCell(i, j, Snake.ISGLITCHED ? 'rgba(0,0,255,0.2)' : 'rgba(0,0,0,0.05)', true, Snake.ISGLITCHED);
 		}
 	}
