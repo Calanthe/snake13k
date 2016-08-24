@@ -2,9 +2,9 @@ var Snake = Snake || {};
 
 Snake.CANVAS = document.getElementById('c');
 Snake.CTX = Snake.CANVAS.getContext('2d');
-Snake.CANVASW = 600;
-Snake.CANVASH = 600;
-Snake.CELL = 20; //dimension of one cell
+Snake.CANVASW = 720;
+Snake.CANVASH = 720;
+Snake.CELL = 24; //dimension of one cell
 Snake.SNAKE = [];
 Snake.WALLS = [];
 Snake.BUGGYBUG;
@@ -185,24 +185,24 @@ Snake.Game.update = function() {
 
 Snake.Game.paint = function() {
 	//paint the board
-	Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
-	Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
-
+	//Snake.CTX.fillStyle = '#1E1E1E'; //move colour variables to the UI module
+	//Snake.CTX.fillRect(0, 0, Snake.CANVASW, Snake.CANVASH);
+	Snake.CTX.clearRect(0, 0, Snake.CANVASW, Snake.CANVASH);
 	//paint the walls
 	this.walls.paintWalls();
 
 	//paint the snake
 	for (var i = 0; i < Snake.SNAKE.length; i++) {
 		var cell = Snake.SNAKE[i];
-		this.paintCell(cell.x, cell.y, '#52DF4A');
+		this.paintCell(cell.x, cell.y, 'rgba(0,0,0,0.7)');
 	}
 
 	//paint the food
-	this.paintCell(Snake.FOOD.x, Snake.FOOD.y, '#E2413A');
+	this.paintCell(Snake.FOOD.x, Snake.FOOD.y, 'rgba(255,0,0,0.7)');
 
 	//paint the buggy bug
 	if (Snake.BUGGYBUG) {
-		this.paintCell(Snake.BUGGYBUG.x, Snake.BUGGYBUG.y, 'white');
+		this.paintCell(Snake.BUGGYBUG.x, Snake.BUGGYBUG.y, 'rgba(255,255,255,0.7)');
 	}
 
 	this.ui.paintScore();
@@ -239,10 +239,27 @@ Snake.Game.addAGlitch = function() {
 };
 
 Snake.Game.paintCell = function(x, y, colour) {
+	// FIXME: decide on one paint mode and use it
+	var mode = document.querySelector('[name=paintMode]:checked').value || 'big';
+
+	var pixelWidth = mode === 'big' ? Snake.CELL - 2 : (Snake.CELL - 6) / 3;
+
 	Snake.CTX.fillStyle = colour;
-	Snake.CTX.fillRect(x * Snake.CELL, y * Snake.CELL, Snake.CELL, Snake.CELL);
-	Snake.CTX.strokeStyle = '#393939';
-	Snake.CTX.strokeRect(x * Snake.CELL, y * Snake.CELL, Snake.CELL, Snake.CELL);
+
+	if (mode === 'big') {
+		Snake.CTX.fillRect(x * Snake.CELL + 1, y * Snake.CELL + 1, pixelWidth, pixelWidth);
+	}
+  else {
+
+		for (var i = 0; i < 3; i++) {
+			for (var j = 0; j < 3; j++) {
+				// if paint mode is 'glitched' hide random pixels
+				if (mode === 'small' || Math.random() < 0.99) {
+					Snake.CTX.fillRect(x * Snake.CELL + 1 + i * (pixelWidth + 2), y * Snake.CELL + 1 + j * (pixelWidth + 2), pixelWidth, pixelWidth);
+				}
+			}
+		}
+	}
 };
 
 Snake.Game.checkCollision = function(snakeX, snakeY) {

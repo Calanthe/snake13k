@@ -3,9 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Sn@Ķ€</title>
+	<style>
+		body { background: rgb(150,200,50); }
+		canvas { display: block; margin: 0 auto; }
+		#controls { text-align: center; }
+	</style>
 </head>
 <body>
-<canvas id="c" width="600" height="600"></canvas>
+<canvas id="c" width="720" height="720"></canvas>
+
+<div id="controls">
+	<label><input type=radio name=paintMode value="big">Big pixels</label>
+	<label><input type=radio name=paintMode value="small" checked=checked>Small pixels</label>
+	<label><input type=radio name=paintMode value="glitch">Glitched pixels</label>
+	<script>
+	// blur inputs on change to prevent them from hijacking keyboard input
+	document.getElementById('controls').addEventListener('change', function(event){
+		event.target.blur();
+	});
+	</script>
+</div>
+
 <script src="js/controls.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/walls.js"></script>

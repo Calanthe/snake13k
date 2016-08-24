@@ -21,9 +21,10 @@ Snake.Walls.initWalls = function() {
 };
 
 Snake.Walls.paintWalls = function() {
+	// TODO: move to Game.paint (?)
 	for (var i = 0; i < Snake.WALLS.length; i++) {
 		var cell = Snake.WALLS[i];
-		this.Game.paintCell(cell.x, cell.y, '#49A6DA');
+		this.Game.paintCell(cell.x, cell.y, 'rgba(0,0,0,0.7)');
 	}
 };
 
