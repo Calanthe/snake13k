@@ -240,9 +240,8 @@ Snake.Game.addAGlitch = function() {
 	if (randomGlitchType === 1 && !Snake.BUGGYBUG) {
 		this.initBuggyBug();
 		this.initFood();
-	} else if (randomGlitchType === 2) { //place a glitched wall piece in a random place
-		this.walls.addSingleWall(Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL), Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL));
-		//TODO the glitched wall should be at least one space from the border of the board
+	} else if (randomGlitchType === 2) { //place a glitched wall piece after snake's tail
+		this.walls.addSingleWall(Snake.SNAKE[0].x, Snake.SNAKE[0].y);
 		this.initFood();
 	} else if (randomGlitchType === 3) { //food generated somewhere on the wall - if there is any wall left
 		if (Snake.WALLS.length) {

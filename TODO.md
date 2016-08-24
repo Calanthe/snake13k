@@ -6,7 +6,7 @@
   - [ ] overflowing pixels of glitches snake
 - [ ] random walls shouldn't have totally random positions
   - [ ] make them stick to exiting wall
-  - [ ] or make them poop out of snake tail
+  - [x] or make them poop out of snake tail
 - [ ] glitched walls shouldn't show at random moments
   - [ ] show it when apple is eaten in special way (from one side?)
   - [ ] show it when apple on a wall is eaten?
