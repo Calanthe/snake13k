@@ -24,7 +24,7 @@ Snake.Walls.paintWalls = function() {
 	// TODO: move to Game.paint (?)
 	for (var i = 0; i < Snake.WALLS.length; i++) {
 		var cell = Snake.WALLS[i];
-		this.Game.paintCell(cell.x, cell.y, 'rgba(0,0,0,0.7)');
+		this.Game.paintCell(cell.x, cell.y, Snake.ISGLITCHED ? 'yellow' : 'rgba(0,0,0,0.7)');
 	}
 };
 

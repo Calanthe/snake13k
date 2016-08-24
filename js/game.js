@@ -195,6 +195,13 @@ Snake.Game.paint = function() {
 		}
 	}
 
+	// FIXME: quick and dirty tron mode prototype
+	if (Snake.ISGLITCHED) {
+		document.body.className = 'tron'
+	}
+	else {
+		document.body.className = ''
+	}
 
 	//paint the walls
 	this.walls.paintWalls();
@@ -202,7 +209,7 @@ Snake.Game.paint = function() {
 	//paint the snake
 	for (var i = 0; i < Snake.SNAKE.length; i++) {
 		var cell = Snake.SNAKE[i];
-		this.paintCell(cell.x, cell.y, 'rgba(0,0,0,0.7)');
+		this.paintCell(cell.x, cell.y, Snake.ISGLITCHED ? 'cyan' : 'rgba(0,0,0,0.7)');
 	}
 
 	//paint the food
