@@ -22,14 +22,14 @@ Snake.Walls.initWalls = function() {
 
 Snake.Walls.paintWalls = function() {
 	// TODO: move to Game.paint (?)
-	for (var i = 0; i < Snake.WALLS.length; i++) {
-		var cell = Snake.WALLS[i];
-		this.Game.paintCell(cell.x, cell.y, Snake.ISGLITCHED ? 'yellow' : 'rgba(0,0,0,0.7)');
+	for (var i = 0; i < Snake.Game.state.walls.length; i++) {
+		var cell = Snake.Game.state.walls[i];
+		this.Game.paintCell(cell.x, cell.y, Snake.Game.state.isGlitched ? 'yellow' : 'rgba(0,0,0,0.7)');
 	}
 };
 
 Snake.Walls.glitchOppositeWall = function() {
-	var oppositeWall = this.getOppositeWall(Snake.FOOD.x, Snake.FOOD.y);
+	var oppositeWall = this.getOppositeWall(Snake.Game.state.food.x, Snake.Game.state.food.y);
 	if (oppositeWall) {
 		console.log('oppositeWall: ', oppositeWall);
 		var wallIndex = this.findWallIndex(oppositeWall.x, oppositeWall.y);
@@ -41,8 +41,8 @@ Snake.Walls.glitchOppositeWall = function() {
 };
 
 Snake.Walls.findWallIndex = function(x, y) {
-	for (var i = 0; i < Snake.WALLS.length; i++) {
-		if (Snake.WALLS[i].x === x && Snake.WALLS[i].y === y) {
+	for (var i = 0; i < Snake.Game.state.walls.length; i++) {
+		if (Snake.Game.state.walls[i].x === x && Snake.Game.state.walls[i].y === y) {
 			return i;
 		}
 	}
@@ -67,7 +67,7 @@ Snake.Walls.getOppositeWall = function(foodX, foodY) {
 };
 
 Snake.Walls.addSingleWall = function(x, y) {
-	Snake.WALLS.push({
+	Snake.Game.state.walls.push({
 		x: x,
 		y: y,
 		isGlitched: false
@@ -75,9 +75,9 @@ Snake.Walls.addSingleWall = function(x, y) {
 };
 
 Snake.Walls.removeSingleWall = function(i) {
-	Snake.WALLS.splice(i, 1);
+	Snake.Game.state.walls.splice(i, 1);
 };
 
 Snake.Walls.glitchSingleWall = function(i) {
-	Snake.WALLS[i].isGlitched = true;
+	Snake.Game.state.walls[i].isGlitched = true;
 };
