@@ -16,11 +16,11 @@ Snake.UI.updateScore = function(n) {
 };
 
 Snake.UI.paintScore = function() {
-	Snake.CTX.fillStyle = '#ffffff';
+	Snake.Renderer.ctx.fillStyle = '#ffffff';
 	var scoreText = "Score: " + Snake.Game.state.score;
-	Snake.CTX.fillText(scoreText, 30, Snake.CANVASH - 30);
+	Snake.Renderer.ctx.fillText(scoreText, 30, Snake.Renderer.canvasHeight - 30);
 	var lengthText = "Snake length: " + Snake.Game.state.snake.length;
-	Snake.CTX.fillText(lengthText, 80, Snake.CANVASH - 30);
+	Snake.Renderer.ctx.fillText(lengthText, 80, Snake.Renderer.canvasHeight - 30);
 };
 
 Snake.UI.refreshScore = function() {

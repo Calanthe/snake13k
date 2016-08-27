@@ -1,14 +1,14 @@
 var Snake = Snake || {};
 
-Snake.CANVAS = document.getElementById('c');
-Snake.CTX = Snake.CANVAS.getContext('2d');
-Snake.CANVASW = 630;
-Snake.CANVASH = 630;
-Snake.CELL = 21; //dimension of one cell
+Snake.Renderer = {};
 
-//this is to change the FPS of the requestAnimationFrame
-// FIXME: global vars
-var fps, fpsInterval, now, then, elapsed, animationId;
+Snake.Renderer.ctx = document.getElementById('c').getContext('2d');
+Snake.Renderer.canvasWidth = 630;
+Snake.Renderer.canvasHeight = 630;
+Snake.Renderer.cellSize = 21; //dimension of one cell
+
+Snake.Renderer.then = null;
+Snake.Renderer.animationId = null;
 
 Snake.Game = {};
 
@@ -52,32 +52,32 @@ Snake.Game.init = function() {
 	//initialise the walls
 	this.walls.initWalls();
 
-	then = Date.now();
+	Snake.Renderer.then = Date.now();
 
 	//start the game
 	this.start();
 };
 
 Snake.Game.start = function() {
-	animationId = window.requestAnimationFrame(this.start.bind(this)); //may change this to setInterval because right now I cant alter the speed of the snake
+	Snake.Renderer.animationId = window.requestAnimationFrame(this.start.bind(this)); //may change this to setInterval because right now I cant alter the speed of the snake
 
-	now = Date.now();
-	elapsed = now - then;
+	var now = Date.now();
+	var elapsed = now - Snake.Renderer.then;
 
 	// make speed depend on snake length
 	// TODO: it speeds up a little bit too quickly
-	fps = this.state.prevLength || this.state.snake.length;
+	var fps = this.state.prevLength || this.state.snake.length;
 	// speed up in tron mode
 	if (this.state.isGlitched) fps += 2;
 
-	fpsInterval = 1000 / fps;
+	var fpsInterval = 1000 / fps;
 
 	// if enough time has elapsed, draw the next frame
 	if (elapsed > fpsInterval) {
 
 		// Get ready for next frame by setting then=now, but also adjust for your
-		// specified fpsInterval not being a multiple of RAF's interval (16.7ms)
-		then = now - (elapsed % fpsInterval);
+		// specified fpsInterval
+		Snake.Renderer.then = now - (elapsed % fpsInterval);
 
 		//paint the board in the game loop
 		this.tick();
@@ -95,8 +95,8 @@ Snake.Game.initFood = function() {
 	//make sure that the food is not generated on the wall -> no sure if this work
 	//neither on buggy bug nor snake
 	do {
-		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
-		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
+		var randomX = Math.round(Math.random() * (Snake.Renderer.canvasWidth - Snake.Renderer.cellSize) / Snake.Renderer.cellSize);
+		var randomY = Math.round(Math.random() * (Snake.Renderer.canvasHeight - Snake.Renderer.cellSize) / Snake.Renderer.cellSize);
 	} while (this.walls.findWallIndex(randomX, randomY) !== -1
 		|| (this.state.bug && randomX === this.state.bug.x && randomY === this.state.bug.y)
 		|| Snake.Game.ifCollided(randomX, randomY, this.state.snake));
@@ -112,8 +112,8 @@ Snake.Game.initBuggyBug = function() { //TODO this and above functions are almos
 	//make sure that the buggy bug is not generated on the wall
 	//neither on food nor snake
 	do {
-		var randomX = Math.round(Math.random() * (Snake.CANVASW - Snake.CELL) / Snake.CELL);
-		var randomY = Math.round(Math.random() * (Snake.CANVASH - Snake.CELL) / Snake.CELL);
+		var randomX = Math.round(Math.random() * (Snake.Renderer.canvasWidth - Snake.Renderer.cellSize) / Snake.Renderer.cellSize);
+		var randomY = Math.round(Math.random() * (Snake.Renderer.canvasHeight - Snake.Renderer.cellSize) / Snake.Renderer.cellSize);
 	} while (this.walls.findWallIndex(randomX, randomY) !== -1
 		|| (this.state.food && randomX === this.state.food.x && randomY === this.state.food.y)
 		|| Snake.Game.ifCollided(randomX, randomY, this.state.snake));
@@ -146,12 +146,12 @@ Snake.Game.update = function() {
 
 	//if we will get out of the board
 	if (snakeX === -1) {
-		snakeX = Snake.CANVASW / Snake.CELL - 1;
-	} else if (snakeX === Snake.CANVASW / Snake.CELL) {
+		snakeX = Snake.Renderer.canvasWidth / Snake.Renderer.cellSize - 1;
+	} else if (snakeX === Snake.Renderer.canvasWidth / Snake.Renderer.cellSize) {
 		snakeX = 0;
 	} else if (snakeY === -1) {
-		snakeY = Snake.CANVASH / Snake.CELL - 1;
-	} else if (snakeY === Snake.CANVASH / Snake.CELL) {
+		snakeY = Snake.Renderer.canvasHeight / Snake.Renderer.cellSize - 1;
+	} else if (snakeY === Snake.Renderer.canvasHeight / Snake.Renderer.cellSize) {
 		snakeY = 0;
 	}
 
@@ -196,11 +196,11 @@ Snake.Game.update = function() {
 Snake.Game.paint = function() {
 	//paint the board
 	//TODO move colour variables to the UI module
-	Snake.CTX.clearRect(0, 0, Snake.CANVASW, Snake.CANVASH);
+	Snake.Renderer.ctx.clearRect(0, 0, Snake.Renderer.canvasWidth, Snake.Renderer.canvasHeight);
 
 	// paint pixels on whole screen
-	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
-		for (var j = 0; j < Snake.CANVASH / Snake.CELL; j++) {
+	for (var i = 0; i < Snake.Renderer.canvasWidth / Snake.Renderer.cellSize; i++) {
+		for (var j = 0; j < Snake.Renderer.canvasHeight / Snake.Renderer.cellSize; j++) {
 			// TODO: special tron background? bigger squares? only blue lines?
 			this.paintCell(i, j, this.state.isGlitched ? 'rgba(0,0,255,0.2)' : 'rgba(0,0,0,0.05)', true, this.state.isGlitched);
 		}
@@ -267,19 +267,19 @@ Snake.Game.paintCell = function(x, y, colour, forcePaint) {
 	// FIXME: decide on one paint mode and use it
 	var mode = document.querySelector('[name=paintMode]:checked').value || 'big';
 
-	var pixelWidth = mode === 'big' ? Snake.CELL - 2 : (Snake.CELL - 6) / 3;
+	var pixelWidth = mode === 'big' ? Snake.Renderer.cellSize - 2 : (Snake.Renderer.cellSize - 6) / 3;
 
-	Snake.CTX.fillStyle = colour;
+	Snake.Renderer.ctx.fillStyle = colour;
 
 	if (mode === 'big') {
-		Snake.CTX.fillRect(x * Snake.CELL + 1, y * Snake.CELL + 1, pixelWidth, pixelWidth);
+		Snake.Renderer.ctx.fillRect(x * Snake.Renderer.cellSize + 1, y * Snake.Renderer.cellSize + 1, pixelWidth, pixelWidth);
 	}
 	else {
 		for (var i = 0; i < 3; i++) {
 			for (var j = 0; j < 3; j++) {
 				// if paint mode is 'glitched' hide random pixels
 				if (mode === 'small' || forcePaint || Math.random() < 0.995) {
-					Snake.CTX.fillRect(x * Snake.CELL + 1 + i * (pixelWidth + 2), y * Snake.CELL + 1 + j * (pixelWidth + 2), pixelWidth, pixelWidth);
+					Snake.Renderer.ctx.fillRect(x * Snake.Renderer.cellSize + 1 + i * (pixelWidth + 2), y * Snake.Renderer.cellSize + 1 + j * (pixelWidth + 2), pixelWidth, pixelWidth);
 				}
 			}
 		}
@@ -291,7 +291,7 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		|| this.ifCollided(snakeX, snakeY, this.state.walls)) { //if the snake will collide with the walls
 
 		//stop the game loop
-		window.cancelAnimationFrame(animationId);
+		window.cancelAnimationFrame(Snake.Renderer.animationId);
 		console.log('ifCollidedWithItself', this.ifCollided(snakeX, snakeY, this.state.snake));
 		console.log('ifCollidedWithWalls', this.ifCollided(snakeX, snakeY, this.state.walls));
 		this.ui.showEndGame();
