@@ -18,8 +18,7 @@ Snake.NEWHEAD;
 
 //this is to change the FPS of the requestAnimationFrame
 // FIXME: global vars
-var stop = false;
-var fps, fpsInterval, startTime, now, then, elapsed;
+var fps, fpsInterval, now, then, elapsed;
 
 Snake.Game = {};
 
@@ -47,7 +46,6 @@ Snake.Game.init = function() {
 	this.walls.initWalls();
 
 	then = Date.now();
-	startTime = then;
 
 	//start the game
 	this.start();
@@ -188,7 +186,7 @@ Snake.Game.update = function() {
 	};
 
 	Snake.SNAKE.push(Snake.NEWHEAD);
-}
+};
 
 Snake.Game.paint = function() {
 	//paint the board
@@ -206,17 +204,17 @@ Snake.Game.paint = function() {
 
 	// FIXME: quick and dirty tron mode prototype
 	if (Snake.ISGLITCHED) {
-		document.body.className = 'tron'
+		document.body.className = 'tron';
 	}
 	else {
-		document.body.className = ''
+		document.body.className = '';
 	}
 
 	//paint the walls
 	this.walls.paintWalls();
 
 	//paint the snake
-	for (var i = 0; i < Snake.SNAKE.length; i++) {
+	for (i = 0; i < Snake.SNAKE.length; i++) {
 		var cell = Snake.SNAKE[i];
 		this.paintCell(cell.x, cell.y, Snake.ISGLITCHED ? 'cyan' : 'rgba(0,0,0,0.7)');
 	}

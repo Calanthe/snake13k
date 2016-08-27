@@ -7,15 +7,15 @@ Snake.Walls.initWalls = function() {
 		this.addSingleWall(i, 0);
 	}
 
-	for (var i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
+	for (i = 0; i < Snake.CANVASW / Snake.CELL; i++) {
 		this.addSingleWall(i, Snake.CANVASH / Snake.CELL - 1);
 	}
 
-	for (var i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
+	for (i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
 		this.addSingleWall(0, i);
 	}
 
-	for (var i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
+	for (i = 0; i < Snake.CANVASH / Snake.CELL; i++) {
 		this.addSingleWall(Snake.CANVASW / Snake.CELL - 1, i);
 	}
 };
