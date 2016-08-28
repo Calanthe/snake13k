@@ -32,12 +32,8 @@ Snake.Game.init = function() {
 	this.ui = Snake.UI;
 	this.controls = Snake.Controls;
 	this.walls = Snake.Walls;
-	this.renderer = Snake.Renderer;
 
-	this.renderer.init(this.state);
-
-	// TODO: move score to state
-	this.ui.initScore();
+	this.ui.init(this.state);
 
 	//TODO show menu or info
 	//this.ui.showMainMenu();
@@ -127,8 +123,8 @@ Snake.Game.initBuggyBug = function() { //TODO this and above functions are almos
 
 Snake.Game.tick = function() {
 	this.update();
-	this.renderer.paint(this.state);
-	this.ui.paintScore();
+	this.ui.paintBoard(this.state);
+	this.ui.paintScore(this.state);
 };
 
 Snake.Game.update = function() {
@@ -161,7 +157,7 @@ Snake.Game.update = function() {
 
 	//if the new head position matches the food
 	if (snakeX == this.state.food.x && snakeY == this.state.food.y) {
-		this.ui.updateScore(1);
+		this.state.score += 1;
 		if (this.state.food.isGlitched) {
 			//glitch also the opposite piece of the wall so the snake can come through
 			this.walls.glitchOppositeWall();
@@ -172,7 +168,7 @@ Snake.Game.update = function() {
 		//if the head position matches the buggy bug,
 		//add extra points and enlarge snake without moving the tail
 		//until normal food is eaten
-		this.ui.updateScore(10);
+		this.state.score += 10;
 		this.state.isGlitched = true;
 		this.state.bug = {};
 		this.state.prevLength = this.state.snake.length; //need to remember the actual length of the snake
