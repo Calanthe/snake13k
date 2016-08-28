@@ -2,34 +2,27 @@ var Snake = Snake || {};
 
 Snake.Walls = {};
 
-Snake.Walls.initWalls = function() {
-	for (var i = 0; i < Snake.Renderer.canvasWidth / Snake.Renderer.cellSize; i++) {
+Snake.Walls.initWalls = function(state) {
+	for (var i = 0; i < state.boardWidth; i++) {
 		this.addSingleWall(i, 0);
 	}
 
-	for (i = 0; i < Snake.Renderer.canvasWidth / Snake.Renderer.cellSize; i++) {
-		this.addSingleWall(i, Snake.Renderer.canvasHeight / Snake.Renderer.cellSize - 1);
+	for (i = 0; i < state.boardWidth; i++) {
+		this.addSingleWall(i, state.boardHeight - 1);
 	}
 
-	for (i = 0; i < Snake.Renderer.canvasHeight / Snake.Renderer.cellSize; i++) {
+	for (i = 0; i < state.boardHeight; i++) {
 		this.addSingleWall(0, i);
 	}
 
-	for (i = 0; i < Snake.Renderer.canvasHeight / Snake.Renderer.cellSize; i++) {
-		this.addSingleWall(Snake.Renderer.canvasWidth / Snake.Renderer.cellSize - 1, i);
-	}
-};
-
-Snake.Walls.paintWalls = function() {
-	// TODO: move to Game.paint (?)
-	for (var i = 0; i < Snake.Game.state.walls.length; i++) {
-		var cell = Snake.Game.state.walls[i];
-		this.Game.paintCell(cell.x, cell.y, Snake.Game.state.isGlitched ? 'yellow' : 'rgba(0,0,0,0.7)');
+	for (i = 0; i < state.boardHeight; i++) {
+		this.addSingleWall(state.boardWidth - 1, i);
 	}
 };
 
 Snake.Walls.glitchOppositeWall = function() {
-	var oppositeWall = this.getOppositeWall(Snake.Game.state.food.x, Snake.Game.state.food.y);
+	var food = Snake.Game.state.food;
+	var oppositeWall = this.getOppositeWall(food.x, food.y);
 	if (oppositeWall) {
 		console.log('oppositeWall: ', oppositeWall);
 		var wallIndex = this.findWallIndex(oppositeWall.x, oppositeWall.y);
@@ -51,15 +44,16 @@ Snake.Walls.findWallIndex = function(x, y) {
 };
 
 Snake.Walls.getOppositeWall = function(foodX, foodY) {
+	var state = Snake.Game.state;
 	var oppositeWall;
 
 	if (foodY === 0) { //if it's at the top wall
-		oppositeWall = {x: foodX, y: Snake.Renderer.canvasHeight / Snake.Renderer.cellSize - 1};
-	} else if (foodY === Snake.Renderer.canvasHeight / Snake.Renderer.cellSize - 1) { //if it's at the bottom wall
+		oppositeWall = {x: foodX, y: state.boardHeight - 1};
+	} else if (foodY === state.boardHeight - 1) { //if it's at the bottom wall
 		oppositeWall = {x: foodX, y: 0};
 	} else if (foodX === 0) { //if on the left wall
-		oppositeWall = {x: Snake.Renderer.canvasWidth / Snake.Renderer.cellSize - 1, y: foodY};
-	} else if (foodX === Snake.Renderer.canvasWidth / Snake.Renderer.cellSize - 1) { //if on the right wall
+		oppositeWall = {x: state.boardWidth - 1, y: foodY};
+	} else if (foodX === state.boardWidth - 1) { //if on the right wall
 		oppositeWall = {x: 0, y: foodY};
 	}
 
