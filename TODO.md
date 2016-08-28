@@ -52,8 +52,8 @@
 ### CODE:
 
 - [ ] TODOs from code
-- [ ] move paint walls together with rest of paint (maybe separate Renderer object?)
-- [ ] refactor game state objects to keep them together
+- [x] move paint walls together with rest of paint (maybe separate Renderer object?)
+- [x] refactor game state objects to keep them together
 - [ ] clean up the code of tron mode and other quick and dirty prototyping
 - [x] store board size instead of computing canvas / cell
 
