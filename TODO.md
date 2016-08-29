@@ -30,7 +30,7 @@
 - [ ] eating 'buggy bug' gives 10 points at once and after growing snake by 10 elements it enters tron mode and gives one point every step
 - [ ] hide walls in tron mode (this will help eating apples on corners), but buggy(tron) bug has to show up randomly even if apple is not eaten
 - [ ] give a tron bug some tron bike icon
-
+- [ ] **BUG** there is possibly a bug that if snake eats apples during tron mode (or while it's getting smaller) they will not add to its length (they don't change prevLength)
 
 ### GAME FEATURES:
 
@@ -52,9 +52,10 @@
 ### CODE:
 
 - [ ] TODOs from code
-- [ ] move paint walls together with rest of paint (maybe separate Renderer object?)
-- [ ] refactor game state objects to keep them together
+- [x] move paint walls together with rest of paint (maybe separate Renderer object?)
+- [x] refactor game state objects to keep them together
 - [ ] clean up the code of tron mode and other quick and dirty prototyping
+- [x] store board size instead of computing canvas / cell
 
 ### BUILD:
 
