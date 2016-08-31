@@ -157,28 +157,25 @@ Snake.UI.paintBoard = function(state) {
 		document.body.className = '';
 	}
 
-	//paint the walls
-	for (i = 0; i < state.walls.length; i++) {
-		var cell = state.walls[i];
-		this.paintCell(cell.x, cell.y, state.isGlitched ? 'yellow' : 'rgba(0,0,0,0.7)', false, this.cells.snakeHeadLeft);
+	//paint the board
+	for (var i = 0; i < state.boardWidth; i++) {
+		for (var j = 0; j < state.boardHeight; j++) {
+			var cell = state.board[i][j];
+			if (cell.type === 'wall') {
+				this.paintCell(i, j, state.isGlitched ? 'yellow' : 'rgba(0,0,0,0.7)', false, this.cells.snakeHeadLeft);
+			} else if (cell.type === 'food') {
+				this.paintCell(i, j, state.isGlitched ? 'red' : 'rgba(0,0,0,0.7)', false, this.cells.food);
+			} else if (cell.type === 'buggybug') {
+				this.paintCell(i, j, state.isGlitched ? 'white' : 'rgba(0,0,0,0.7)', false, this.cells.bug);
+			}
+		}
 	}
 
 	//paint the snake
-
 	for (i = 0; i < state.snake.length; i++) {
 		cell = state.snake[i];
-		var cellPixels = this.cells.snake[ this.getSnakeCellType(i, state.snake)];
-		console.log(this.getSnakeCellType(i, state.snake), cellPixels);
+		var cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
 		this.paintCell(cell.x, cell.y, state.isGlitched ? 'cyan' : 'rgba(0,0,0,0.7)', false, cellPixels);
-	}
-
-
-	//paint the food
-	this.paintCell(state.food.x, state.food.y, state.isGlitched ? 'red' : 'rgba(0,0,0,0.7)', false, this.cells.food);
-
-	//paint the buggy bug
-	if (state.bug) {
-		this.paintCell(state.bug.x, state.bug.y, state.isGlitched ? 'white' : 'rgba(0,0,0,0.7)', false, this.cells.bug);
 	}
 };
 
