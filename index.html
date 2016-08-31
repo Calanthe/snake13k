@@ -4,8 +4,31 @@
 	<meta charset="UTF-8">
 	<title>Sn@Ķ€</title>
 	<style>
-		body { background: rgb(150,200,50); transition: 200ms }
-		body.tron { background: black }
+		/* TODO: clean it up! */
+		body { background: #333; overflow: hidden; }
+		.screen {
+			margin: 50px auto;
+			position: relative;
+			border-radius: 75px;
+			padding: 20px 25px 25px 20px; width: 600px; background: rgb(150,200,50); transition: 200ms }
+		body.tron .screen { background: black }
+		.screen:after, .screen:before {
+			content: '';
+			overflow: hidden;
+			position: absolute; left: 0; top: 0;
+			width: 100%; height: 100%;
+			background: inherit;
+			border-radius: 100%;
+			-webkit-transform: scaleX(4) scaleY(1.02);
+			transform: scaleX(4) scaleY(1.02);
+			clip: rect(0, 385px, 650px, 260px);
+			z-index: -1;
+		}
+		.screen:after {
+			-webkit-transform: scaleY(4) scaleX(1.02) rotate(90deg);
+			transform: scaleY(4) scaleX(1.02) rotate(90deg);
+		}
+
 		canvas {
 			display: block;
 			margin: 0 auto;
@@ -18,7 +41,9 @@
 	</style>
 </head>
 <body>
-<canvas id="c"></canvas>
+	<div class="screen">
+		<canvas id="c"></canvas>
+	</div>
 
 <div id="controls">
 	<label><input type=radio name=paintMode value="big">Big pixels</label>

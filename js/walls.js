@@ -11,11 +11,11 @@ Snake.Walls.initWalls = function(state) {
 		this.addSingleWall(i, state.boardHeight - 1);
 	}
 
-	for (i = 0; i < state.boardHeight; i++) {
+	for (i = 1; i < state.boardHeight - 1; i++) {
 		this.addSingleWall(0, i);
 	}
 
-	for (i = 0; i < state.boardHeight; i++) {
+	for (i = 1; i < state.boardHeight - 1; i++) {
 		this.addSingleWall(state.boardWidth - 1, i);
 	}
 };
