@@ -76,6 +76,7 @@ Snake.UI.init = function(state) {
 	this.canvas.height = state.boardHeight * this.cellSize;
 
 	Snake.UI.initSnakeCells();
+	Snake.UI.initWallCells();
 	console.log(this.cells.snake);
 };
 
@@ -117,6 +118,27 @@ Snake.UI.initSnakeCells = function() {
 	};
 },
 
+Snake.UI.initWallCells = function() {
+	this.cells.wall = {
+		// horizontal wall
+		"__LR": this.cells.snakeHorizontal,
+		"__L_": this.cells.snakeHorizontal,
+		"___R": this.cells.snakeHeadLeft,
+		"____": this.cells.snakeHeadLeft,
+
+		// vertical wall
+		"TB__": this.cells.snakeVertical,
+		"T___": this.cells.snakeVertical,
+		"_B__": this.cells.snakeHeadLeft,
+
+		// corners
+		"_B_R": this.cells.snakeHeadLeft,
+		"_BL_": this.cells.snakeHorizontal,
+		"T_L_": this.cells.snakeTopLeft,
+		"T__R": this.cells.snakeVertical
+
+	};
+};
 
 Snake.UI.showMainMenu = function() {
 	// TODO
@@ -142,10 +164,10 @@ Snake.UI.paintBoard = function(state) {
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 	// paint pixels on whole screen
-	for (var i = 0; i < state.boardWidth; i++) {
-		for (var j = 0; j < state.boardHeight; j++) {
+	for (var x = 0; x < state.boardWidth; x++) {
+		for (var y = 0; y < state.boardHeight; y++) {
 			// TODO: special tron background? bigger squares? only blue lines?
-			this.paintCell(i, j, state.isGlitched ? 'rgba(0,0,255,0.2)' : 'rgba(0,0,0,0.05)', true, this.cells.full);
+			this.paintCell(x, y, state.isGlitched ? 'rgba(0,0,255,0.2)' : 'rgba(0,0,0,0.05)', true, this.cells.full);
 		}
 	}
 
@@ -158,23 +180,24 @@ Snake.UI.paintBoard = function(state) {
 	}
 
 	//paint the board
-	for (var i = 0; i < state.boardWidth; i++) {
-		for (var j = 0; j < state.boardHeight; j++) {
-			var cell = state.board[i][j];
+	for (x = 0; x < state.boardWidth; x++) {
+		for (y = 0; y < state.boardHeight; y++) {
+			var cell = state.board[x][y];
 			if (cell.type === 'wall') {
-				this.paintCell(i, j, state.isGlitched ? 'yellow' : 'rgba(0,0,0,0.7)', false, this.cells.snakeHeadLeft);
+				var cellPixels = this.cells.wall[this.getWallCellType(x, y, state.board)];
+				this.paintCell(x, y, state.isGlitched ? 'yellow' : 'rgba(0,0,0,0.7)', false, cellPixels);
 			} else if (cell.type === 'food') {
-				this.paintCell(i, j, state.isGlitched ? 'red' : 'rgba(0,0,0,0.7)', false, this.cells.food);
+				this.paintCell(x, y, state.isGlitched ? 'red' : 'rgba(0,0,0,0.7)', false, this.cells.food);
 			} else if (cell.type === 'buggybug') {
-				this.paintCell(i, j, state.isGlitched ? 'white' : 'rgba(0,0,0,0.7)', false, this.cells.bug);
+				this.paintCell(x, y, state.isGlitched ? 'white' : 'rgba(0,0,0,0.7)', false, this.cells.bug);
 			}
 		}
 	}
 
 	//paint the snake
-	for (i = 0; i < state.snake.length; i++) {
+	for (var i = 0; i < state.snake.length; i++) {
 		cell = state.snake[i];
-		var cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
+		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
 		this.paintCell(cell.x, cell.y, state.isGlitched ? 'cyan' : 'rgba(0,0,0,0.7)', false, cellPixels);
 	}
 };
@@ -211,6 +234,15 @@ Snake.UI.getSnakeCellType = function(i, snake) {
 	}
 
 	return type;
+};
+
+Snake.UI.getWallCellType = function(x, y, board) {
+	var top =    board[x]   && board[x][y-1] && board[x][y-1].type === 'wall';
+	var bottom = board[x]   && board[x][y+1] && board[x][y+1].type === 'wall';
+	var left =   board[x-1] && board[x-1][y] && board[x-1][y].type === 'wall';
+	var right =  board[x+1] && board[x+1][y] && board[x+1][y].type === 'wall';
+
+	return (top ? 'T' : '_') + (bottom ? 'B' : '_') + (left ? 'L' : '_') + (right ? 'R' : '_');
 };
 
 Snake.UI.paintCell = function(x, y, colour, forcePaint, cellPixels) {
