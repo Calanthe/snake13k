@@ -96,14 +96,18 @@ Snake.Game.initFood = function() {
 		var randomX = this.random(0, this.state.boardWidth - 1);
 		var randomY = this.random(0, this.state.boardHeight - 1);
 		console.log('new food: ', randomX, randomY);
-	} while (this.state.board[randomX][randomY].type === 'wall'
-		|| (this.state.board[randomX][randomY].type === 'buggybug')
+	} while ((this.state.board[randomX][randomY].type === 'buggybug')
 		|| Snake.Game.ifCollidedWithSnake(randomX, randomY));
+
+	// if food happens to be on wall glitch opposite wall so snake can go through
+	if (this.state.board[randomX][randomY].type === 'wall') {
+		this.board.glitchOppositeWall(randomX, randomY);
+	}
 
 	Snake.Game.state.board[randomX][randomY] = {
 		type: 'food',
 		isGlitched: false
-	}
+	};
 };
 
 Snake.Game.initBuggyBug = function() { //TODO this and above functions are almost the same - make one
@@ -119,7 +123,7 @@ Snake.Game.initBuggyBug = function() { //TODO this and above functions are almos
 	Snake.Game.state.board[randomX][randomY] = {
 		type: 'buggybug',
 		isGlitched: false
-	}
+	};
 };
 
 Snake.Game.tick = function() {
@@ -159,10 +163,6 @@ Snake.Game.update = function() {
 	//if the new head position matches the food
 	if (this.state.board[snakeX][snakeY].type === 'food') {
 		this.state.score += 1;
-		if (this.state.board[snakeX][snakeY].isGlitched) {
-			//glitch also the opposite piece of the wall so the snake can come through
-			this.board.glitchOppositeWall();
-		}
 		this.state.isGlitched = false; //fix the snake so the tail can move
 		this.state.board[snakeX][snakeY].type = '';
 		this.addAGlitch(); //sasasasasa
@@ -194,28 +194,21 @@ Snake.Game.update = function() {
 };
 
 Snake.Game.ifBuggyBugOnBoard = function() {
-	return false;
+	return this.state.board.filter(function(row) {
+		// filter only rows that contain buggy bug
+		return row.filter(function(cell) {
+			// filter only cells that are buggybug
+			return cell.type === 'buggybug';
+		}).length;
+	}).length;
 };
 
 Snake.Game.addAGlitch = function() {
 	var randomGlitchType = this.random(1, 3); //1 - buggy bug, 2 - food, 3 - TODO glitched board?
 
-	if (randomGlitchType === 1 && !this.ifBuggyBugOnBoard()) { //TODO implement this.ifBuggyBugOnBoard()
+	if (randomGlitchType === 1 && !this.ifBuggyBugOnBoard()) {
 		this.initBuggyBug();
 		this.initFood();
-	/*} else if (randomGlitchType === 2) { //TODO food generated somewhere on the wall - if there is any wall left
-		if (this.state.walls.length) {
-			var randomWall = Math.round(Math.random() * (this.state.walls.length - 1) / 1); //TODO it cant be in the corner, use this.random() method
-			this.state.food = {
-				x: this.state.walls[randomWall - 1].x,
-				y: this.state.walls[randomWall - 1].y,
-				isGlitched: true
-			};
-			//now remove that piece from the WALLS array, otherwise snake will crash
-			this.walls.removeSingleWall(randomWall - 1);
-		} else {
-			this.initFood();
-		} */
 	} else {
 		this.initFood();
 	}
@@ -223,7 +216,7 @@ Snake.Game.addAGlitch = function() {
 
 Snake.Game.checkCollision = function(snakeX, snakeY) {
 	if (this.ifCollidedWithSnake(snakeX, snakeY) //if the snake will collide with itself
-		|| this.state.board[snakeX][snakeY].type === 'wall') { //if the snake will collide with the walls
+		|| (this.state.board[snakeX][snakeY].type === 'wall' && !this.state.board[snakeX][snakeY].isGlitched)) { //if the snake will collide with the walls
 
 		//stop the game loop
 		window.cancelAnimationFrame(this.vars.animationId);
@@ -237,12 +230,9 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 
 Snake.Game.ifCollidedWithSnake = function(x, y) {
 	//check if the x/y coordinates exist in the snake array
-	for (var i = 0; i < this.state.snake; i++) {
-		if (array[i].x === x && array[i].y === y) {
-			return true;
-		}
-	}
-	return false;
+	return this.state.snake.filter(function(cell) {
+		return cell.x === x && cell.y == y;
+	}).length;
 };
 
 Snake.Game.onInput = function(newDirection) {
