@@ -77,8 +77,8 @@ Snake.Game.start = function() {
 
 Snake.Game.initSnake = function() {
 	for(var i = 0; i < 5; i++) { //let's start with snake length 5
-		//horizontal snake starting from the top left
-		this.state.snake.push({x: i, y: 1});
+		//horizontal snake in the middle
+		this.state.snake.push({x: ~~(this.state.boardWidth / 2) + i - 5, y: ~~(this.state.boardHeight / 2)});
 	}
 };
 

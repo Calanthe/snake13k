@@ -2,23 +2,37 @@ var Snake = Snake || {};
 
 Snake.Board = {};
 
+Snake.Board.wallOffsetTop = 1;
+Snake.Board.wallOffsetBottom = 1;
+Snake.Board.wallOffsetLeft = 1;
+Snake.Board.wallOffsetRight = 1;
+
 Snake.Board.initBoard = function(state) {
-	var type;
+	var wallOffsetTop = Snake.Board.wallOffsetTop;
+	var wallOffsetBottom = Snake.Board.wallOffsetBottom;
+	var wallOffsetLeft = Snake.Board.wallOffsetLeft;
+	var wallOffsetRight = Snake.Board.wallOffsetRight;
 
 	for (var x = 0; x < state.boardWidth; x++) {
-		Snake.Game.state.board[x] = new Array(state.boardHeightidth);
+		Snake.Game.state.board[x] = new Array(state.boardWidth);
 		for (var y = 0; y < state.boardHeight; y++) {
-			if (x === 0 || y === 0 || x === state.boardWidth - 1 || y === state.boardHeight - 1) {
-				type = 'wall';
-			} else {
-				type = '';
-			}
 			Snake.Game.state.board[x][y] = {
-				type: type,
+				type: null,
 				isGlitched: false
 			};
 		}
 	}
+
+	for (x = wallOffsetLeft; x < state.boardWidth - wallOffsetRight; x++) {
+		Snake.Game.state.board[x][wallOffsetTop].type = 'wall';
+		Snake.Game.state.board[x][state.boardHeight - wallOffsetBottom - 1].type = 'wall';
+	}
+
+	for (y = wallOffsetTop; y < state.boardHeight - wallOffsetBottom; y++) {
+		Snake.Game.state.board[wallOffsetLeft][y].type = 'wall';
+		Snake.Game.state.board[state.boardWidth - wallOffsetRight - 1][y].type = 'wall';
+	}
+
 };
 
 Snake.Board.glitchOppositeWall = function(x, y) {
@@ -33,24 +47,29 @@ Snake.Board.getOppositeWallCoords = function(x, y) {
 	var state = Snake.Game.state;
 	var coords;
 
-	if (y === 0) { //if it's at the top wall
+	var wallOffsetTop = Snake.Board.wallOffsetTop;
+	var wallOffsetBottom = Snake.Board.wallOffsetBottom;
+	var wallOffsetLeft = Snake.Board.wallOffsetLeft;
+	var wallOffsetRight = Snake.Board.wallOffsetRight;
+
+	if (y === wallOffsetTop) { //if it's at the top wall
 		coords = {
 			x: x,
-			y: state.boardHeight - 1
+			y: state.boardHeight - wallOffsetBottom - 1
 		};
-	} else if (y === state.boardHeight - 1) { //if it's at the bottom wall
+	} else if (y === state.boardHeight - wallOffsetBottom - 1) { //if it's at the bottom wall
 		coords = {
 			x: x,
-			y: 0
+			y: wallOffsetTop
 		};
-	} else if (x === 0) { //if on the left wall
+	} else if (x === wallOffsetLeft) { //if on the left wall
 		coords = {
-			x: state.boardWidth - 1,
+			x: state.boardWidth - wallOffsetRight - 1,
 			y: y
 		};
-	} else if (x === state.boardWidth - 1) { //if on the right wall
+	} else if (x === state.boardWidth - wallOffsetRight - 1) { //if on the right wall
 		coords = {
-			x: 0,
+			x: wallOffsetLeft,
 			y: y
 		};
 	}
