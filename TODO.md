@@ -28,6 +28,7 @@
 - [ ] eating 'buggy bug' gives 10 points at once and after growing snake by 10 elements it enters tron mode and gives one point every step
 - [ ] hide walls in tron mode?
 - [ ] give a tron bug some tron bike icon
+- [ ] **BUG** eating second buggybug when snake is long (getting smaller) adds a lot to speed
 - [ ] **BUG** there is possibly a bug that if snake eats apples during tron mode (or while it's getting smaller) they will not add to its length (they don't change prevLength)
 
 ### GAME FEATURES:
