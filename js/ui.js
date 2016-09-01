@@ -6,7 +6,6 @@ Snake.UI = {
 
 	cellSize: 20, //dimension of one cell
 
-
 	cells: {
 		full: [
 			[1,1,1,1],
@@ -68,7 +67,19 @@ Snake.UI = {
 			[0,1,1,1],
 			[0,1,1,1]
 		]
-	}
+	},
+
+	//colors
+	boardCellTron: 'rgba(0,0,255,0.2)',
+	boardCell: 'rgba(0,0,255,0.05)',
+	wallTron: 'yellow',
+	foodTron: 'red',
+	bugTron: 'white',
+	wall: 'rgba(0,0,0,0.7)',
+	food: 'rgba(0,0,0,0.7)',
+	bug: 'rgba(0,0,0,0.7)',
+	snakeTron: 'cyan',
+	snake: 'rgba(0,0,0,0.7)'
 };
 
 Snake.UI.init = function(state) {
@@ -76,7 +87,6 @@ Snake.UI.init = function(state) {
 	this.canvas.height = state.boardHeight * this.cellSize;
 
 	Snake.UI.initSnakeCells();
-	console.log(this.cells.snake);
 };
 
 Snake.UI.initSnakeCells = function() {
@@ -138,35 +148,29 @@ Snake.UI.showEndGame = function() {
 
 Snake.UI.paintBoard = function(state) {
 	//paint the board
-	//TODO move colour variables to the UI module
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 	// paint pixels on whole screen
 	for (var i = 0; i < state.boardWidth; i++) {
 		for (var j = 0; j < state.boardHeight; j++) {
 			// TODO: special tron background? bigger squares? only blue lines?
-			this.paintCell(i, j, state.isGlitched ? 'rgba(0,0,255,0.2)' : 'rgba(0,0,0,0.05)', true, this.cells.full);
+			this.paintCell(i, j, state.mode === 'tron' ? this.boardCellTron : this.boardCell, true, this.cells.full);
 		}
 	}
 
 	// FIXME: quick and dirty tron mode prototype
-	if (state.isGlitched) {
-		document.body.className = 'tron';
-	}
-	else {
-		document.body.className = '';
-	}
+	document.body.className = state.mode;
 
 	//paint the board
 	for (var i = 0; i < state.boardWidth; i++) {
 		for (var j = 0; j < state.boardHeight; j++) {
 			var cell = state.board[i][j];
 			if (cell.type === 'wall') {
-				this.paintCell(i, j, state.isGlitched ? 'yellow' : 'rgba(0,0,0,0.7)', false, this.cells.snakeHeadLeft);
+				this.paintCell(i, j, state.mode === 'tron' ? this.wallTron : this.wall, false, this.cells.snakeHeadLeft);
 			} else if (cell.type === 'food') {
-				this.paintCell(i, j, state.isGlitched ? 'red' : 'rgba(0,0,0,0.7)', false, this.cells.food);
+				this.paintCell(i, j, state.mode === 'tron' ? this.foodTron : this.food, false, this.cells.food);
 			} else if (cell.type === 'buggybug') {
-				this.paintCell(i, j, state.isGlitched ? 'white' : 'rgba(0,0,0,0.7)', false, this.cells.bug);
+				this.paintCell(i, j, state.mode === 'tron' ? this.bugTron : this.bug, false, this.cells.bug);
 			}
 		}
 	}
@@ -175,7 +179,7 @@ Snake.UI.paintBoard = function(state) {
 	for (i = 0; i < state.snake.length; i++) {
 		cell = state.snake[i];
 		var cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
-		this.paintCell(cell.x, cell.y, state.isGlitched ? 'cyan' : 'rgba(0,0,0,0.7)', false, cellPixels);
+		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, false, cellPixels);
 	}
 };
 

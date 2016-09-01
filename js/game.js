@@ -11,11 +11,8 @@ Snake.Game.state = {
 	boardHeight: 30,
 	score: 0,
 	level: 1,
-	mode: 'snake', // TODO: 'snake' / 'tron' modes
-	prevLength: null, // real snake length (during tron mode)
-
-	// FIXME: temporary values to be refactored
-	isGlitched: false // FIXME: to be replaced with mode
+	mode: 'snake',
+	prevLength: null // real snake length (during tron mode)
 };
 
 // TODO: wrap in function and turn to local vars?
@@ -62,7 +59,7 @@ Snake.Game.start = function() {
 	// TODO: it speeds up a little bit too quickly
 	var fps = this.state.prevLength || this.state.snake.length;
 	// speed up in tron mode
-	if (this.state.isGlitched) fps += 2;
+	if (this.state.mode === 'tron') fps += 2;
 
 	var fpsInterval = 1000 / fps;
 
@@ -110,7 +107,7 @@ Snake.Game.initFood = function() {
 	};
 };
 
-Snake.Game.initBuggyBug = function() { //TODO this and above functions are almost the same - make one
+Snake.Game.initBuggyBug = function() { //TODO this and above functions are almost the same - make one?
 	//make sure that the buggy bug is not generated on the wall
 	//neither on food nor snake
 	do {
@@ -163,7 +160,7 @@ Snake.Game.update = function() {
 	//if the new head position matches the food
 	if (this.state.board[snakeX][snakeY].type === 'food') {
 		this.state.score += 1;
-		this.state.isGlitched = false; //fix the snake so the tail can move
+		this.state.mode = 'snake'; //fix the snake so the tail can move
 		this.state.board[snakeX][snakeY].type = '';
 		this.addAGlitch(); //sasasasasa
 	} else if (this.state.board[snakeX][snakeY].type === 'buggybug') {
@@ -171,16 +168,22 @@ Snake.Game.update = function() {
 		//add extra points and enlarge snake without moving the tail
 		//until normal food is eaten
 		this.state.score += 10;
-		this.state.isGlitched = true;
+		this.state.mode = 'tron';
 		this.state.board[snakeX][snakeY].type = '';
 		this.state.prevLength = this.state.snake.length; //need to remember the actual length of the snake
 	} else {
-		if (!this.state.isGlitched) {
+		if (this.state.mode === 'snake') {
 			this.state.snake.shift(); //remove the first cell - tail
 			//make it smaller in every paint
-			//TODO make the snake smaller immediately?
-			if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
+			/*if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
 				this.state.snake.shift();
+			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
+				this.state.prevLength = null;
+			}*/
+			//make the snake smaller immediately
+			if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
+				var elementsNo = this.state.snake.length - this.state.prevLength;
+				this.state.snake.splice(0, elementsNo);
 			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
 				this.state.prevLength = null;
 			}
