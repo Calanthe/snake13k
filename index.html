@@ -7,10 +7,13 @@
 		/* TODO: clean it up! */
 		body { background: #333; overflow: hidden; }
 		.screen {
+			width: 600px;
+			height: 600px;
 			margin: 50px auto;
 			position: relative;
-			border-radius: 75px;
-			padding: 20px 25px 25px 20px; width: 600px; background: rgb(150,200,50); transition: 200ms }
+			border-radius: 65px;
+			background: rgb(150,200,50);
+			transition: 200ms }
 		body.tron .screen { background: black }
 		.screen:after, .screen:before {
 			content: '';
@@ -21,7 +24,7 @@
 			border-radius: 100%;
 			-webkit-transform: scaleX(4) scaleY(1.02);
 			transform: scaleX(4) scaleY(1.02);
-			clip: rect(0, 385px, 650px, 260px);
+			clip: rect(0, 360px, 650px, 240px);
 			z-index: -1;
 		}
 		.screen:after {
@@ -30,12 +33,14 @@
 		}
 
 		canvas {
+			border-radius: 65px;
+			width: 600px;
+			height: 600px;
 			display: block;
 			margin: 0 auto;
 			box-shadow:
 			inset 0px 50px 100px rgba(255,255,255,0.2),
-			inset 0px -50px 100px rgba(255,255,255,0.2),
-				  0px 0px 100px 20px rgba(255,255,255,0.2);
+			inset 0px -50px 100px rgba(255,255,255,0.2);
 		}
 		#controls { text-align: center; }
 	</style>
