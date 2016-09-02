@@ -177,7 +177,7 @@ Snake.UI.paintBoard = function(state) {
 	for (var x = 0; x < state.boardWidth; x++) {
 		for (var y = 0; y < state.boardHeight; y++) {
 			// TODO: special tron background? bigger squares? only blue lines?
-			this.paintCell(x, y, state.mode === 'tron' ? this.boardCellTron : this.boardCell, true, this.cells.full);
+			this.paintCell(x, y, state.mode === 'tron' ? this.boardCellTron : this.boardCell, this.cells.full);
 		}
 	}
 
@@ -190,11 +190,11 @@ Snake.UI.paintBoard = function(state) {
 			var cell = state.board[x][y];
 			if (cell.type === 'wall') {
 				var cellPixels = this.cells.wall[this.getWallCellType(x, y, state.board)];
-				this.paintCell(x, y, state.mode === 'tron' ? this.wallTron : this.wall, false, cellPixels);
+				this.paintCell(x, y, state.mode === 'tron' ? this.wallTron : this.wall, cellPixels, cell.isGlitched);
 			} else if (cell.type === 'food') {
-				this.paintCell(x, y, state.mode === 'tron' ? this.foodTron : this.food, false, this.cells.food);
+				this.paintCell(x, y, state.mode === 'tron' ? this.foodTron : this.food, this.cells.food);
 			} else if (cell.type === 'buggybug') {
-				this.paintCell(x, y, state.mode === 'tron' ? this.bugTron : this.bug, false, this.cells.bug);
+				this.paintCell(x, y, state.mode === 'tron' ? this.bugTron : this.bug, this.cells.bug);
 			}
 		}
 	}
@@ -203,7 +203,7 @@ Snake.UI.paintBoard = function(state) {
 	for (var i = 0; i < state.snake.length; i++) {
 		cell = state.snake[i];
 		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
-		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, false, cellPixels);
+		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels);
 	}
 };
 
@@ -250,14 +250,14 @@ Snake.UI.getWallCellType = function(x, y, board) {
 	return (top ? 'T' : '_') + (bottom ? 'B' : '_') + (left ? 'L' : '_') + (right ? 'R' : '_');
 };
 
-Snake.UI.paintCell = function(x, y, colour, forcePaint, cellPixels) {
+Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
 	var pixelWidth = (this.cellSize - 4) / 4;
 
 	this.ctx.fillStyle = colour;
 
 	for (var i = 0; i < 4; i++) {
 		for (var j = 0; j < 4; j++) {
-			if (cellPixels[j][i]) {
+			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
 				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + 1), y * this.cellSize+ j * (pixelWidth + 1), pixelWidth, pixelWidth);
 			}
 		}
