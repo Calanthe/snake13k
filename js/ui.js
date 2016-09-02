@@ -6,6 +6,20 @@ Snake.UI = {
 
 	cellSize: 20, //dimension of one cell
 
+	// TODO: font for score (and letters?)
+	// http://robey.lag.net/2010/01/23/tiny-monospace-font.html
+	// http://www.dafont.com/bitmap.php
+	//
+	// font: {
+	// 	"0": [
+	// 		[1,1,1],
+	// 		[1,0,1],
+	// 		[1,0,1],
+	// 		[1,0,1],
+	// 		[1,1,1]
+	// 	]
+	// },
+
 	cells: {
 		full: [
 			[1,1,1,1],
@@ -252,13 +266,17 @@ Snake.UI.getWallCellType = function(x, y, board) {
 
 Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
 	var pixelWidth = (this.cellSize - 4) / 4;
-
+	var pixelSpacing = 1;
+	if (Snake.Game.state.mode === 'tron') {
+		pixelWidth += 1;
+		pixelSpacing = 0;
+	}
 	this.ctx.fillStyle = colour;
 
 	for (var i = 0; i < 4; i++) {
 		for (var j = 0; j < 4; j++) {
 			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
-				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + 1), y * this.cellSize+ j * (pixelWidth + 1), pixelWidth, pixelWidth);
+				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + pixelSpacing), y * this.cellSize+ j * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
 			}
 		}
 	}
