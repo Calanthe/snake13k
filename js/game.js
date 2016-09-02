@@ -188,18 +188,18 @@ Snake.Game.update = function() {
 		if (this.state.mode === 'snake') {
 			this.state.snake.shift(); //remove the first cell - tail
 			//make it smaller in every paint
-			/*if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
+			if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
 				this.state.snake.shift();
 			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
 				this.state.prevLength = null;
-			}*/
-			//make the snake smaller immediately
-			if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
-				var elementsNo = this.state.snake.length - this.state.prevLength;
-				this.state.snake.splice(0, elementsNo);
-			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
-				this.state.prevLength = null;
 			}
+			//make the snake smaller immediately
+			// if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
+			// 	var elementsNo = this.state.snake.length - this.state.prevLength;
+			// 	this.state.snake.splice(0, elementsNo);
+			// } else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
+			// 	this.state.prevLength = null;
+			// }
 		} else {
 			this.state.score += 1; //score one point for every piece grown in tron mode
 		}
@@ -218,7 +218,7 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.state.mode = 'snake'; //fix the snake so the tail can move
 	this.state.board[snakeX][snakeY].type = '';
 	if (this.state.prevLength) this.state.prevLength += 1;
-	this.addAGlitch();
+	this.addEdible();
 };
 
 Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
@@ -239,44 +239,17 @@ Snake.Game.ifBuggyBugOnBoard = function() {
 	}).length;
 };
 
-// TODO: refactor this, or remove?
-Snake.Game.isFoodInLine = function (x, y) {
-	var column = this.state.board[x];
-
-	var foodInLine = column.filter(function(cell) {
-		// filter only cells that are buggybug
-		return cell.type === 'food' || cell.type === 'buggybug';
-	}).length;
-
-	if (foodInLine) {
-		return true;
-	}
-
-	for (x = 0; x < this.state.boardWidth; x++) {
-		var cell = this.state.board[x][y];
-		if (cell.type === 'food' || cell.type === 'buggybug') {
-			return true;
-		}
-	}
-	return false;
-};
-
-Snake.Game.addAGlitch = function() {
-	var randomGlitchType = this.random(1, 3); //1 - buggy bug, 2 - food, 3 - TODO glitched board?
-
-	if (randomGlitchType === 1 && !this.ifBuggyBugOnBoard()) {
+Snake.Game.addEdible = function() {
+	if (this.state.level > 2 && Math.random() < 0.3 && !this.ifBuggyBugOnBoard()) {
 		this.initBuggyBug();
-		this.initFood();
-	} else {
-		this.initFood();
 	}
+	this.initFood();
 };
 
 Snake.Game.checkCollision = function(snakeX, snakeY) {
 	if (this.ifCollidedWithSnake(snakeX, snakeY) // if the snake will collide with itself
 		|| (this.state.board[snakeX][snakeY].type === 'wall' // or if the snake will collide with the walls
-				&& !this.state.board[snakeX][snakeY].isGlitched  // but not glitched walls
-			/* && !this.isFoodInLine(snakeX, snakeY) */)) {
+				&& !this.state.board[snakeX][snakeY].isGlitched)) { // but not glitched walls
 
 		//stop the game loop
 		window.cancelAnimationFrame(this.vars.animationId);
