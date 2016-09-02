@@ -157,11 +157,11 @@ Snake.UI.showMainMenu = function() {
 };
 
 Snake.UI.paintScore = function(state) {
-	this.ctx.fillStyle = '#ffffff';
+	this.ctx.fillStyle = this.wall;
+	this.ctx.font = "40px monospace";
 	var scoreText = "Score: " + state.score;
-	this.ctx.fillText(scoreText, 30, this.canvas.height - 30);
-	var lengthText = "Snake length: " + state.snake.length;
-	this.ctx.fillText(lengthText, 80, this.canvas.height - 30);
+	this.ctx.fillText(scoreText, 50, 60);
+
 };
 
 Snake.UI.showEndGame = function() {
