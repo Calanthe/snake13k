@@ -8,6 +8,7 @@
     "rules": {
       "indent": ["error", "tab"],
       "semi": [ "error", "always" ],
-      "no-console": "off"
+      "no-console": "off",
+      "eqeqeq": "error"
     }
 }

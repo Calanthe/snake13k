@@ -202,7 +202,7 @@ Snake.UI.paintBoard = function(state) {
 	//paint the snake
 	for (var i = 0; i < state.snake.length; i++) {
 		cell = state.snake[i];
-		var cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
+		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
 		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, false, cellPixels);
 	}
 };

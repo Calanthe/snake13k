@@ -139,10 +139,10 @@ Snake.Game.update = function() {
 		this.state.direction = this.state.newDirection;
 	}
 
-	if (this.state.direction == 'right') snakeX++;
-	else if (this.state.direction == 'left') snakeX--;
-	else if (this.state.direction == 'up') snakeY--;
-	else if (this.state.direction == 'down') snakeY++;
+	if (this.state.direction === 'right') snakeX++;
+	else if (this.state.direction === 'left') snakeX--;
+	else if (this.state.direction === 'up') snakeY--;
+	else if (this.state.direction === 'down') snakeY++;
 
 	//if we will get out of the board
 	if (snakeX === -1) {
@@ -234,16 +234,16 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 Snake.Game.ifCollidedWithSnake = function(x, y) {
 	//check if the x/y coordinates exist in the snake array
 	return this.state.snake.filter(function(cell) {
-		return cell.x === x && cell.y == y;
+		return cell.x === x && cell.y === y;
 	}).length;
 };
 
 Snake.Game.onInput = function(newDirection) {
 	// don't accept input with direction oposite to current
-	if ((newDirection == 'right' && this.state.direction !== 'left') ||
-			(newDirection == 'left' && this.state.direction !== 'right') ||
-			(newDirection == 'up' && this.state.direction !== 'down') ||
-			(newDirection == 'down' && this.state.direction !== 'up')) {
+	if ((newDirection === 'right' && this.state.direction !== 'left') ||
+			(newDirection === 'left' && this.state.direction !== 'right') ||
+			(newDirection === 'up' && this.state.direction !== 'down') ||
+			(newDirection === 'down' && this.state.direction !== 'up')) {
 		this.state.newDirection = newDirection;
 	}
 };

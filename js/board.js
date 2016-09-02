@@ -2,10 +2,10 @@ var Snake = Snake || {};
 
 Snake.Board = {};
 
-Snake.Board.wallOffsetTop = 1;
-Snake.Board.wallOffsetBottom = 1;
-Snake.Board.wallOffsetLeft = 1;
-Snake.Board.wallOffsetRight = 1;
+Snake.Board.wallOffsetTop = 4;
+Snake.Board.wallOffsetBottom = 2;
+Snake.Board.wallOffsetLeft = 2;
+Snake.Board.wallOffsetRight = 2;
 
 Snake.Board.initBoard = function(state) {
 	var wallOffsetTop = Snake.Board.wallOffsetTop;
