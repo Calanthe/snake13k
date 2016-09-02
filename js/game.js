@@ -9,6 +9,12 @@ Snake.Game.state = {
 	board: [],
 	boardWidth: 30,
 	boardHeight: 30,
+	borderOffset: {
+		top: 4,
+		bottom: 2,
+		left: 2,
+		right: 2
+	},
 	score: 0,
 	level: 1,
 	mode: 'snake',
