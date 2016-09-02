@@ -21,6 +21,8 @@
 - [x] don't render apple on snake or buggy bug
   - [ ] or make apple on snake eatable with some nice bonus or another glitch? ;)
 - [ ] allow snake going outside and around the border
+- [ ] don't render food or buggy bug outside of the walls, at least until there will be a hole
+  - [ ] show first three foods inside the walls, then one on the wall, and after that one outside. Then randomly as it is right now. ?
 
 
 ### TRON MODE:
