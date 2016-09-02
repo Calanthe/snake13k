@@ -206,6 +206,28 @@ Snake.Game.ifBuggyBugOnBoard = function() {
 	}).length;
 };
 
+// TODO: refactor this, or remove?
+Snake.Game.isFoodInLine = function (x, y) {
+	var column = this.state.board[x];
+
+	var foodInLine = column.filter(function(cell) {
+		// filter only cells that are buggybug
+		return cell.type === 'food' || cell.type === 'buggybug';
+	}).length;
+
+	if (foodInLine) {
+		return true;
+	}
+
+	for (x = 0; x < this.state.boardWidth; x++) {
+		var cell = this.state.board[x][y];
+		if (cell.type === 'food' || cell.type === 'buggybug') {
+			return true;
+		}
+	}
+	return false;
+};
+
 Snake.Game.addAGlitch = function() {
 	var randomGlitchType = this.random(1, 3); //1 - buggy bug, 2 - food, 3 - TODO glitched board?
 
@@ -219,7 +241,9 @@ Snake.Game.addAGlitch = function() {
 
 Snake.Game.checkCollision = function(snakeX, snakeY) {
 	if (this.ifCollidedWithSnake(snakeX, snakeY) //if the snake will collide with itself
-		|| (this.state.board[snakeX][snakeY].type === 'wall' && !this.state.board[snakeX][snakeY].isGlitched)) { //if the snake will collide with the walls
+		|| (this.state.board[snakeX][snakeY].type === 'wall' &&
+				!this.state.board[snakeX][snakeY].isGlitched &&
+				!this.isFoodInLine(snakeX, snakeY))) { //if the snake will collide with the walls
 
 		//stop the game loop
 		window.cancelAnimationFrame(this.vars.animationId);
