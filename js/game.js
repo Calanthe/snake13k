@@ -124,6 +124,8 @@ Snake.Game.initEdible = function(type) {
 			|| (randomX === maxX && randomY === 0)
 			|| (randomX === maxX && randomY === maxY))));
 
+	console.log('inside initEdible: ', type, minX, maxX, minY, maxY, randomX, randomY, this.state.holeInTheWall);
+
 	//if food happens to be on wall glitch opposite wall so snake can go through
 	if (this.state.board[randomX][randomY].type === 'wall' && type === 'food') {
 		this.board.glitchOppositeWall(randomX, randomY);
@@ -190,6 +192,8 @@ Snake.Game.update = function() {
 			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
 				this.state.prevLength = null;
 			}
+		} else {
+			this.state.score += 1; //score one point for every piece grown in tron mode
 		}
 	}
 
@@ -204,12 +208,13 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 	if (this.state.score % 3 === 0) this.state.level += 1;
 	this.state.mode = 'snake'; //fix the snake so the tail can move
 	this.state.board[snakeX][snakeY].type = '';
+	if (this.state.prevLength) this.state.prevLength += 1;
 	this.addAGlitch();
 };
 
 Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 	//add extra points and enlarge snake without moving the tail until normal food is eaten
-	this.state.score += 10;
+	this.state.score += 1;
 	this.state.mode = 'tron';
 	this.state.board[snakeX][snakeY].type = '';
 	this.state.prevLength = this.state.snake.length; //need to remember the actual length of the snake

@@ -30,7 +30,6 @@ Snake.Board.initBoard = function(state) {
 Snake.Board.glitchOppositeWall = function(x, y) {
 	var oppositeCoords = this.getOppositeWallCoords(x, y);
 	if (oppositeCoords) {
-		console.log('getOppositeWallCoords: ', oppositeCoords);
 		this.glitchSingleWall(oppositeCoords.x, oppositeCoords.y);
 	}
 };
