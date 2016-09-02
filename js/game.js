@@ -17,9 +17,10 @@ Snake.Game.state = {
 	},
 	holeInTheWall: false,
 	score: 0,
-	level: 5,
+	level: 1,
 	mode: 'snake',
-	prevLength: null // real snake length (during tron mode)
+	prevLength: null, // real snake length (during tron mode),
+	foodEaten: 0
 };
 
 // TODO: wrap in function and turn to local vars?
@@ -62,7 +63,7 @@ Snake.Game.start = function() {
 	var now = performance.now();
 	var elapsed = now - this.vars.then;
 
-	var fps = this.state.level;
+	var fps = this.state.level + 4;
 	// speed up in tron mode
 	if (this.state.mode === 'tron') fps += 2;
 
@@ -81,7 +82,7 @@ Snake.Game.start = function() {
 };
 
 Snake.Game.initSnake = function() {
-	for(var i = 0; i < 5; i++) { //let's start with snake length 5
+	for (var i = 0; i < 5; i++) { //let's start with snake length 5
 		//horizontal snake in the middle
 		this.state.snake.push({x: ~~(this.state.boardWidth / 2) + i - 5, y: ~~(this.state.boardHeight / 2)});
 	}
@@ -100,17 +101,26 @@ Snake.Game.initBuggyBug = function() {
 };
 
 Snake.Game.initEdible = function(type) {
-	var minX = this.state.borderOffset.left;
-	var maxX = this.state.boardWidth - this.state.borderOffset.right - 1;
+	var minX, maxX, minY, maxY, offset;
 
-	var minY = this.state.borderOffset.top;
-	var maxY = this.state.boardHeight - this.state.borderOffset.bottom - 1;
+	if (this.state.foodEaten < 3) { //first three foods always in the middle of the board
+		offset = 1;
+	} else if (this.state.foodEaten >= 3) { //from now on it can be also walls
+		offset = 0;
+	}
 
-	if (this.state.holeInTheWall) {
+	if (!this.state.holeInTheWall) {
+		minX = this.state.borderOffset.left - offset;
+		maxX = this.state.boardWidth - this.state.borderOffset.right - (1 + offset);
+
+		minY = this.state.borderOffset.top - offset;
+		maxY = this.state.boardHeight - this.state.borderOffset.bottom - (1 + offset);
+	} else { //if there is a hole, edible can be outside of the board
 		minX = minY = 0;
 		maxX = this.state.boardWidth - 1;
 		maxY = this.state.boardHeight - 1;
 	}
+
 	//make sure that the edible is not generated on the buggy bug, food or snake
 	do {
 		var randomX = this.random(minX, maxX);
@@ -119,15 +129,15 @@ Snake.Game.initEdible = function(type) {
 		|| (this.state.board[randomX][randomY].type === 'buggybug')
 		|| Snake.Game.ifCollidedWithSnake(randomX, randomY)
 		|| (!this.state.holeInTheWall && //exclude walls in the corners if there is no hole yet
-			  ((randomX === 0 && randomY === 0)
-			|| (randomX === 0 && randomY === maxY)
-			|| (randomX === maxX && randomY === 0)
+			  ((randomX === minX && randomY === minY)
+			|| (randomX === minX && randomY === maxY)
+			|| (randomX === maxX && randomY === minY)
 			|| (randomX === maxX && randomY === maxY))));
 
 	console.log('inside initEdible: ', type, minX, maxX, minY, maxY, randomX, randomY, this.state.holeInTheWall);
 
-	//if food happens to be on wall glitch opposite wall so snake can go through
-	if (this.state.board[randomX][randomY].type === 'wall' && type === 'food') {
+	//if edible happens to be on wall glitch opposite wall so snake can go through
+	if (this.state.board[randomX][randomY].type === 'wall') {
 		this.board.glitchOppositeWall(randomX, randomY);
 		this.state.holeInTheWall = true;
 	}
@@ -209,6 +219,7 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.state.mode = 'snake'; //fix the snake so the tail can move
 	this.state.board[snakeX][snakeY].type = '';
 	if (this.state.prevLength) this.state.prevLength += 1;
+	this.state.foodEaten += 1;
 	this.addAGlitch();
 };
 

@@ -24,7 +24,6 @@ Snake.Board.initBoard = function(state) {
 		state.board[offset.left][y].type = 'wall';
 		state.board[state.boardWidth - offset.right - 1][y].type = 'wall';
 	}
-
 };
 
 Snake.Board.glitchOppositeWall = function(x, y) {
