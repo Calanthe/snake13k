@@ -159,7 +159,7 @@ Snake.UI.showMainMenu = function() {
 Snake.UI.paintScore = function(state) {
 	this.ctx.fillStyle = state.mode === 'tron' ? this.snakeTron : this.wall;
 	this.ctx.font = "40px monospace";
-	var scoreText = "Score: " + state.score;
+	var scoreText = "SCORE: " + state.score + " LVL: " + state.level;
 	this.ctx.fillText(scoreText, 50, 60);
 
 };
