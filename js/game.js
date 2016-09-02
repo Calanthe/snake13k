@@ -17,7 +17,7 @@ Snake.Game.state = {
 	},
 	holeInTheWall: false,
 	score: 0,
-	level: 1,
+	level: 5,
 	mode: 'snake',
 	prevLength: null // real snake length (during tron mode)
 };
@@ -62,9 +62,7 @@ Snake.Game.start = function() {
 	var now = performance.now();
 	var elapsed = now - this.vars.then;
 
-	// make speed depend on snake length
-	// TODO: it speeds up a little bit too quickly
-	var fps = this.state.prevLength || this.state.snake.length;
+	var fps = this.state.level;
 	// speed up in tron mode
 	if (this.state.mode === 'tron') fps += 2;
 
@@ -173,18 +171,9 @@ Snake.Game.update = function() {
 
 	//if the new head position matches the food
 	if (this.state.board[snakeX][snakeY].type === 'food') {
-		this.state.score += 1;
-		this.state.mode = 'snake'; //fix the snake so the tail can move
-		this.state.board[snakeX][snakeY].type = '';
-		this.addAGlitch();
-	} else if (this.state.board[snakeX][snakeY].type === 'buggybug') {
-		//if the head position matches the buggy bug,
-		//add extra points and enlarge snake without moving the tail
-		//until normal food is eaten
-		this.state.score += 10;
-		this.state.mode = 'tron';
-		this.state.board[snakeX][snakeY].type = '';
-		this.state.prevLength = this.state.snake.length; //need to remember the actual length of the snake
+		this.consumeFood(snakeX, snakeY);
+	} else if (this.state.board[snakeX][snakeY].type === 'buggybug') { //if the head position matches the buggy bug
+		this.consumeBuggyBug(snakeX, snakeY);
 	} else {
 		if (this.state.mode === 'snake') {
 			this.state.snake.shift(); //remove the first cell - tail
@@ -208,6 +197,22 @@ Snake.Game.update = function() {
 		x: snakeX,
 		y: snakeY
 	});
+};
+
+Snake.Game.consumeFood = function(snakeX, snakeY) {
+	this.state.score += 1;
+	if (this.state.score % 3 === 0) this.state.level += 1;
+	this.state.mode = 'snake'; //fix the snake so the tail can move
+	this.state.board[snakeX][snakeY].type = '';
+	this.addAGlitch();
+};
+
+Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
+	//add extra points and enlarge snake without moving the tail until normal food is eaten
+	this.state.score += 10;
+	this.state.mode = 'tron';
+	this.state.board[snakeX][snakeY].type = '';
+	this.state.prevLength = this.state.snake.length; //need to remember the actual length of the snake
 };
 
 Snake.Game.ifBuggyBugOnBoard = function() {
