@@ -37,6 +37,7 @@
 
 - [x] make speed change after couple of apples eaten (3)
 - [ ] some welcome screen / menu / game over with ability to restart the game
+- [ ] buggybug on 2 pixels (can be eaten on any of them)
 - [ ] bonus bugs (regular bugs that show for short time for bonus points)
   - [ ] one of them will be buggy(tron) bug
 - [ ] sounds
@@ -47,6 +48,7 @@
   - [ ] draw pixel numbers for score
   - [ ] countdown for bugs
   - [x] make it possible to get there with a snake
+  - [ ] countdown for food eaten in level
 - [ ] mobile controls
 
 
