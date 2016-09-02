@@ -101,20 +101,18 @@ Snake.Game.initBuggyBug = function() {
 };
 
 Snake.Game.initEdible = function(type) {
-	var minX, maxX, minY, maxY, offset;
+	var minX, maxX, minY, maxY, offset = 0;
 
-	if (this.state.foodEaten < 3) { //first three foods always in the middle of the board
+	if (this.state.level === 1) { //first three foods always in the middle of the board
 		offset = 1;
-	} else if (this.state.foodEaten >= 3) { //from now on it can be also walls
-		offset = 0;
 	}
 
 	if (!this.state.holeInTheWall) {
-		minX = this.state.borderOffset.left - offset;
-		maxX = this.state.boardWidth - this.state.borderOffset.right - (1 + offset);
+		minX = this.state.borderOffset.left + offset;
+		maxX = this.state.boardWidth - this.state.borderOffset.right - 1 - offset;
 
-		minY = this.state.borderOffset.top - offset;
-		maxY = this.state.boardHeight - this.state.borderOffset.bottom - (1 + offset);
+		minY = this.state.borderOffset.top + offset;
+		maxY = this.state.boardHeight - this.state.borderOffset.bottom - 1 - offset;
 	} else { //if there is a hole, edible can be outside of the board
 		minX = minY = 0;
 		maxX = this.state.boardWidth - 1;
@@ -129,10 +127,10 @@ Snake.Game.initEdible = function(type) {
 		|| (this.state.board[randomX][randomY].type === 'buggybug')
 		|| Snake.Game.ifCollidedWithSnake(randomX, randomY)
 		|| (!this.state.holeInTheWall && //exclude walls in the corners if there is no hole yet
-			  ((randomX === minX && randomY === minY)
-			|| (randomX === minX && randomY === maxY)
-			|| (randomX === maxX && randomY === minY)
-			|| (randomX === maxX && randomY === maxY))));
+				((randomX === minX && randomY === minY)
+				|| (randomX === minX && randomY === maxY)
+				|| (randomX === maxX && randomY === minY)
+				|| (randomX === maxX && randomY === maxY))));
 
 	console.log('inside initEdible: ', type, minX, maxX, minY, maxY, randomX, randomY, this.state.holeInTheWall);
 
@@ -215,11 +213,11 @@ Snake.Game.update = function() {
 
 Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.state.score += 1;
-	if (this.state.score % 3 === 0) this.state.level += 1;
+	this.state.foodEaten += 1;
+	if (this.state.foodEaten % 3 === 0) this.state.level += 1;
 	this.state.mode = 'snake'; //fix the snake so the tail can move
 	this.state.board[snakeX][snakeY].type = '';
 	if (this.state.prevLength) this.state.prevLength += 1;
-	this.state.foodEaten += 1;
 	this.addAGlitch();
 };
 
