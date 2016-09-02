@@ -251,24 +251,16 @@ Snake.UI.getWallCellType = function(x, y, board) {
 };
 
 Snake.UI.paintCell = function(x, y, colour, forcePaint, cellPixels) {
-	// FIXME: decide on one paint mode and use it
-	var mode = document.querySelector('[name=paintMode]:checked').value || 'big';
-
-	var pixelWidth = mode === 'big' ? this.cellSize - 1 : (this.cellSize - 4) / 4;
+	var pixelWidth = (this.cellSize - 4) / 4;
 
 	this.ctx.fillStyle = colour;
 
-	if (mode === 'big') {
-		this.ctx.fillRect(x * this.cellSize, y * this.cellSize, pixelWidth, pixelWidth);
-	}
-	else {
-		for (var i = 0; i < 4; i++) {
-			for (var j = 0; j < 4; j++) {
-				// if paint mode is 'glitched' hide random pixels
-				if (forcePaint || ((mode === 'small' || Math.random() < 0.995) && cellPixels[j][i])) {
-					this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + 1), y * this.cellSize+ j * (pixelWidth + 1), pixelWidth, pixelWidth);
-				}
+	for (var i = 0; i < 4; i++) {
+		for (var j = 0; j < 4; j++) {
+			if (cellPixels[j][i]) {
+				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + 1), y * this.cellSize+ j * (pixelWidth + 1), pixelWidth, pixelWidth);
 			}
 		}
 	}
+
 };

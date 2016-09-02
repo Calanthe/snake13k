@@ -42,25 +42,16 @@
 			inset 0px 50px 100px rgba(255,255,255,0.2),
 			inset 0px -50px 100px rgba(255,255,255,0.2);
 		}
-		#controls { text-align: center; }
+
+		.tron canvas {
+			box-shadow: none;
+		}
 	</style>
 </head>
 <body>
 	<div class="screen">
 		<canvas id="c"></canvas>
 	</div>
-
-<div id="controls">
-	<label><input type=radio name=paintMode value="big">Big pixels</label>
-	<label><input type=radio name=paintMode value="small" checked=checked>Small pixels</label>
-	<label><input type=radio name=paintMode value="glitch">Glitched pixels</label>
-	<script>
-	// blur inputs on change to prevent them from hijacking keyboard input
-	document.getElementById('controls').addEventListener('change', function(event){
-		event.target.blur();
-	});
-	</script>
-</div>
 
 <script src="js/controls.js"></script>
 <script src="js/ui.js"></script>
