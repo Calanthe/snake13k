@@ -97,11 +97,11 @@ Snake.Game.initFood = function() {
 	this.initEdible('food');
 };
 
-Snake.Game.initBuggyBug = function() { //TODO this and above functions are almost the same - make one?
+Snake.Game.initBuggyBug = function() {
 	this.initEdible('buggybug');
 };
 
-Snake.Game.initEdible = function(type) { //TODO this and above functions are almost the same - make one?
+Snake.Game.initEdible = function(type) {
 	var minX = this.state.borderOffset.left;
 	var maxX = this.state.boardWidth - this.state.borderOffset.right - 1;
 
@@ -113,17 +113,21 @@ Snake.Game.initEdible = function(type) { //TODO this and above functions are alm
 		maxX = this.state.boardWidth - 1;
 		maxY = this.state.boardHeight - 1;
 	}
-	//make sure that the buggy bug is not generated on the wall
-	//neither on food nor snake
+	//make sure that the edible is not generated on the buggy bug, food or snake
 	do {
 		var randomX = this.random(minX, maxX);
 		var randomY = this.random(minY, maxY);
 	} while ((this.state.board[randomX][randomY].type === 'food')
 		|| (this.state.board[randomX][randomY].type === 'buggybug')
-		|| Snake.Game.ifCollidedWithSnake(randomX, randomY));
+		|| Snake.Game.ifCollidedWithSnake(randomX, randomY)
+		|| (!this.state.holeInTheWall && //exclude walls in the corners if there is no hole yet
+			  ((randomX === 0 && randomY === 0)
+			|| (randomX === 0 && randomY === maxY)
+			|| (randomX === maxX && randomY === 0)
+			|| (randomX === maxX && randomY === maxY))));
 
-	// if food happens to be on wall glitch opposite wall so snake can go through
-	if (this.state.board[randomX][randomY].type === 'wall') {
+	//if food happens to be on wall glitch opposite wall so snake can go through
+	if (this.state.board[randomX][randomY].type === 'wall' && type === 'food') {
 		this.board.glitchOppositeWall(randomX, randomY);
 		this.state.holeInTheWall = true;
 	}
@@ -172,7 +176,7 @@ Snake.Game.update = function() {
 		this.state.score += 1;
 		this.state.mode = 'snake'; //fix the snake so the tail can move
 		this.state.board[snakeX][snakeY].type = '';
-		this.addAGlitch(); //sasasasasa
+		this.addAGlitch();
 	} else if (this.state.board[snakeX][snakeY].type === 'buggybug') {
 		//if the head position matches the buggy bug,
 		//add extra points and enlarge snake without moving the tail
