@@ -34,16 +34,7 @@ Snake.Game.vars = {
 };
 
 Snake.Game.init = function() {
-	this.initStateValues();
-	console.log(this.state);
-
-	this.ui = Snake.UI;
-	this.controls = Snake.Controls;
-	this.board = Snake.Board;
-
-	this.ui.init(this.state);
-
-	this.initGameFeatures();
+	this.initNewGame();
 
 	this.ui.paintBoard(this.state);
 
@@ -52,7 +43,15 @@ Snake.Game.init = function() {
 	this.controls.addListeners(this.onInput.bind(this));
 };
 
-Snake.Game.initGameFeatures = function() {
+Snake.Game.initNewGame = function() {
+	this.initStateValues();
+
+	this.ui = this.ui || Snake.UI;
+	this.controls = this.controls || Snake.Controls;
+	this.board = this.board || Snake.Board;
+
+	this.ui.init(this.state);
+
 	//initialise the walls on the board
 	this.board.initBoard(this.state);
 

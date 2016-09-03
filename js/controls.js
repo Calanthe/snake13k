@@ -8,11 +8,10 @@ Snake.Controls.addListeners = function(callback) {
 
 		if (Snake.Game.state.state !== 'play') {
 			if (Snake.Game.state.state === 'end') {
-				Snake.Game.initStateValues();
-				Snake.Game.initGameFeatures();
+				Snake.Game.initNewGame();
 			}
 			Snake.Game.startNewGame();
-		} else if (keyCode === 37) {
+		} else if (keyCode === 37) { //during the game read only arrow keys
 			callback('left');
 		} else if (keyCode === 38) {
 			callback('up');
