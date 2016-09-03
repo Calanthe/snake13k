@@ -177,8 +177,6 @@ Snake.Game.update = function() {
 		snakeY = 0;
 	}
 
-	this.checkCollision(snakeX, snakeY);
-
 	//if the new head position matches the food
 	if (this.state.board[snakeX][snakeY].type === 'food') {
 		this.consumeFood(snakeX, snakeY);
@@ -204,6 +202,8 @@ Snake.Game.update = function() {
 			this.state.score += 1; //score one point for every piece grown in tron mode
 		}
 	}
+
+	this.checkCollision(snakeX, snakeY);
 
 	this.state.snake.push({
 		x: snakeX,
