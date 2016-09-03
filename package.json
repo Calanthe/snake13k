@@ -1,0 +1,35 @@
+{
+  "name": "snake13k",
+  "version": "1.0.0",
+  "description": "Glitched Snake game",
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Calanthe/snake13k.git"
+  },
+  "keywords": [
+    "snake",
+    "glitch",
+    "js13kgames"
+  ],
+  "author": "Zofia Korcz, Bartosz Szopka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Calanthe/snake13k/issues"
+  },
+  "homepage": "https://github.com/Calanthe/snake13k#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "cheerio": "^0.19.0",
+    "gulp-closure-compiler": "^0.2.20",
+    "gulp-concat": "^2.6.0",
+    "gulp-htmlmin": "^1.1.3",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.3",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-uglify": "^1.2.0",
+    "gulp-unzip": "^0.1.3",
+    "gulp-webserver": "^0.9.1",
+    "gulp-zip": "^3.0.2"
+  }
+}
