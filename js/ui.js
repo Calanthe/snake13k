@@ -93,7 +93,8 @@ Snake.UI = {
 	food: 'rgba(0,0,0,0.7)',
 	bug: 'rgba(0,0,0,0.7)',
 	snakeTron: 'cyan',
-	snake: 'rgba(0,0,0,0.7)'
+	snake: 'rgba(0,0,0,0.7)',
+	screenBackground: 'rgb(150,200,50)'
 };
 
 Snake.UI.init = function(state) {
@@ -141,7 +142,7 @@ Snake.UI.initSnakeCells = function() {
 		"BR": this.cells.snakeBottomRight,
 		"RB": this.cells.snakeBottomRight
 	};
-},
+};
 
 Snake.UI.initWallCells = function() {
 	this.cells.wall = {
@@ -166,8 +167,16 @@ Snake.UI.initWallCells = function() {
 };
 
 Snake.UI.showMainMenu = function() {
-	// TODO
-	console.log('Main Menu');
+	this.ctx.fillStyle = this.wall;
+	this.ctx.font = "50px monospace";
+	var titleText = "Sn@Ķæ";
+	this.ctx.fillText(titleText, 50, 60);
+	this.ctx.font = "18px monospace";
+	var subtitleText = "A game where glitch is a feature!";
+	this.ctx.fillText(subtitleText, 50, 80);
+	this.ctx.font = "18px monospace";
+	var subtitleText = "--Press any key to start--";
+	this.ctx.fillText(subtitleText, 100, 300);
 };
 
 Snake.UI.paintScore = function(state) {
@@ -175,12 +184,15 @@ Snake.UI.paintScore = function(state) {
 	this.ctx.font = "40px monospace";
 	var scoreText = "SCORE: " + state.score + " LVL: " + state.level;
 	this.ctx.fillText(scoreText, 50, 60);
-
 };
 
 Snake.UI.showEndGame = function() {
-	// TODO
-	console.log('Game Over');
+	this.ctx.font = "24px monospace";
+	var subtitleText = "Game over ;(";
+	this.ctx.fillText(subtitleText, 100, 260);
+	this.ctx.font = "18px monospace";
+	var subtitleText = "--Press any key to restart--";
+	this.ctx.fillText(subtitleText, 100, 300);
 };
 
 Snake.UI.paintBoard = function(state) {

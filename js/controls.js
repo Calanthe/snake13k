@@ -5,16 +5,20 @@ Snake.Controls = {};
 Snake.Controls.addListeners = function(callback) {
 	document.onkeydown = function (e) {
 		var keyCode = e.keyCode;
-		if (keyCode === 37) {
+
+		if (Snake.Game.state.state !== 'play') {
+			if (Snake.Game.state.state === 'end') {
+				Snake.Game.initStateValues();
+				Snake.Game.initGameFeatures();
+			}
+			Snake.Game.startNewGame();
+		} else if (keyCode === 37) {
 			callback('left');
-		}
-		else if (keyCode === 38) {
+		} else if (keyCode === 38) {
 			callback('up');
-		}
-		else if (keyCode === 39) {
+		} else if (keyCode === 39) {
 			callback('right');
-		}
-		else if (keyCode === 40) {
+		} else if (keyCode === 40) {
 			callback('down');
 		}
 	};

@@ -2,25 +2,28 @@ var Snake = Snake || {};
 
 Snake.Game = {};
 
-Snake.Game.state = {
-	snake: [],
-	direction: 'right', // 'right', 'left', 'top', 'down'
-	newDirection: null,
-	board: [],
-	boardWidth: 30,
-	boardHeight: 30,
-	borderOffset: {
-		top: 4,
-		bottom: 2,
-		left: 2,
-		right: 2
-	},
-	holeInTheWall: false,
-	score: 0,
-	level: 1,
-	mode: 'snake',
-	prevLength: null, // real snake length (during tron mode),
-	foodEaten: 0
+Snake.Game.initStateValues = function() {
+	this.state = {
+		state: 'menu', // 'menu', 'play', 'end'
+		snake: [],
+		direction: 'right', // 'right', 'left', 'top', 'down'
+		newDirection: null,
+		board: [],
+		boardWidth: 30,
+		boardHeight: 30,
+		borderOffset: {
+			top: 4,
+			bottom: 2,
+			left: 2,
+			right: 2
+		},
+		holeInTheWall: false,
+		score: 0,
+		level: 1,
+		mode: 'snake',
+		prevLength: null, // real snake length (during tron mode),
+		foodEaten: 0
+	};
 };
 
 // TODO: wrap in function and turn to local vars?
@@ -31,34 +34,46 @@ Snake.Game.vars = {
 };
 
 Snake.Game.init = function() {
+	this.initStateValues();
+	console.log(this.state);
+
 	this.ui = Snake.UI;
 	this.controls = Snake.Controls;
 	this.board = Snake.Board;
 
 	this.ui.init(this.state);
 
-	//TODO show menu or info
-	//this.ui.showMainMenu();
+	this.initGameFeatures();
+
+	this.ui.paintBoard(this.state);
+
+	this.ui.showMainMenu();
 
 	this.controls.addListeners(this.onInput.bind(this));
+};
 
-	//initialise the snake
-	this.initSnake();
-
+Snake.Game.initGameFeatures = function() {
 	//initialise the walls on the board
 	this.board.initBoard(this.state);
 
 	//initialise the food
 	this.initFood();
 
+	//initialise the snake
+	this.initSnake();
+};
+
+Snake.Game.startNewGame = function() {
+	this.state.state = 'play';
+
 	this.vars.then = performance.now();
 
 	//start the game
-	this.start();
+	this.startGameLoop();
 };
 
-Snake.Game.start = function() {
-	this.vars.animationId = window.requestAnimationFrame(this.start.bind(this));
+Snake.Game.startGameLoop = function() {
+	this.vars.animationId = window.requestAnimationFrame(this.startGameLoop.bind(this));
 
 	var now = performance.now();
 	var elapsed = now - this.vars.then;
@@ -149,6 +164,8 @@ Snake.Game.tick = function() {
 	this.update();
 	this.ui.paintBoard(this.state);
 	this.ui.paintScore(this.state);
+
+	if (this.state.state === 'end') this.ui.showEndGame();
 };
 
 Snake.Game.update = function() {
@@ -255,9 +272,7 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		window.cancelAnimationFrame(this.vars.animationId);
 		console.log('ifCollidedWithItself', this.ifCollidedWithSnake(snakeX, snakeY));
 		console.log('ifCollidedWithWalls', this.state.board[snakeX][snakeY].type === 'wall');
-		this.ui.showEndGame();
-		//restart game ?
-		//this.Game.init();
+		this.state.state = 'end';
 	}
 };
 
