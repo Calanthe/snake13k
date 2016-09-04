@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/Calanthe/snake13k.git"
   },
+  "scripts": {
+    "start": "gulp build"
+  },
   "keywords": [
     "snake",
     "glitch",
