@@ -164,16 +164,9 @@ Snake.UI.initWallCells = function() {
 };
 
 Snake.UI.showMainMenu = function() {
-	this.ctx.fillStyle = this.wall;
-	this.ctx.font = "50px monospace";
-	var titleText = "Sn@Ķæ";
-	this.ctx.fillText(titleText, 50, 60);
-	this.ctx.font = "18px monospace";
-	var subtitleText = "A game where glitch is a feature!";
-	this.ctx.fillText(subtitleText, 50, 80);
-	this.ctx.font = "18px monospace";
-	subtitleText = "--Press [SPACE] to start--";
-	this.ctx.fillText(subtitleText, 100, 300);
+	this.paintString(60, 60, 'SNAKE', this.wall);
+	this.paintString(9, 70, '  press [space] to start  ', this.wall);
+	this.paintString(9, 100, '  every bug is a feature  ', this.wall);
 };
 
 Snake.UI.paintScore = function(state) {
@@ -182,6 +175,7 @@ Snake.UI.paintScore = function(state) {
 	var paddedScore = pad.substring(0, pad.length - score.length) + score;
 
 	this.paintString(9, 7, paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(9, 114, 'js13k 2016 intuitio bartaz', state.mode === 'tron' ? this.snakeTron : this.wall);
 	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
@@ -195,7 +189,7 @@ Snake.UI.showEndGame = function() {
 	this.ctx.fillText(subtitleText, 100, 300);
 };
 
-Snake.UI.paintBoard = function(state) {
+Snake.UI.paint = function(state) {
 	//paint the board
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -205,6 +199,8 @@ Snake.UI.paintBoard = function(state) {
 			this.paintCell(x, y, state.mode === 'tron' ? this.boardCellTron : this.boardCell, this.cells.full);
 		}
 	}
+
+	this.paintScore(state);
 
 	document.body.className = state.mode;
 
@@ -230,7 +226,9 @@ Snake.UI.paintBoard = function(state) {
 		}
 	}
 
-	this.paintScore(state);
+	if (state.state === 'menu') {
+		this.showMainMenu();
+	}
 
 	this.glitchPixels();
 	this.paintPixels();
@@ -296,7 +294,7 @@ Snake.UI.paintLine = function(x, y, width, colour) {
 };
 
 Snake.UI.paintCharacter = function(x, y, character, colour) {
-	var characterPixels = this.font.font[character];
+	var characterPixels = this.font.font[character] || this.font.font["0"];
 	if (characterPixels) {
 		for (var i = 0; i < this.font.characterPixelsWidth; i++) {
 			for (var j = 0; j < this.font.characterPixelsHeight; j++) {
@@ -310,7 +308,7 @@ Snake.UI.paintCharacter = function(x, y, character, colour) {
 
 Snake.UI.paintString = function(x, y, stringValue, colour) {
 	for (var i = 0; i < stringValue.length; i++) { //iterate over string characters
-		this.paintCharacter(x + (this.font.characterPixelsWidth + 1) * i, y, stringValue.charAt(i), colour);
+		this.paintCharacter(x + (this.font.characterPixelsWidth + 1) * i, y, stringValue.charAt(i).toUpperCase(), colour);
 	}
 };
 

@@ -36,9 +36,7 @@ Snake.Game.vars = {
 Snake.Game.init = function() {
 	this.initNewGame();
 
-	this.ui.paintBoard(this.state);
-
-	this.ui.showMainMenu();
+	this.ui.paint(this.state);
 
 	this.controls.addListeners(this.onInput.bind(this));
 };
@@ -165,7 +163,7 @@ Snake.Game.initEdible = function(type) {
 
 Snake.Game.tick = function() {
 	this.update();
-	this.ui.paintBoard(this.state);
+	this.ui.paint(this.state);
 
 	if (this.state.state === 'end') this.ui.showEndGame();
 };
