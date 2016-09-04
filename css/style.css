@@ -1,0 +1,92 @@
+body {
+  background: #333;
+  overflow: hidden; /* because screen bevel cause scroll to show up */
+}
+
+.screen {
+  width: 600px;
+  height: 600px;
+  margin: 50px auto;
+  position: relative;
+  border-radius: 65px;
+  background: rgb(150,200,50);
+  transition: 200ms;
+}
+
+.tron .screen { background: #000; }
+
+.screen:after, .screen:before {
+  content: '';
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%; height: 100%;
+  background:
+    -webkit-gradient(linear, left top, right bottom,
+      color-stop(0, rgba(255, 255, 255, 0)),
+      color-stop(0.5, rgba(255, 255, 255, .05)),
+      color-stop(0.501, rgba(0, 0, 0, 0.05)),
+      color-stop(1, rgba(0, 0, 0, 0)));
+  background:
+      -moz-linear-gradient(left top,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, .05) 50%,
+        rgba(0, 0, 0, .05) 50%,
+        rgba(0, 0, 0, 0));
+  background:
+      linear-gradient(left top,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, .05) 50%,
+        rgba(0, 0, 0, .05) 50%,
+        rgba(0, 0, 0, 0));
+  background-color: inherit;
+
+  border-radius: 100%;
+
+  -webkit-transform: scaleX(4) scaleY(1.02);
+  transform: scaleX(4) scaleY(1.02);
+
+  clip: rect(0, 360px, 650px, 240px);
+  z-index: -1;
+}
+.screen:after {
+  -webkit-transform: scaleY(4) scaleX(1.02) rotate(-90deg);
+  transform: scaleY(4) scaleX(1.02) rotate(-90deg);
+}
+
+canvas {
+  border-radius: 65px;
+  width: 600px;
+  height: 600px;
+  display: block;
+  margin: 0 auto;
+  transition: 200ms;
+}
+
+.glare {
+  position:absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 65px;
+  z-index: 1;
+  background:
+    -webkit-gradient(linear, left top, right bottom,
+      color-stop(0, rgba(255, 255, 255, 0)),
+      color-stop(0.55, rgba(255, 255, 255, .05)),
+      color-stop(0.551, rgba(0, 0, 0, .05)),
+      color-stop(1, rgba(0, 0, 0, 0)));
+  background:
+    -moz-linear-gradient(left top,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, .05) 55%,
+      rgba(0, 0, 0, .05) 55%,
+      rgba(0, 0, 0, 0));
+  background:
+    linear-gradient(left top,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, .05) 55%,
+      rgba(0, 0, 0, .05) 55%,
+      rgba(0, 0, 0, 0));
+}

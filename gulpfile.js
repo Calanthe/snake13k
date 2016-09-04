@@ -1,36 +1,24 @@
+/* eslint-env node */
+
 var fs = require('fs'),
 	cheerio = require('cheerio'),
 	gulp = require('gulp'),
+	cssmin = require('gulp-cssmin'),
 	concat = require('gulp-concat'),
 	htmlmin = require('gulp-htmlmin'),
 	rimraf = require('gulp-rimraf'),
-	rename = require('gulp-rename'),
 	replace = require('gulp-replace'),
-	webserver = require('gulp-webserver'),
 	uglify = require('gulp-uglify'),
-	unzip = require('gulp-unzip'),
 	zip = require('gulp-zip'),
 	exclude_min = [], //eg ['js/lib/jsfxr.min.js']
 	config = { js: [] };
 
 
-gulp.task('build', ['initbuild', 'jsmin', 'addjs', 'zip', 'clean', 'report']);
-
-//do we need this?
-gulp.task('serve', function() {
-	gulp.src('.')
-		.pipe(webserver({
-			livereload: false,
-			host: '0.0.0.0',
-			port: 8013,
-			open: true
-		}));
-});
-
+gulp.task('build', ['initbuild', 'jsmin', 'cssmin', 'inline', 'zip', 'clean', 'report']);
 
 gulp.task('initbuild', function() {
 
-	var stream, html, $, src, js = [];
+	var stream, html, $, src, js = [], css = [];
 
 	// delete prev files
 	stream = gulp.src('game.zip')
@@ -58,6 +46,16 @@ gulp.task('initbuild', function() {
 
 	config.js = js;
 
+	$('link[rel="stylesheet"]').each(function() {
+		src = $(this).attr('href');
+		if (exclude_min.indexOf(src) === -1) { //exclude already minified files
+			css.push(src);
+		}
+	});
+
+	config.css = css;
+
+	return stream;
 });
 
 gulp.task('jsmin', ['initbuild'], function() {
@@ -71,8 +69,18 @@ gulp.task('jsmin', ['initbuild'], function() {
 
 });
 
-gulp.task('addjs', ['jsmin'], function() {
-	var i, tmp, extra_js = '';
+gulp.task('cssmin', ['initbuild'], function() {
+
+	var stream = gulp.src(config.css)
+		.pipe(concat('s.css')) //all js files are concatenated into g.js
+		.pipe(cssmin())
+		.pipe(gulp.dest('./tmp'));
+
+	return stream;
+});
+
+gulp.task('inline', ['jsmin', 'cssmin'], function() {
+	var i, extra_js = '';
 
 	var js = fs.readFileSync('./tmp/g.js', 'utf-8', function(e, data) {
 		return data;
@@ -80,25 +88,30 @@ gulp.task('addjs', ['jsmin'], function() {
 
 	//include already minified files
 	for (i = 0; i < exclude_min.length; i += 1) {
-		console.log(exclude_min[i])
+		console.log(exclude_min[i]);
 		extra_js += fs.readFileSync(exclude_min[i], 'utf-8', function(e, data) {
 			return data;
 		});
 	}
 	console.log(extra_js.length, 'OK', exclude_min);
 
+	var css = fs.readFileSync('./tmp/s.css', 'utf-8', function(e, data) {
+		return data;
+	});
+
 	var stream = gulp.src('index.html')
 		.pipe(replace(/<.*?script.*?>.*?<\/.*?script.*?>/igm, ''))
 		.pipe(replace(/<\/body>/igm, '<script>'+extra_js+' '+js+'</script></body>'))
+		.pipe(replace(/<.*?link.*rel="stylesheet".*?\/>/igm, ''))
+		.pipe(replace(/<\/head>/igm, '<style>'+css+'</style></head>'))
 		.pipe(htmlmin({collapseWhitespace: true}))
-		//.pipe(rename('index.html'))
 		.pipe(gulp.dest('./tmp'));
 
 	return stream;
 
 });
 
-gulp.task('zip', ['addjs'], function() {
+gulp.task('zip', ['inline'], function() {
 	var stream = gulp.src('./tmp/index.html')
 		.pipe(zip('game.zip'))
 		.pipe(gulp.dest('.'));
@@ -106,20 +119,9 @@ gulp.task('zip', ['addjs'], function() {
 	return stream;
 });
 
-//do we need this?
-/*gulp.task('unzip', ['zip'], function() {
-	var stream = gulp.src('game.zip')
-		.pipe(unzip())
-		.pipe(gulp.dest('.'));
-
-	return stream;
-});*/
-
-
 gulp.task('clean', ['zip'], function() {
 	var stream = gulp.src('./tmp')
 		.pipe(rimraf());
-
 
 	return stream;
 });
@@ -131,7 +133,7 @@ gulp.task('report', ['clean'], function() {
 		remaining = limit - size,
 		percentage = (remaining / limit) * 100;
 
-	percentage = Math.round(percentage * 100) / 100
+	percentage = Math.round(percentage * 100) / 100;
 
 	console.log('\n\n-------------');
 	console.log('BYTES USED: ' + stat.size);
