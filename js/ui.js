@@ -304,7 +304,7 @@ Snake.UI.glitchPixels = function() {
 	for (var g = 0; g < state.level - 1; g++) {
 		// glitch columns (simple shifting/pushing pixels around)
 		var glitchOffset = Snake.Game.random(0, state.level - 1); // move by how many pixels
-		var glitchWidth = Snake.Game.random(0, state.level * 2);  // group of how many columns/rows to move
+		var glitchWidth = Snake.Game.random(state.level, state.boardWidth * this.pixelsPerCell / 2);  // group of how many columns/rows to move
 		var rand = Math.random(); // direction of move
 
 		var column = Snake.Game.random(0, state.boardWidth * this.pixelsPerCell - 1 - glitchWidth); // which column to move
@@ -312,10 +312,10 @@ Snake.UI.glitchPixels = function() {
 		for (var w = 0; w < glitchWidth; w++) {
 			var x = column + w;
 			for (var o = 0; o < glitchOffset; o++) {
-				if (rand < 0.1) {
+				if (rand < 0.01) {
 					var pixel = this.pixels[x].shift();
 					this.pixels[x].push(pixel);
-				} else if (rand > 0.9) {
+				} else if (rand > 0.99) {
 					pixel = this.pixels[x][state.boardHeight * this.pixelsPerCell - 1];
 					this.pixels[x].unshift(pixel);
 				}
@@ -324,14 +324,14 @@ Snake.UI.glitchPixels = function() {
 
 		// glitch rows (we need to move pixels between columns)
 		glitchOffset = Snake.Game.random(0, state.level - 1);
-		glitchWidth = Snake.Game.random(0, state.level * 2);
+		glitchWidth = Snake.Game.random(state.level, state.boardHeight * this.pixelsPerCell / 2);
 		rand = Math.random();
 		var row = Snake.Game.random(0, state.boardHeight * this.pixelsPerCell - 1 - glitchWidth);
 
 		for (w = 0; w < glitchWidth; w++) {
 			var y = row + w;
 			for (o = 0; o < glitchOffset; o++) {
-				if (rand < 0.1) {
+				if (rand < 0.01) {
 					// move pixels left
 					pixel = this.pixels[0][y];
 					for (x = 0; x < this.pixels.length - 1; x++) {
@@ -339,7 +339,7 @@ Snake.UI.glitchPixels = function() {
 					}
 					this.pixels[this.pixels.length - 1][y] = pixel;
 				}
-				else if (rand > 0.9) {
+				else if (rand > 0.99) {
 					// move pixels right
 					pixel = this.pixels[this.pixels.length - 1][y];
 					for (x = this.pixels.length - 1; x > 0; x--) {
