@@ -1,6 +1,8 @@
 ### GLITCHES:
 
-ALL DONE!
+- [ ] glitched wall special treatment
+  - [ ] becomes hole after using it?
+  - [ ] or becomes wall again after using it?
 
 ### TRON MODE:
 
