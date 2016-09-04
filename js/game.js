@@ -281,13 +281,21 @@ Snake.Game.ifCollidedWithSnake = function(x, y) {
 	}).length;
 };
 
-Snake.Game.onInput = function(newDirection) {
-	// don't accept input with direction oposite to current
-	if ((newDirection === 'right' && this.state.direction !== 'left') ||
-			(newDirection === 'left' && this.state.direction !== 'right') ||
-			(newDirection === 'up' && this.state.direction !== 'down') ||
-			(newDirection === 'down' && this.state.direction !== 'up')) {
-		this.state.newDirection = newDirection;
+Snake.Game.onInput = function(action) {
+	if (this.state.state === 'play') {
+		// don't accept input with direction oposite to current
+		if ((action === 'right' && this.state.direction !== 'left') ||
+		(action === 'left' && this.state.direction !== 'right') ||
+		(action === 'up' && this.state.direction !== 'down') ||
+		(action === 'down' && this.state.direction !== 'up')) {
+			this.state.newDirection = action;
+		}
+	}
+	else if (action === 'start') {
+		if (Snake.Game.state.state === 'end') {
+			Snake.Game.initNewGame();
+		}
+		Snake.Game.startNewGame();
 	}
 };
 

@@ -172,7 +172,7 @@ Snake.UI.showMainMenu = function() {
 	var subtitleText = "A game where glitch is a feature!";
 	this.ctx.fillText(subtitleText, 50, 80);
 	this.ctx.font = "18px monospace";
-	subtitleText = "--Press any key to start--";
+	subtitleText = "--Press [SPACE] to start--";
 	this.ctx.fillText(subtitleText, 100, 300);
 };
 
@@ -191,7 +191,7 @@ Snake.UI.showEndGame = function() {
 	var subtitleText = "Game over ;(";
 	this.ctx.fillText(subtitleText, 100, 260);
 	this.ctx.font = "18px monospace";
-	subtitleText = "--Press any key to restart--";
+	subtitleText = "--Press [SPACE] to start a new game--";
 	this.ctx.fillText(subtitleText, 100, 300);
 };
 
