@@ -24,12 +24,6 @@ gulp.task('initbuild', function() {
 	stream = gulp.src('game.zip')
 		.pipe(rimraf());
 
-	stream = gulp.src('./tmp/g.js')
-		.pipe(rimraf());
-
-	stream = gulp.src('./tmp/index.html')
-		.pipe(rimraf());
-
 	// get a list of all js scripts from our dev file
 	html = fs.readFileSync('index.html', 'utf-8', function(e, data) {
 		return data;
@@ -72,7 +66,7 @@ gulp.task('jsmin', ['initbuild'], function() {
 gulp.task('cssmin', ['initbuild'], function() {
 
 	var stream = gulp.src(config.css)
-		.pipe(concat('s.css')) //all js files are concatenated into g.js
+		.pipe(concat('s.css'))//all js files are concatenated into s.css
 		.pipe(cssmin())
 		.pipe(gulp.dest('./tmp'));
 
