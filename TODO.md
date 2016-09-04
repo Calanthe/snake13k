@@ -17,7 +17,7 @@
 - [ ] improve menu/game over text
 - [ ] start game with any key (what with game over?)
 - [x] buggybug on 2 pixels (can be eaten on any of them)
-  - [ ] add 0 in the first column and choose only 7 length bugs
+  - [ ] add 0 in the first column and row, also choose only 7 length bugs
 - [ ] bonus bugs (regular bugs that show for short time for bonus points)
   - [ ] one of them will be buggy(tron) bug
 - [ ] sounds
@@ -26,6 +26,7 @@
   - [ ] countdown for bugs
   - [ ] countdown for food eaten in level
 - [ ] mobile controls
+- [ ] favicon?
 
 
 ### CODE:
