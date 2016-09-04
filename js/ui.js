@@ -20,6 +20,9 @@ Snake.UI = {
 	// 	]
 	// },
 
+	pixels: [],
+	pixelsPerCell: 4,
+
 	cells: {
 		full: [
 			[1,1,1,1],
@@ -100,9 +103,17 @@ Snake.UI.init = function(state) {
 	this.canvas.width = state.boardWidth * this.cellSize;
 	this.canvas.height = state.boardHeight * this.cellSize;
 
+	Snake.UI.initPixels(state);
 	Snake.UI.initSnakeCells();
 	Snake.UI.initWallCells();
 	console.log(this.cells.snake);
+};
+
+Snake.UI.initPixels = function(state) {
+	this.pixels = [];
+	for (var x = 0; x < state.boardWidth * this.pixelsPerCell; x++) {
+		this.pixels.push(new Array(state.boardHeight * this.pixelsPerCell));
+	}
 };
 
 Snake.UI.initSnakeCells = function() {
@@ -206,13 +217,19 @@ Snake.UI.paintBoard = function(state) {
 		}
 	}
 
-	// FIXME: quick and dirty tron mode prototype
 	document.body.className = state.mode;
+
+	//paint the snake
+	for (var i = 0; i < state.snake.length; i++) {
+		var cell = state.snake[i];
+		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
+		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels);
+	}
 
 	//paint the board
 	for (x = 0; x < state.boardWidth; x++) {
 		for (y = 0; y < state.boardHeight; y++) {
-			var cell = state.board[x][y];
+			cell = state.board[x][y];
 			if (cell.type === 'wall') {
 				var cellPixels = this.cells.wall[this.getWallCellType(x, y, state.board)];
 				this.paintCell(x, y, state.mode === 'tron' ? this.wallTron : this.wall, cellPixels, cell.isGlitched);
@@ -224,12 +241,8 @@ Snake.UI.paintBoard = function(state) {
 		}
 	}
 
-	//paint the snake
-	for (var i = 0; i < state.snake.length; i++) {
-		cell = state.snake[i];
-		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
-		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels);
-	}
+	this.glitchPixels();
+	this.paintPixels();
 };
 
 Snake.UI.getSnakeCellType = function(i, snake) {
@@ -276,20 +289,84 @@ Snake.UI.getWallCellType = function(x, y, board) {
 };
 
 Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
-	var pixelWidth = (this.cellSize - 4) / 4;
+	for (var i = 0; i < this.pixelsPerCell; i++) {
+		for (var j = 0; j < this.pixelsPerCell; j++) {
+			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
+				this.pixels[x * this.pixelsPerCell + i][y * this.pixelsPerCell + j] = colour;
+			}
+		}
+	}
+};
+
+Snake.UI.glitchPixels = function() {
+	var state = Snake.Game.state;
+
+	for (var g = 0; g < state.level - 1; g++) {
+		// glitch columns (simple shifting/pushing pixels around)
+		var glitchOffset = Snake.Game.random(0, state.level - 1); // move by how many pixels
+		var glitchWidth = Snake.Game.random(state.level, state.boardWidth * this.pixelsPerCell / 2);  // group of how many columns/rows to move
+		var rand = Math.random(); // direction of move
+
+		var column = Snake.Game.random(0, state.boardWidth * this.pixelsPerCell - 1 - glitchWidth); // which column to move
+
+		for (var w = 0; w < glitchWidth; w++) {
+			var x = column + w;
+			for (var o = 0; o < glitchOffset; o++) {
+				if (rand < 0.01) {
+					var pixel = this.pixels[x].shift();
+					this.pixels[x].push(pixel);
+				} else if (rand > 0.99) {
+					pixel = this.pixels[x][state.boardHeight * this.pixelsPerCell - 1];
+					this.pixels[x].unshift(pixel);
+				}
+			}
+		}
+
+		// glitch rows (we need to move pixels between columns)
+		glitchOffset = Snake.Game.random(0, state.level - 1);
+		glitchWidth = Snake.Game.random(state.level, state.boardHeight * this.pixelsPerCell / 2);
+		rand = Math.random();
+		var row = Snake.Game.random(0, state.boardHeight * this.pixelsPerCell - 1 - glitchWidth);
+
+		for (w = 0; w < glitchWidth; w++) {
+			var y = row + w;
+			for (o = 0; o < glitchOffset; o++) {
+				if (rand < 0.01) {
+					// move pixels left
+					pixel = this.pixels[0][y];
+					for (x = 0; x < this.pixels.length - 1; x++) {
+						this.pixels[x][y] = this.pixels[x + 1][y];
+					}
+					this.pixels[this.pixels.length - 1][y] = pixel;
+				}
+				else if (rand > 0.99) {
+					// move pixels right
+					pixel = this.pixels[this.pixels.length - 1][y];
+					for (x = this.pixels.length - 1; x > 0; x--) {
+						this.pixels[x][y] = this.pixels[x - 1][y];
+					}
+					this.pixels[0][y] = pixel;
+				}
+			}
+		}
+	}
+};
+
+Snake.UI.paintPixels = function() {
+	var pixelWidth = (this.cellSize - this.pixelsPerCell) / this.pixelsPerCell;
 	var pixelSpacing = 1;
 	if (Snake.Game.state.mode === 'tron') {
 		pixelWidth += 1;
 		pixelSpacing = 0;
 	}
-	this.ctx.fillStyle = colour;
-
-	for (var i = 0; i < 4; i++) {
-		for (var j = 0; j < 4; j++) {
-			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
-				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + pixelSpacing), y * this.cellSize+ j * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
+	var ctx = this.ctx;
+	this.pixels.forEach(function(column, x) {
+		column.forEach(function(pixel, y) {
+			if (pixel) {
+				ctx.fillStyle = pixel;
+				ctx.fillRect(x * (pixelWidth + pixelSpacing), y * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
 			}
-		}
-	}
+		});
+	});
 
 };
