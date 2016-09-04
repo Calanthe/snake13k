@@ -301,21 +301,51 @@ Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
 Snake.UI.glitchPixels = function() {
 	var state = Snake.Game.state;
 
-	for (var i = 0; i < state.level - 1; i++) {
-		var glitchOffset = Snake.Game.random(0,1);
-		var glitchWidth = Snake.Game.random(0,state.level*2);
-		var column = Snake.Game.random(0, state.boardWidth * this.pixelsPerCell - 1 - glitchWidth);
-		var rand = Math.random();
+	for (var g = 0; g < state.level - 1; g++) {
+		// glitch columns (simple shifting/pushing pixels around)
+		var glitchOffset = Snake.Game.random(0, state.level - 1); // move by how many pixels
+		var glitchWidth = Snake.Game.random(0, state.level * 2);  // group of how many columns/rows to move
+		var rand = Math.random(); // direction of move
 
-		for (var c = 0; c < glitchWidth; c++) {
-			for (var j = 0; j < glitchOffset; j++) {
+		var column = Snake.Game.random(0, state.boardWidth * this.pixelsPerCell - 1 - glitchWidth); // which column to move
+
+		for (var w = 0; w < glitchWidth; w++) {
+			var x = column + w;
+			for (var o = 0; o < glitchOffset; o++) {
 				if (rand < 0.1) {
-					var pixel = this.pixels[column + c].shift();
-					this.pixels[column + c].push(pixel);
-
+					var pixel = this.pixels[x].shift();
+					this.pixels[x].push(pixel);
 				} else if (rand > 0.9) {
-					pixel = this.pixels[column + c][state.boardHeight * this.pixelsPerCell - 1];
-					this.pixels[column + c].unshift(pixel);
+					pixel = this.pixels[x][state.boardHeight * this.pixelsPerCell - 1];
+					this.pixels[x].unshift(pixel);
+				}
+			}
+		}
+
+		// glitch rows (we need to move pixels between columns)
+		glitchOffset = Snake.Game.random(0, state.level - 1);
+		glitchWidth = Snake.Game.random(0, state.level * 2);
+		rand = Math.random();
+		var row = Snake.Game.random(0, state.boardHeight * this.pixelsPerCell - 1 - glitchWidth);
+
+		for (w = 0; w < glitchWidth; w++) {
+			var y = row + w;
+			for (o = 0; o < glitchOffset; o++) {
+				if (rand < 0.1) {
+					// move pixels left
+					pixel = this.pixels[0][y];
+					for (x = 0; x < this.pixels.length - 1; x++) {
+						this.pixels[x][y] = this.pixels[x + 1][y];
+					}
+					this.pixels[this.pixels.length - 1][y] = pixel;
+				}
+				else if (rand > 0.9) {
+					// move pixels right
+					pixel = this.pixels[this.pixels.length - 1][y];
+					for (x = this.pixels.length - 1; x > 0; x--) {
+						this.pixels[x][y] = this.pixels[x - 1][y];
+					}
+					this.pixels[0][y] = pixel;
 				}
 			}
 		}
