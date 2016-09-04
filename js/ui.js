@@ -20,6 +20,9 @@ Snake.UI = {
 	// 	]
 	// },
 
+	pixels: [],
+	pixelsPerCell: 4,
+
 	cells: {
 		full: [
 			[1,1,1,1],
@@ -100,9 +103,17 @@ Snake.UI.init = function(state) {
 	this.canvas.width = state.boardWidth * this.cellSize;
 	this.canvas.height = state.boardHeight * this.cellSize;
 
+	Snake.UI.initPixels(state);
 	Snake.UI.initSnakeCells();
 	Snake.UI.initWallCells();
 	console.log(this.cells.snake);
+};
+
+Snake.UI.initPixels = function(state) {
+	this.pixels = [];
+	for (var x = 0; x < state.boardWidth * this.pixelsPerCell; x++) {
+		this.pixels.push(new Array(state.boardHeight * this.pixelsPerCell));
+	}
 };
 
 Snake.UI.initSnakeCells = function() {
@@ -230,6 +241,8 @@ Snake.UI.paintBoard = function(state) {
 		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
 		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels);
 	}
+
+	this.paintPixels();
 };
 
 Snake.UI.getSnakeCellType = function(i, snake) {
@@ -276,20 +289,30 @@ Snake.UI.getWallCellType = function(x, y, board) {
 };
 
 Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
-	var pixelWidth = (this.cellSize - 4) / 4;
+	for (var i = 0; i < this.pixelsPerCell; i++) {
+		for (var j = 0; j < this.pixelsPerCell; j++) {
+			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
+				this.pixels[x * this.pixelsPerCell + i][y * this.pixelsPerCell + j] = colour;
+			}
+		}
+	}
+};
+
+Snake.UI.paintPixels = function() {
+	var pixelWidth = (this.cellSize - this.pixelsPerCell) / this.pixelsPerCell;
 	var pixelSpacing = 1;
 	if (Snake.Game.state.mode === 'tron') {
 		pixelWidth += 1;
 		pixelSpacing = 0;
 	}
-	this.ctx.fillStyle = colour;
-
-	for (var i = 0; i < 4; i++) {
-		for (var j = 0; j < 4; j++) {
-			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
-				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + pixelSpacing), y * this.cellSize+ j * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
+	var ctx = this.ctx;
+	this.pixels.forEach(function(column, x) {
+		column.forEach(function(pixel, y) {
+			if (pixel) {
+				ctx.fillStyle = pixel;
+				ctx.fillRect(x * (pixelWidth + pixelSpacing), y * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
 			}
-		}
-	}
+		});
+	});
 
 };
