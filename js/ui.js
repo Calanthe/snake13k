@@ -217,13 +217,19 @@ Snake.UI.paintBoard = function(state) {
 		}
 	}
 
-	// FIXME: quick and dirty tron mode prototype
 	document.body.className = state.mode;
+
+	//paint the snake
+	for (var i = 0; i < state.snake.length; i++) {
+		var cell = state.snake[i];
+		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
+		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels);
+	}
 
 	//paint the board
 	for (x = 0; x < state.boardWidth; x++) {
 		for (y = 0; y < state.boardHeight; y++) {
-			var cell = state.board[x][y];
+			cell = state.board[x][y];
 			if (cell.type === 'wall') {
 				var cellPixels = this.cells.wall[this.getWallCellType(x, y, state.board)];
 				this.paintCell(x, y, state.mode === 'tron' ? this.wallTron : this.wall, cellPixels, cell.isGlitched);
@@ -235,13 +241,7 @@ Snake.UI.paintBoard = function(state) {
 		}
 	}
 
-	//paint the snake
-	for (var i = 0; i < state.snake.length; i++) {
-		cell = state.snake[i];
-		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
-		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels);
-	}
-
+	this.glitchPixels();
 	this.paintPixels();
 };
 
@@ -293,6 +293,30 @@ Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
 		for (var j = 0; j < this.pixelsPerCell; j++) {
 			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
 				this.pixels[x * this.pixelsPerCell + i][y * this.pixelsPerCell + j] = colour;
+			}
+		}
+	}
+};
+
+Snake.UI.glitchPixels = function() {
+	var state = Snake.Game.state;
+
+	for (var i = 0; i < state.level - 1; i++) {
+		var glitchOffset = Snake.Game.random(0,1);
+		var glitchWidth = Snake.Game.random(0,state.level*2);
+		var column = Snake.Game.random(0, state.boardWidth * this.pixelsPerCell - 1 - glitchWidth);
+		var rand = Math.random();
+
+		for (var c = 0; c < glitchWidth; c++) {
+			for (var j = 0; j < glitchOffset; j++) {
+				if (rand < 0.1) {
+					var pixel = this.pixels[column + c].shift();
+					this.pixels[column + c].push(pixel);
+
+				} else if (rand > 0.9) {
+					pixel = this.pixels[column + c][state.boardHeight * this.pixelsPerCell - 1];
+					this.pixels[column + c].unshift(pixel);
+				}
 			}
 		}
 	}
