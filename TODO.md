@@ -13,7 +13,9 @@
 
 ### GAME FEATURES:
 
-- [ ] some welcome screen / menu / game over with ability to restart the game
+- [ ] hi score
+- [ ] improve menu/game over text
+- [ ] start game with any key (what with game over?)
 - [x] buggybug on 2 pixels (can be eaten on any of them)
   - [ ] add 0 in the first column and choose only 7 length bugs
 - [ ] bonus bugs (regular bugs that show for short time for bonus points)
