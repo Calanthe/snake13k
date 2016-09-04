@@ -117,38 +117,42 @@ Snake.Game.initBuggyBug = function() {
 Snake.Game.initEdible = function(type) {
 	var minX, maxX, minY, maxY, offset = 0;
 
-	if (this.state.level === 1) { //first three foods always in the middle of the board
+	if (this.state.level === 1) { // food on first level always inside of the board
 		offset = 1;
 	}
 
 	if (!this.state.holeInTheWall) {
+		// if there is no hole in the wall yet let food show on walls but not outside
 		minX = this.state.borderOffset.left + offset;
 		maxX = this.state.boardWidth - this.state.borderOffset.right - 1 - offset;
 
 		minY = this.state.borderOffset.top + offset;
 		maxY = this.state.boardHeight - this.state.borderOffset.bottom - 1 - offset;
-	} else { //if there is a hole, edible can be outside of the board
+	} else {
+		// if there is a hole, edible can be outside of the board walls
 		minX = minY = 0;
 		maxX = this.state.boardWidth - 1;
 		maxY = this.state.boardHeight - 1;
 	}
 
-	//make sure that the edible is not generated on the buggy bug, food or snake
+	// make sure that the edible is not generated on the buggy bug, food or snake
 	do {
 		var randomX = this.random(minX, maxX);
 		var randomY = this.random(minY, maxY);
 	} while ((this.state.board[randomX][randomY].type === 'food')
 		|| (this.state.board[randomX][randomY].type === 'buggybug')
 		|| Snake.Game.ifCollidedWithSnake(randomX, randomY)
-		|| (!this.state.holeInTheWall && //exclude walls in the corners if there is no hole yet
-				((randomX === minX && randomY === minY)
-				|| (randomX === minX && randomY === maxY)
-				|| (randomX === maxX && randomY === minY)
-				|| (randomX === maxX && randomY === maxY))));
+		||
+			// exclude corners, so food don't show in wall corners if there is no hole yet
+			// and then it doesn't show in invisible rounded corners
+			((randomX === minX && randomY === minY)
+			|| (randomX === minX && randomY === maxY)
+			|| (randomX === maxX && randomY === minY)
+			|| (randomX === maxX && randomY === maxY)));
 
 	console.log('inside initEdible: ', type, minX, maxX, minY, maxY, randomX, randomY, this.state.holeInTheWall);
 
-	//if edible happens to be on wall glitch opposite wall so snake can go through
+	// if edible happens to be on wall glitch opposite wall so snake can go through
 	if (this.state.board[randomX][randomY].type === 'wall') {
 		this.board.glitchOppositeWall(randomX, randomY);
 		this.state.holeInTheWall = true;
