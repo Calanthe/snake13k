@@ -179,14 +179,9 @@ Snake.UI.paintScore = function(state) {
 	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
-Snake.UI.showEndGame = function() {
-	this.ctx.fillStyle = this.wall;
-	this.ctx.font = "24px monospace";
-	var subtitleText = "Game over ;(";
-	this.ctx.fillText(subtitleText, 100, 260);
-	this.ctx.font = "18px monospace";
-	subtitleText = "--Press [SPACE] to start a new game--";
-	this.ctx.fillText(subtitleText, 100, 300);
+Snake.UI.showEndGame = function(state) {
+	this.paintString(11, 60, '        GAME OVER         ', state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(9, 70, '  press [space] to start  ', state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
 Snake.UI.paint = function(state) {
@@ -228,6 +223,8 @@ Snake.UI.paint = function(state) {
 
 	if (state.state === 'menu') {
 		this.showMainMenu();
+	} else if (state.state === 'end') {
+		this.showEndGame(state);
 	}
 
 	this.glitchPixels();
