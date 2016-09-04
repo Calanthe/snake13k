@@ -93,8 +93,7 @@ Snake.UI = {
 	food: 'rgba(0,0,0,0.7)',
 	bug: 'rgba(0,0,0,0.7)',
 	snakeTron: 'cyan',
-	snake: 'rgba(0,0,0,0.7)',
-	screenBackground: 'rgb(150,200,50)'
+	snake: 'rgba(0,0,0,0.7)'
 };
 
 Snake.UI.init = function(state) {
@@ -175,7 +174,7 @@ Snake.UI.showMainMenu = function() {
 	var subtitleText = "A game where glitch is a feature!";
 	this.ctx.fillText(subtitleText, 50, 80);
 	this.ctx.font = "18px monospace";
-	var subtitleText = "--Press any key to start--";
+	subtitleText = "--Press any key to start--";
 	this.ctx.fillText(subtitleText, 100, 300);
 };
 
@@ -191,7 +190,7 @@ Snake.UI.showEndGame = function() {
 	var subtitleText = "Game over ;(";
 	this.ctx.fillText(subtitleText, 100, 260);
 	this.ctx.font = "18px monospace";
-	var subtitleText = "--Press any key to restart--";
+	subtitleText = "--Press any key to restart--";
 	this.ctx.fillText(subtitleText, 100, 300);
 };
 
