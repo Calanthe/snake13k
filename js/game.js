@@ -52,13 +52,13 @@ Snake.Game.initNewGame = function() {
 
 	this.ui.init(this.state);
 
-	//initialise the walls on the board
+	//initialise walls on the board
 	this.board.initBoard(this.state);
 
-	//initialise the food
+	//initialise food
 	this.initFood();
 
-	//initialise the snake
+	//initialise snake
 	this.initSnake();
 };
 

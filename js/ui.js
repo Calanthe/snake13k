@@ -6,20 +6,6 @@ Snake.UI = {
 
 	cellSize: 20, //dimension of one cell
 
-	// TODO: font for score (and letters?)
-	// http://robey.lag.net/2010/01/23/tiny-monospace-font.html
-	// http://www.dafont.com/bitmap.php
-	//
-	// font: {
-	// 	"0": [
-	// 		[1,1,1],
-	// 		[1,0,1],
-	// 		[1,0,1],
-	// 		[1,0,1],
-	// 		[1,1,1]
-	// 	]
-	// },
-
 	cells: {
 		full: [
 			[1,1,1,1],
@@ -102,7 +88,7 @@ Snake.UI.init = function(state) {
 
 	Snake.UI.initSnakeCells();
 	Snake.UI.initWallCells();
-	console.log(this.cells.snake);
+	this.font = Snake.Font;
 };
 
 Snake.UI.initSnakeCells = function() {
@@ -287,6 +273,22 @@ Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
 	for (var i = 0; i < 4; i++) {
 		for (var j = 0; j < 4; j++) {
 			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
+				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + pixelSpacing), y * this.cellSize+ j * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
+			}
+		}
+	}
+
+};
+
+Snake.UI.paintCharacter = function(character, colour) {
+	var pixelWidth = (this.cellSize - 4) / 4;
+	var pixelSpacing = 1;
+
+	this.ctx.fillStyle = colour;
+
+	for (var i = 0; i < 3; i++) {
+		for (var j = 0; j < 5; j++) {
+			if (this.font[j][i]) {
 				this.ctx.fillRect(x * this.cellSize + i * (pixelWidth + pixelSpacing), y * this.cellSize+ j * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
 			}
 		}
