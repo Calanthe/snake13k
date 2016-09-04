@@ -22,10 +22,52 @@ Snake.UI = {
 			[0,1,0,1],
 			[0,0,1,0]
 		],
-		bug: [
+		bug1Left: [
+			[1,0,0,0],
+			[1,0,0,1],
+			[0,1,1,1],
+			[0,0,0,1]
+		],
+		bug1Right: [
+			[1,0,0,0],
+			[1,1,0,0],
+			[1,1,1,0],
+			[0,1,0,0]
+		],
+		bug2Left: [
+			[0,0,0,1],
+			[0,0,1,1],
+			[0,1,1,1],
+			[1,1,1,1]
+		],
+		bug2Right: [
+			[1,0,0,0],
+			[0,1,0,0],
+			[1,1,0,0],
+			[1,1,1,0]
+		],
+		bug3Left: [
 			[0,0,0,0],
-			[0,1,0,1],
+			[1,1,1,1],
+			[1,0,1,0],
+			[0,0,0,0]
+		],
+		bug3Right: [
+			[0,0,0,0],
+			[1,1,1,0],
+			[1,0,1,0],
+			[0,0,0,0]
+		],
+		bug4Left: [
 			[0,0,1,0],
+			[1,1,1,1],
+			[1,0,1,1],
+			[1,0,1,0]
+		],
+		bug4Right: [
+			[0,1,0,0],
+			[1,1,1,1],
+			[1,1,0,1],
 			[0,1,0,1]
 		],
 		snakeHeadRight: [
@@ -225,7 +267,7 @@ Snake.UI.paintBoard = function(state) {
 			} else if (cell.type === 'food') {
 				this.paintCell(x, y, state.mode === 'tron' ? this.foodTron : this.food, this.cells.food);
 			} else if (cell.type === 'buggybug') {
-				this.paintCell(x, y, state.mode === 'tron' ? this.bugTron : this.bug, this.cells.bug);
+				this.paintCell(x, y, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[cell.body]);
 			}
 		}
 	}
