@@ -162,7 +162,6 @@ Snake.Game.initEdible = function(type) {
 Snake.Game.tick = function() {
 	this.update();
 	this.ui.paintBoard(this.state);
-	this.ui.paintScore(this.state);
 
 	if (this.state.state === 'end') this.ui.showEndGame();
 };
