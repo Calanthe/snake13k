@@ -1,6 +1,9 @@
 ### GLITCHES:
 
-ALL DONE (for now)!
+- [ ] buggybug
+  - [ ] fix issue with buggybug on edge
+  - [ ] more time to catch it
+  - [ ] only show it inside the board?
 
 ### TRON MODE:
 
@@ -30,6 +33,7 @@ ALL DONE (for now)!
 - [ ] controls
   - [ ] just touch on game screen?
   - [ ] some buttons below the screen
+- [ ] sound doesn't work at all (user input needed)
 - [ ] don't draw all the pixels
   - [ ] only draw pixels that are on?
   - [ ] have separate background canvas that is not redrawn?
