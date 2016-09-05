@@ -34,6 +34,9 @@ Snake.Game.vars = {
 };
 
 Snake.Game.init = function() {
+	this.sound = Snake.Sound;
+	this.sound.init();
+
 	this.initNewGame();
 
 	this.ui.paint(this.state);
@@ -245,6 +248,7 @@ Snake.Game.update = function() {
 };
 
 Snake.Game.consumeFood = function(snakeX, snakeY) {
+	this.sound.play(this.state.mode === 'tron' ? 'tronEat' : 'snakeEat');
 	this.state.score += 1;
 	this.state.foodEaten += 1;
 	if (this.state.foodEaten % 5 === 0) this.state.level += 1;
@@ -255,6 +259,7 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 };
 
 Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
+	this.sound.play(this.state.mode === 'tron' ? 'tronEat' : 'snakeEat');
 	// add extra points and enlarge snake without moving the tail until normal food is eaten
 	this.state.score += 1;
 	this.state.mode = 'tron';
@@ -289,6 +294,7 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		|| (this.state.board[snakeX][snakeY].type === 'wall' // or if the snake will collide with the walls
 				&& !this.state.board[snakeX][snakeY].isGlitched)) { // but not glitched walls
 
+		this.sound.play(this.state.mode === 'tron' ? 'tronHit' : 'snakeHit');
 		//stop the game loop
 		window.cancelAnimationFrame(this.vars.animationId);
 		console.log('ifCollidedWithItself', this.ifCollidedWithSnake(snakeX, snakeY));
