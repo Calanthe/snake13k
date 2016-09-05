@@ -22,7 +22,8 @@ Snake.Game.initStateValues = function() {
 		level: 1,
 		mode: 'snake',
 		prevLength: null, // real snake length (during tron mode),
-		foodEaten: 0
+		foodEaten: 0,
+		buggyBugTimeLeft: -1 // no buggy bug on the board
 	};
 };
 
@@ -53,11 +54,11 @@ Snake.Game.initNewGame = function() {
 	//initialise walls on the board
 	this.board.initBoard(this.state);
 
-	//initialise food
-	this.initFood();
-
 	//initialise snake
 	this.initSnake();
+
+	//initialise food
+	this.initFood();
 };
 
 Snake.Game.startNewGame = function() {
@@ -128,7 +129,7 @@ Snake.Game.initEdible = function(type) {
 		maxY = this.state.boardHeight - this.state.borderOffset.bottom - 1 - offset;
 	} else {
 		// if there is a hole, edible can be outside of the board walls
-		minX = minY = 0;
+		minX = minY = 0; //TODO fix if buggybug is on the edge
 		maxX = this.state.boardWidth - 1;
 		maxY = this.state.boardHeight - 1;
 	}
@@ -165,6 +166,7 @@ Snake.Game.initEdible = function(type) {
 			type: type,
 			body: 'bug' + bugNo + 'Right' // info about the body part
 		};
+		this.state.buggyBugTimeLeft = 20;
 	}
 };
 
@@ -177,6 +179,8 @@ Snake.Game.update = function() {
 	//take the snake's head
 	var snakeX = this.state.snake[this.state.snake.length - 1].x;
 	var snakeY = this.state.snake[this.state.snake.length - 1].y;
+
+	var buggyBugOnBoard = this.findBuggyBugOnBoard();
 
 	// update direction based on input
 	if (this.state.inputBuffer.length) {
@@ -242,6 +246,15 @@ Snake.Game.update = function() {
 		x: snakeX,
 		y: snakeY
 	});
+
+	if (buggyBugOnBoard.length === 2) {
+		if (this.state.buggyBugTimeLeft === 1) {
+			this.removeBuggyBug(buggyBugOnBoard[0].x, buggyBugOnBoard[0].y);
+			this.state.buggyBugTimeLeft = -1;
+		} else { //decrease remaining time of the buggyBug
+			this.state.buggyBugTimeLeft--;
+		}
+	}
 };
 
 Snake.Game.consumeFood = function(snakeX, snakeY) {
@@ -258,27 +271,40 @@ Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 	// add extra points and enlarge snake without moving the tail until normal food is eaten
 	this.state.score += 1;
 	this.state.mode = 'tron';
-	this.state.board[snakeX][snakeY].type = '';
-	if (this.state.board[snakeX - 1][snakeY].type === 'buggybug') { // remember to remove the second part of the bug
-		this.state.board[snakeX - 1][snakeY].type = '';
-	} else if (this.state.board[snakeX + 1][snakeY].type === 'buggybug') {
-		this.state.board[snakeX + 1][snakeY].type = '';
-	}
+	this.removeBuggyBug(snakeX, snakeY);
 	this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
 };
 
-Snake.Game.ifBuggyBugOnBoard = function() {
-	return this.state.board.filter(function(row) {
-		// filter only rows that contain buggy bug
-		return row.filter(function(cell) {
+Snake.Game.removeBuggyBug = function(x, y) {
+	this.state.board[x][y].type = '';
+	if (this.state.board[x - 1][y].type === 'buggybug') { // remember to remove the second part of the bug
+		this.state.board[x - 1][y].type = '';
+	} else if (this.state.board[x + 1][y].type === 'buggybug') {
+		this.state.board[x + 1][y].type = '';
+	}
+};
+
+Snake.Game.findBuggyBugOnBoard = function() {
+	var bug = [];
+
+	this.state.board.forEach(function(row, indexX) {
+		row.forEach(function(cell, indexY) {
 			// filter only cells that are buggybug
-			return cell.type === 'buggybug';
-		}).length;
-	}).length;
+			if (cell.type === 'buggybug') { // we should find two pieces
+				bug.push({
+					x: indexX,
+					y: indexY,
+					body: cell.body
+				});
+			};
+		});
+	});
+
+	return bug;
 };
 
 Snake.Game.addEdible = function() {
-	if (this.state.level > 2 && Math.random() < 0.3 && !this.ifBuggyBugOnBoard()) {
+	if (this.state.level > 2 && Math.random() < 0.3 && !this.findBuggyBugOnBoard().length) {
 		this.initBuggyBug();
 	}
 	this.initFood();

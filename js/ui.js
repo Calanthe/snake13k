@@ -196,27 +196,40 @@ Snake.UI.initWallCells = function() {
 Snake.UI.showMainMenu = function() {
 	this.paintString(60, 60, 'SNAKE', this.wall);
 	// TODO: not needed?
-	// this.paintString(9, 70, '  press [SPACE] to start  ', this.wall);
+	this.paintString(9, 70, ' press [any key] to start  ', this.wall);
 	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
 	//this.paintString(9, 113, 'abcdefghijklmnopqrstuvwxyz', this.wall);
 };
 
 Snake.UI.paintScore = function(state) {
-	var score = '' + state.score;
-	var pad = "0000";
-	var paddedScore = pad.substring(0, pad.length - score.length) + score;
+	var paddedScore = this.addPad(state.score, '0000');
+	var buggyBugOnBoard = Snake.Game.findBuggyBugOnBoard();
 
 	this.paintString(9, 7, paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
 	if (state.holeInTheWall) {
 		this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);
 	}
+	if (state.buggyBugTimeLeft !== -1 && buggyBugOnBoard.length === 2) {
+		// paint two parts of buggy bug in the top right corner
+		this.paintCell(24, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[0].body]);
+		this.paintCell(25, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[1].body]);
+
+		// paint also remaining time
+		var paddedTimeLeft = this.addPad(state.buggyBugTimeLeft, '00');
+		this.paintString(105, 7, '' + paddedTimeLeft, state.mode === 'tron' ? this.snakeTron : this.wall);
+	}
 	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, state.mode === 'tron' ? this.snakeTron : this.wall);
+};
+
+Snake.UI.addPad = function(number, pad) {
+	var string = '' + number;
+	return pad.substring(0, pad.length - string.length) + string;
 };
 
 Snake.UI.showEndGame = function(state) {
 	this.paintString(11, 60, '        GAME OVER         ', state.mode === 'tron' ? this.snakeTron : this.wall);
 	// TODO: not needed?
-	//this.paintString(9, 70, '  press [SPACE] to start  ', state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(9, 70, ' press [any key] to start  ', state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
 Snake.UI.paint = function(state) {
