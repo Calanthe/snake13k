@@ -7,7 +7,7 @@ Snake.Game.initStateValues = function() {
 		state: 'menu', // 'menu', 'play', 'end'
 		snake: [],
 		direction: 'right', // 'right', 'left', 'top', 'down'
-		newDirection: null,
+		inputBuffer: [],
 		board: [],
 		boardWidth: 30,
 		boardHeight: 30,
@@ -179,8 +179,19 @@ Snake.Game.update = function() {
 	var snakeY = this.state.snake[this.state.snake.length - 1].y;
 
 	// update direction based on input
-	if (this.state.newDirection) {
-		this.state.direction = this.state.newDirection;
+	if (this.state.inputBuffer.length) {
+		do {
+			var action = this.state.inputBuffer.shift();
+		} while (
+			// don't accept input with direction oposite to current
+			(action === 'right' && this.state.direction === 'left') ||
+			(action === 'left' && this.state.direction === 'right') ||
+			(action === 'up' && this.state.direction === 'down') ||
+			(action === 'down' && this.state.direction === 'up')
+		);
+		if (action) {
+			this.state.direction = action;
+		}
 	}
 
 	if (this.state.direction === 'right') snakeX++;
@@ -295,13 +306,7 @@ Snake.Game.ifCollidedWithSnake = function(x, y) {
 
 Snake.Game.onInput = function(action) {
 	if (this.state.state === 'play') {
-		// don't accept input with direction oposite to current
-		if ((action === 'right' && this.state.direction !== 'left') ||
-		(action === 'left' && this.state.direction !== 'right') ||
-		(action === 'up' && this.state.direction !== 'down') ||
-		(action === 'down' && this.state.direction !== 'up')) {
-			this.state.newDirection = action;
-		}
+		this.state.inputBuffer.push(action);
 	}
 	else if (action === 'start') {
 		if (Snake.Game.state.state === 'end') {
