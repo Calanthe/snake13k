@@ -159,7 +159,7 @@ Snake.Game.initEdible = function(type) {
 	};
 
 	if (type === 'buggybug') { // buggybug's body has two parts
-		var bugNo = this.random(1, 4); //four different bugs
+		var bugNo = this.random(1, 3);
 		Snake.Game.state.board[randomX][randomY].body = 'bug' + bugNo + 'Left'; // info about the body part
 		Snake.Game.state.board[randomX + 1][randomY] = {
 			type: type,
@@ -183,7 +183,7 @@ Snake.Game.update = function() {
 		do {
 			var action = this.state.inputBuffer.shift();
 		} while (
-			// don't accept input with direction oposite to current
+			// don't accept input with direction opposite to current
 			(action === 'right' && this.state.direction === 'left') ||
 			(action === 'left' && this.state.direction === 'right') ||
 			(action === 'up' && this.state.direction === 'down') ||
