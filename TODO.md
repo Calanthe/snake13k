@@ -14,7 +14,6 @@
 
 ### GAME FEATURES:
 
-- [ ] hi score
 - [ ] improve menu/game over text
 - [x] buggybug on 2 pixels (can be eaten on any of them)
   - [ ] add 0 in the first column and row, also choose only 7 length bugs
@@ -34,11 +33,11 @@
 ### MOBILE
 
 - [ ] controls
-  - [ ] just touch on game screen?
+  - [x] just touch on game screen?
   - [ ] some buttons below the screen
 - [ ] sound doesn't work at all (user input needed)
 - [ ] don't draw all the pixels
-  - [ ] only draw pixels that are on?
+  - [x] only draw pixels that are on?
   - [ ] have separate background canvas that is not redrawn?
 - [ ] check if getting rid of gradients helps
 
@@ -50,4 +49,4 @@
 
 ### BUILD:
 
-ALL DONE!
+- [ ] add favicon? (first try to make canvas favicon)

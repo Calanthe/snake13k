@@ -1,5 +1,7 @@
 var Snake = Snake || {};
 
+Snake.MOBILE = "ontouchstart" in document;
+
 Snake.Game = {};
 
 Snake.Game.initStateValues = function() {

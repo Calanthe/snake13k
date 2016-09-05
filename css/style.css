@@ -1,3 +1,8 @@
+html {
+  width: 650px;
+  margin: 0 auto;
+}
+
 body {
   background: #333;
   overflow: hidden; /* because screen bevel cause scroll to show up */
@@ -89,4 +94,54 @@ canvas {
       rgba(255, 255, 255, .05) 55%,
       rgba(0, 0, 0, .05) 55%,
       rgba(0, 0, 0, 0));
+}
+
+.controls {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 65px;
+  z-index: 2;
+}
+
+.controls button {
+  background: rgba(255,255,255,0);
+  border: none;
+  display: block;
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  transform: rotate(45deg);
+  z-index: 2;
+}
+
+.controls button:focus {
+  outline: none;
+}
+
+.controls button.active {
+  background: rgba(255,255,255,0.1);
+  outline: none;
+}
+
+.controls button[data-action=up] {
+  top: -200px;
+  left: 100px;
+}
+
+.controls button[data-action='down'] {
+  top: 400px;
+  left: 100px;
+}
+
+.controls button[data-action='left'] {
+  top: 100px;
+  left: -200px;
+}
+
+.controls button[data-action=right] {
+  top: 100px;
+  left: 400px;
 }

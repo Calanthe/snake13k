@@ -196,7 +196,7 @@ Snake.UI.initWallCells = function() {
 Snake.UI.showMainMenu = function() {
 	this.paintString(60, 60, 'SnAkE', this.wall);
 	// TODO: not needed?
-	this.paintString(9, 70, '    press key to start   ', this.wall);
+	this.paintString(9, 70, Snake.MOBILE ? '      touch to start' : '    press key to start   ', this.wall);
 	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
 };
 
@@ -233,7 +233,7 @@ Snake.UI.addPad = function(number, pad) {
 Snake.UI.showEndGame = function(state) {
 	this.paintString(11, 60, '        GAME OVER         ', state.mode === 'tron' ? this.snakeTron : this.wall);
 	// TODO: not needed?
-	this.paintString(9, 70,'    press key to start    ', state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(9, 70, Snake.MOBILE ? '      touch to start' : '    press key to start   ', this.wall);
 };
 
 Snake.UI.showPause = function(state) {
@@ -247,7 +247,13 @@ Snake.UI.paint = function(state) {
 	// paint pixels on whole screen
 	for (var x = 0; x < state.boardWidth; x++) {
 		for (var y = 0; y < state.boardHeight; y++) {
-			this.paintCell(x, y, state.mode === 'tron' ? this.boardCellTron : this.boardCell, this.cells.full);
+			if (Snake.MOBILE) {
+				// don't draw background pixels on mobile
+				// TODO: draw them on background canvas just once
+				this.paintCell(x, y, null, this.cells.full);
+			} else {
+				this.paintCell(x, y, state.mode === 'tron' ? this.boardCellTron : this.boardCell, this.cells.full);
+			}
 		}
 	}
 

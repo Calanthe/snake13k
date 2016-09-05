@@ -32,4 +32,17 @@ Snake.Controls.addListeners = function(callback) {
 			callback('pause');
 		}
 	});
+
+	document.ontouchstart = function(e) {
+		if (e.target.dataset.action) {
+			e.target.classList.add('active');
+			callback(e.target.dataset.action);
+			e.preventDefault();
+		}
+	};
+
+	document.ontouchend = function(e) {
+		e.target.classList.remove('active');
+	};
+
 };
