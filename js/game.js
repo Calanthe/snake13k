@@ -294,6 +294,12 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		console.log('ifCollidedWithItself', this.ifCollidedWithSnake(snakeX, snakeY));
 		console.log('ifCollidedWithWalls', this.state.board[snakeX][snakeY].type === 'wall');
 		this.state.state = 'end';
+
+		// pause input for a while, so end game screen is not closed by quick input
+		this.state.pauseInput = true;
+		setTimeout(function(state){
+			state.pauseInput = false;
+		}, 1000, this.state);
 	}
 };
 
@@ -304,15 +310,22 @@ Snake.Game.ifCollidedWithSnake = function(x, y) {
 	}).length;
 };
 
+/* eslint no-fallthrough: "off" */
+
 Snake.Game.onInput = function(action) {
-	if (this.state.state === 'play') {
-		this.state.inputBuffer.push(action);
-	}
-	else if (action === 'start') {
-		if (Snake.Game.state.state === 'end') {
-			Snake.Game.initNewGame();
-		}
+	if (this.state.pauseInput) return;
+
+	switch (this.state.state) {
+	case 'end':
+		Snake.Game.initNewGame();
+		this.ui.paint(this.state);
+		break;
+	case 'menu':
 		Snake.Game.startNewGame();
+	default:
+		if (action !== 'start') {
+			this.state.inputBuffer.push(action);
+		}
 	}
 };
 
