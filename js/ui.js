@@ -207,8 +207,9 @@ Snake.UI.initWallCells = function() {
 
 Snake.UI.showMainMenu = function() {
 	this.paintString(60, 60, 'SNAKE', this.wall);
-	this.paintString(9, 70, '  press [space] to start  ', this.wall);
-	this.paintString(9, 100, '  every bug is a feature  ', this.wall);
+	this.paintString(9, 70, '  press [SPACE] to start  ', this.wall);
+	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
+	//this.paintString(9, 113, 'abcdefghijklmnopqrstuvwxyz', this.wall);
 };
 
 Snake.UI.paintScore = function(state) {
@@ -217,13 +218,15 @@ Snake.UI.paintScore = function(state) {
 	var paddedScore = pad.substring(0, pad.length - score.length) + score;
 
 	this.paintString(9, 7, paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
-	this.paintString(9, 114, 'js13k 2016 intuitio bartaz', state.mode === 'tron' ? this.snakeTron : this.wall);
+	if (state.holeInTheWall) {
+		this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);
+	}
 	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
 Snake.UI.showEndGame = function(state) {
 	this.paintString(11, 60, '        GAME OVER         ', state.mode === 'tron' ? this.snakeTron : this.wall);
-	this.paintString(9, 70, '  press [space] to start  ', state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(9, 70, '  press [SPACE] to start  ', state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
 Snake.UI.paint = function(state) {
@@ -336,7 +339,7 @@ Snake.UI.paintCharacter = function(x, y, character, colour) {
 	var characterPixels = this.font.font[character] || this.font.font["0"];
 	if (characterPixels) {
 		for (var i = 0; i < this.font.characterPixelsWidth; i++) {
-			for (var j = 0; j < this.font.characterPixelsHeight; j++) {
+			for (var j = 0; j < characterPixels.length; j++) {
 				if (characterPixels[j][i]) {
 					this.pixels[x + i][y + j] = colour;
 				}
@@ -347,7 +350,7 @@ Snake.UI.paintCharacter = function(x, y, character, colour) {
 
 Snake.UI.paintString = function(x, y, stringValue, colour) {
 	for (var i = 0; i < stringValue.length; i++) { //iterate over string characters
-		this.paintCharacter(x + (this.font.characterPixelsWidth + 1) * i, y, stringValue.charAt(i).toUpperCase(), colour);
+		this.paintCharacter(x + (this.font.characterPixelsWidth + 1) * i, y, stringValue.charAt(i), colour);
 	}
 };
 
