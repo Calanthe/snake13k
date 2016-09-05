@@ -207,9 +207,10 @@ Snake.UI.paintScore = function(state) {
 	var paddedScore = pad.substring(0, pad.length - score.length) + score;
 
 	this.paintString(9, 7, paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
-	if (state.holeInTheWall) {
-		this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);
-	}
+	// TODO: put it somewhere else? - makes food hard to see during game
+	// if (state.holeInTheWall) {
+	// 	this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);
+	// }
 	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
