@@ -338,8 +338,8 @@ Snake.UI.paintLine = function(x, y, width, colour) {
 Snake.UI.paintCharacter = function(x, y, character, colour) {
 	var characterPixels = this.font.font[character] || this.font.font["0"];
 	if (characterPixels) {
-		for (var i = 0; i < this.font.characterPixelsWidth; i++) {
-			for (var j = 0; j < characterPixels.length; j++) {
+		for (var j = 0; j < characterPixels.length; j++) {
+			for (var i = 0; i < characterPixels[j].length; i++) {
 				if (characterPixels[j][i]) {
 					this.pixels[x + i][y + j] = colour;
 				}
