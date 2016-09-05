@@ -240,12 +240,14 @@ Snake.Game.update = function() {
 		}
 	}
 
-	if (this.state.board[snakeX][snakeY].type === 'wall'
-			&& this.state.board[snakeX][snakeY].isGlitched) {
-		this.sound.playGlitchedWall();
-	}
-
 	this.checkCollision(snakeX, snakeY);
+
+	if (this.state.board[snakeX][snakeY].type === 'wall'
+		&& this.state.board[snakeX][snakeY].isGlitched) {
+		this.sound.playGlitchedWall();
+		// glitched wall is just one time use 'portal'
+		this.state.board[snakeX][snakeY].isGlitched = false;
+	}
 
 	this.state.snake.push({
 		x: snakeX,
