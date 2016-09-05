@@ -28,6 +28,15 @@
 - [ ] mobile controls
 - [ ] favicon?
 
+### MOBILE
+
+- [ ] controls
+  - [ ] just touch on game screen?
+  - [ ] some buttons below the screen
+- [ ] don't draw all the pixels
+  - [ ] only draw pixels that are on?
+  - [ ] have separate background canvas that is not redrawn?
+- [ ] check if getting rid of gradients helps
 
 ### CODE:
 
