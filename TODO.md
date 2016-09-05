@@ -1,8 +1,6 @@
 ### GLITCHES:
 
-- [ ] glitched wall special treatment
-  - [ ] becomes hole after using it?
-  - [ ] or becomes wall again after using it?
+ALL DONE (for now)!
 
 ### TRON MODE:
 
@@ -14,18 +12,17 @@
 ### GAME FEATURES:
 
 - [ ] hi score
+- [ ] more score for food? (1 is quite small comparing to tron mode)
+  - [ ] 5?
+  - [ ] make score bigger each level?
 - [ ] improve menu/game over text
-- [ ] start game with any key (what with game over?)
 - [x] buggybug on 2 pixels (can be eaten on any of them)
   - [ ] add 0 in the first column and row, also choose only 7 length bugs
 - [ ] bonus bugs (regular bugs that show for short time for bonus points)
   - [ ] one of them will be buggy(tron) bug
-- [ ] sounds
-  - [ ] eating, game over, glitches?
 - [ ] better score board
   - [ ] countdown for bugs
   - [ ] countdown for food eaten in level
-- [ ] mobile controls
 - [ ] favicon?
 
 ### MOBILE
