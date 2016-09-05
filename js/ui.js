@@ -206,9 +206,10 @@ Snake.UI.paintScore = function(state) {
 	var buggyBugOnBoard = Snake.Game.findBuggyBugOnBoard();
 
 	this.paintString(9, 7, paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
-	if (state.holeInTheWall) {
-		this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);
-	}
+	// TODO: put it somewhere else? - makes food hard to see during game
+	// if (state.holeInTheWall) {
+	// 	this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);
+	// }
 	if (state.buggyBugTimeLeft !== -1 && buggyBugOnBoard.length === 2) {
 		// paint two parts of buggy bug in the top right corner
 		this.paintCell(24, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[0].body]);
