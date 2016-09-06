@@ -114,10 +114,10 @@ gulp.task('zip', ['inline'], function() {
 });
 
 gulp.task('clean', ['zip'], function() {
-	// var stream = gulp.src('./tmp')
-	// 	.pipe(rimraf());
-	//
-	// return stream;
+	var stream = gulp.src('./tmp')
+		.pipe(rimraf());
+
+	return stream;
 });
 
 gulp.task('report', ['clean'], function() {

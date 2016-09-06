@@ -194,9 +194,9 @@ Snake.UI.initWallCells = function() {
 };
 
 Snake.UI.showMainMenu = function() {
-	this.paintString(60, 60, 'SNAKE', this.wall);
+	this.paintString(60, 60, 'SnAkE', this.wall);
 	// TODO: not needed?
-	this.paintString(9, 70, ' press [any key] to start  ', this.wall);
+	this.paintString(9, 70, '    press key to start   ', this.wall);
 	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
 	//this.paintString(9, 113, 'abcdefghijklmnopqrstuvwxyz', this.wall);
 };
@@ -230,7 +230,7 @@ Snake.UI.addPad = function(number, pad) {
 Snake.UI.showEndGame = function(state) {
 	this.paintString(11, 60, '        GAME OVER         ', state.mode === 'tron' ? this.snakeTron : this.wall);
 	// TODO: not needed?
-	this.paintString(9, 70, ' press [any key] to start  ', state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(9, 70,'    press key to start    ', state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
 Snake.UI.paint = function(state) {

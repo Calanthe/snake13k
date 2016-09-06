@@ -4,6 +4,7 @@
   - [ ] fix issue with buggybug on edge
   - [ ] more time to catch it
   - [ ] only show it inside the board?
+- [ ] **BUG** snake piece wrongly rendered when turning out of screen (right/bottom edge)
 
 ### TRON MODE:
 
