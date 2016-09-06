@@ -4,6 +4,7 @@
   - [ ] fix issue with buggybug on edge
   - [ ] more time to catch it
   - [ ] only show it inside the board?
+  - [ ] remove the biggest one?
 - [ ] **BUG** snake piece wrongly rendered when turning out of screen (right/bottom edge)
 
 ### TRON MODE:
@@ -44,6 +45,7 @@
 
 - [ ] TODOs from code
 - [ ] clean up quick and dirty prototyping, remove console.logs
+- [ ] check also other browsers like eg IE?
 
 ### BUILD:
 
