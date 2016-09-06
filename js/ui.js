@@ -287,29 +287,28 @@ Snake.UI.getSnakeCellType = function(i, snake) {
 
 	var type = ""; // _ = none (tail/head), T = top, B = bottom, R = right, L = left
 
-	if (prev) {
-		if (prev.x === cell.x) {
-			type += (prev.y > cell.y) ? "B" : "T";
+	function neighbourPosition(cell, neighbour) {
+		var pos = "";
+
+		if (neighbour) {
+			if (neighbour.x === cell.x) {
+				// in theory it should be checked for oposite (y + 1) too,
+				// but it kinda looks better on top/left edges this way
+				pos = (neighbour.y === cell.y - 1) ? "T" : "B";
+			}
+			else { // neighbour.y === cell.y
+				pos = (neighbour.x === cell.x - 1) ? "L" : "R";
+			}
 		}
-		else { // prev.y === cell.y
-			type += (prev.x > cell.x) ? "R" : "L";
+		else {
+			pos = "_";
 		}
-	}
-	else {
-		type += "_";
+
+		return pos;
 	}
 
-	if (next) {
-		if (next.x === cell.x) {
-			type += (next.y > cell.y) ? "B" : "T";
-		}
-		else { // prev.y === cell.y
-			type += (next.x > cell.x) ? "R" : "L";
-		}
-	}
-	else {
-		type += "_";
-	}
+	type += neighbourPosition(cell, prev);
+	type += neighbourPosition(cell, next);
 
 	return type;
 };
