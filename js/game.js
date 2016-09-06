@@ -169,8 +169,15 @@ Snake.Game.initEdible = function(type) {
 			type: type,
 			body: 'bug' + bugNo + 'Right' // info about the body part
 		};
-		this.state.buggyBugTimeLeft = 20;
+		var timeout = this.getDistanceFromHead(randomX, randomY) + 10;
+		timeout = timeout - (timeout % 10) + 10;
+		this.state.buggyBugTimeLeft = timeout;
 	}
+};
+
+Snake.Game.getDistanceFromHead = function(x, y) {
+	var head = Snake.Game.state.snake[Snake.Game.state.snake.length - 1];
+	return Math.abs(head.x - x) + Math.abs(head.y - y);
 };
 
 Snake.Game.tick = function() {
@@ -309,7 +316,7 @@ Snake.Game.findBuggyBugOnBoard = function() {
 					y: indexY,
 					body: cell.body
 				});
-			};
+			}
 		});
 	});
 

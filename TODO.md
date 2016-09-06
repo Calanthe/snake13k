@@ -1,11 +1,11 @@
 ### GLITCHES:
 
 - [ ] buggybug
-  - [ ] fix issue with buggybug on edge
-  - [ ] more time to catch it
+  - [ ] **BUG** fix issue with buggybug on edge
+  - [ ] **BUG** it happened that only half bug disappeared after timeout
+  - [x] more time to catch it
   - [ ] only show it inside the board?
   - [ ] remove the biggest one?
-- [ ] **BUG** snake piece wrongly rendered when turning out of screen (right/bottom edge)
 
 ### TRON MODE:
 
