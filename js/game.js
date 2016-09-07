@@ -286,9 +286,9 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.state.foodEaten += 1;
 	if (this.state.foodEaten % 5 === 0) this.state.level += 1;
 	this.state.mode = 'snake'; //fix the snake so the tail can move
+	this.addEdible(); // add new food before removing old one (to prevent it showing on same place)
 	this.state.board[snakeX][snakeY].type = '';
 	if (this.state.prevLength) this.state.prevLength += 1;
-	this.addEdible();
 };
 
 Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
