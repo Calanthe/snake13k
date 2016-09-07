@@ -309,9 +309,9 @@ Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 
 Snake.Game.removeBuggyBug = function(x, y) {
 	this.state.board[x][y].type = '';
-	if (this.state.board[x - 1][y].type === 'buggybug') { // remember to remove the second part of the bug
+	if (this.state.board[x - 1] && this.state.board[x - 1][y].type === 'buggybug') { // remember to remove the second part of the bug
 		this.state.board[x - 1][y].type = '';
-	} else if (this.state.board[x + 1][y].type === 'buggybug') {
+	} else if (this.state.board[x + 1] && this.state.board[x + 1][y].type === 'buggybug') {
 		this.state.board[x + 1][y].type = '';
 	}
 };
@@ -336,6 +336,7 @@ Snake.Game.findBuggyBugOnBoard = function() {
 };
 
 Snake.Game.addEdible = function() {
+	// TODO: random buggybug when we stop testing
 	if (this.state.level > 2 /*&& Math.random() < 0.3*/ && !this.findBuggyBugOnBoard().length) {
 		this.initBuggyBug();
 	}

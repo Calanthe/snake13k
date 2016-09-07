@@ -3,7 +3,7 @@
 - [ ] buggybug
   - [x] **BUG** fix issue with buggybug on edge
   - [ ] **BUG** if buggybug right side only is on wall glitched wall doesn't appear (if whole bug is on top/bottom wall 2 glitched walls should appear?)
-  - [ ] **BUG** it happened that only half bug disappeared after timeout
+  - [x] **BUG** it happened that only half bug disappeared after timeout
   - [x] more time to catch it
   - [ ] only show it inside the board?
   - [ ] remove the biggest one?
