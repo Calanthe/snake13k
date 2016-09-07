@@ -2,6 +2,7 @@
 
 - [ ] buggybug
   - [x] **BUG** fix issue with buggybug on edge
+  - [ ] **BUG** if buggybug right side only is on wall glitched wall doesn't appear (if whole bug is on top/bottom wall 2 glitched walls should appear?)
   - [ ] **BUG** it happened that only half bug disappeared after timeout
   - [x] more time to catch it
   - [ ] only show it inside the board?
@@ -18,18 +19,18 @@
 ### GAME FEATURES:
 
 - [ ] hi score
-- [ ] more score for food? (1 is quite small comparing to tron mode)
+- [x] more score for food? (1 is quite small comparing to tron mode)
   - [x] 5?
   - [x] make score bigger each level?
 - [ ] improve menu/game over text
 - [x] buggybug on 2 pixels (can be eaten on any of them)
   - [ ] add 0 in the first column and row, also choose only 7 length bugs
-- [ ] bonus bugs (regular bugs that show for short time for bonus points)
-  - [ ] one of them will be buggy(tron) bug
 - [ ] better score board
-  - [ ] countdown for bugs
+  - [x] countdown for bugs
   - [ ] countdown for food eaten in level
-- [x] favicon?
+- [x] favicon
+  - [ ] favicons are too big (we can have only one if optimized)
+  - [ ] maybe generate favicon from canvas?
 
 ### MOBILE
 
