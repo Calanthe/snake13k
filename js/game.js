@@ -282,7 +282,7 @@ Snake.Game.update = function() {
 
 Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.sound.playEatFood(this.state.mode);
-	this.state.score += 1;
+	this.state.score += 5 * this.state.level;
 	this.state.foodEaten += 1;
 	if (this.state.foodEaten % 5 === 0) this.state.level += 1;
 	this.state.mode = 'snake'; //fix the snake so the tail can move
@@ -293,11 +293,18 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 
 Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 	this.sound.playEatBuggyBug();
-	// add extra points and enlarge snake without moving the tail until normal food is eaten
-	this.state.score += 1;
-	this.state.mode = 'tron';
+
+	// trigger tron mode when buggy bug is eaten from left to right or right to left
+	if (this.state.direction === 'right' || this.state.direction === 'left') {
+		// add extra points and enlarge snake without moving the tail until normal food is eaten
+		this.state.mode = 'tron';
+		this.state.score += 1;
+		this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
+	} else {
+		this.state.score += 10 * (this.state.level - 2);
+	}
+
 	this.removeBuggyBug(snakeX, snakeY);
-	this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
 };
 
 Snake.Game.removeBuggyBug = function(x, y) {
@@ -329,7 +336,7 @@ Snake.Game.findBuggyBugOnBoard = function() {
 };
 
 Snake.Game.addEdible = function() {
-	if (this.state.level > 2 && Math.random() < 0.3 && !this.findBuggyBugOnBoard().length) {
+	if (this.state.level > 2 /*&& Math.random() < 0.3*/ && !this.findBuggyBugOnBoard().length) {
 		this.initBuggyBug();
 	}
 	this.initFood();
