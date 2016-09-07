@@ -137,6 +137,11 @@ Snake.Game.initEdible = function(type) {
 		maxY = this.state.boardHeight - 1;
 	}
 
+	//buggy bug has two parts so don't generate left side near the edge because right part won't fit
+	if (type === 'buggybug') {
+		maxX -= 1;
+	}
+
 	// make sure that the edible is not generated on the buggy bug, food or snake
 	do {
 		var randomX = this.random(minX, maxX);
