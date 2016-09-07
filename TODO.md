@@ -1,7 +1,7 @@
 ### GLITCHES:
 
 - [ ] buggybug
-  - [ ] **BUG** fix issue with buggybug on edge
+  - [x] **BUG** fix issue with buggybug on edge
   - [ ] **BUG** it happened that only half bug disappeared after timeout
   - [x] more time to catch it
   - [ ] only show it inside the board?
