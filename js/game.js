@@ -282,7 +282,7 @@ Snake.Game.update = function() {
 
 Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.sound.playEatFood(this.state.mode);
-	this.state.score += 5 * this.state.level;
+	this.state.score += 4 + this.state.level;
 	this.state.foodEaten += 1;
 	if (this.state.foodEaten % 5 === 0) this.state.level += 1;
 	this.state.mode = 'snake'; //fix the snake so the tail can move
@@ -301,7 +301,7 @@ Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 		this.state.score += 1;
 		this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
 	} else {
-		this.state.score += 10 * (this.state.level - 2);
+		this.state.score += 9 + this.state.level;
 	}
 
 	this.removeBuggyBug(snakeX, snakeY);
