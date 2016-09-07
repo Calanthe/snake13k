@@ -105,13 +105,13 @@ Snake.UI = {
 	//colors
 	boardCellTron: 'rgba(0,0,255,0.2)',
 	boardCell: 'rgba(0,0,255,0.05)',
-	wallTron: 'yellow',
-	foodTron: 'red',
-	bugTron: 'white',
+	wallTron: 'rgb(255,255,0)',
+	foodTron: 'rgb(255,0,0)',
+	bugTron: 'rgb(255,255,255)',
 	wall: 'rgba(0,0,0,0.7)',
 	food: 'rgba(0,0,0,0.7)',
 	bug: 'rgba(0,0,0,0.7)',
-	snakeTron: 'cyan',
+	snakeTron: 'rgb(0,255,255)',
 	snake: 'rgba(0,0,0,0.7)'
 };
 
@@ -198,7 +198,6 @@ Snake.UI.showMainMenu = function() {
 	// TODO: not needed?
 	this.paintString(9, 70, '    press key to start   ', this.wall);
 	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
-	//this.paintString(9, 113, 'abcdefghijklmnopqrstuvwxyz', this.wall);
 };
 
 Snake.UI.paintScore = function(state) {
