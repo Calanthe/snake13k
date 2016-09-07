@@ -13,7 +13,7 @@ body {
   transition: 200ms;
 }
 
-.tron .screen { background: #000; }
+.tron .screen { background: #003; }
 
 .screen:after, .screen:before {
   content: '';

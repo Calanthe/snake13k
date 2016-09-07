@@ -103,7 +103,7 @@ Snake.UI = {
 	},
 
 	//colors
-	boardCellTron: 'rgba(0,0,255,0.2)',
+	boardCellTron: 0, // don't draw anything, as background is in CSS (was 'rgba(0,0,255,0.2)'),
 	boardCell: 'rgba(0,0,255,0.05)',
 	wallTron: 'rgb(255,255,0)',
 	foodTron: 'rgb(255,0,0)',
