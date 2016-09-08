@@ -202,9 +202,13 @@ Snake.UI.showMainMenu = function() {
 
 Snake.UI.paintScore = function(state) {
 	var paddedScore = this.addPad(state.score, '0000');
+
 	var buggyBugOnBoard = Snake.Game.findBuggyBugOnBoard();
 
 	this.paintString(9, 7, paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
+
+	paddedScore = this.addPad(state.hiscore, '0000');
+	this.paintString(47, 7, 'HI ' + paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
 	// TODO: put it somewhere else? - makes food hard to see during game
 	// if (state.holeInTheWall) {
 	// 	this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);

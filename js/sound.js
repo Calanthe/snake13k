@@ -118,3 +118,7 @@ Snake.Sound.playMove = function(mode) {
 Snake.Sound.playGlitchedWall = function() {
 	this.play('glitchedWall');
 };
+
+Snake.Sound.playHiScore = function() {
+	this.play('hiScore');
+};

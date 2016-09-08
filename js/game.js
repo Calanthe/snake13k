@@ -19,6 +19,7 @@ Snake.Game.initStateValues = function() {
 		},
 		holeInTheWall: false,
 		score: 0,
+		hiscore: Snake.Game.readHiScore(),
 		level: 1,
 		mode: 'snake',
 		prevLength: null, // real snake length (during tron mode),
@@ -81,9 +82,15 @@ Snake.Game.loop = function() {
 	var now = performance.now();
 	var elapsed = now - this.vars.then;
 
-	var fps = this.state.level + 4;
-	// speed up in tron mode
-	if (this.state.mode === 'tron') fps += 2;
+	var fps = 20; // 20 frames per sec for menu / end game screens
+
+	if (this.state.state === 'play') {
+		fps = this.state.level + 4;
+		// speed up in tron mode
+		if (this.state.mode === 'tron') {
+			fps += 2;
+		}
+	}
 
 	var fpsInterval = 1000 / fps;
 
@@ -188,9 +195,22 @@ Snake.Game.getDistanceFromHead = function(x, y) {
 };
 
 Snake.Game.tick = function() {
+	// update game state (move snake) when game is playing
 	if (this.state.state === 'play') {
 		this.update();
 	}
+
+	// animate hiscore on game over screen
+	if (this.state.state === 'end') {
+		if (this.state.score > this.state.hiscore) {
+			this.state.hiscore++;
+			if (this.state.hiscore % 10 === 0) {
+				this.sound.playHiScore();
+			}
+		}
+	}
+
+	// paint everything
 	this.ui.paint(this.state);
 };
 
@@ -362,6 +382,10 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		setTimeout(function(state){
 			state.pauseInput = false;
 		}, 1000, this.state);
+
+		if (this.state.score > this.state.hiscore) {
+			Snake.Game.saveHiScore(this.state.score);
+		}
 	}
 };
 
@@ -395,6 +419,27 @@ Snake.Game.onInput = function(action) {
 		if (action !== 'start') {
 			this.state.inputBuffer.push(action);
 		}
+	}
+};
+
+Snake.Game.readHiScore = function() {
+	var hi = 0;
+	var score;
+	if (localStorage) {
+		score = localStorage.getItem('SNAKE_HISCORE');
+		score = +score;
+		if (!isNaN(score) && score > 0) {
+			hi = score;
+		}
+	}
+	console.log("readHiScore", hi);
+	return hi;
+};
+
+Snake.Game.saveHiScore = function(hi) {
+	console.log("saveHiScore", hi);
+	if (localStorage) {
+		localStorage.setItem('SNAKE_HISCORE', hi);
 	}
 };
 
