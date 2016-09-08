@@ -232,6 +232,10 @@ Snake.UI.showEndGame = function(state) {
 	this.paintString(9, 70,'    press key to start    ', state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
+Snake.UI.showPause = function(state) {
+	this.paintString(11, 60, '          PAUSE           ', state.mode === 'tron' ? this.snakeTron : this.wall);
+};
+
 Snake.UI.paint = function(state) {
 	//paint the board
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -271,6 +275,8 @@ Snake.UI.paint = function(state) {
 
 	if (state.state === 'menu') {
 		this.showMainMenu();
+	} else if (state.state === 'pause') {
+		this.showPause(state);
 	} else if (state.state === 'end') {
 		this.showEndGame(state);
 	}

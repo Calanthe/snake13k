@@ -377,13 +377,20 @@ Snake.Game.ifCollidedWithSnake = function(x, y) {
 Snake.Game.onInput = function(action) {
 	if (this.state.pauseInput) return;
 
-	switch (this.state.state) {
+	if (action === 'pause') {
+		if (this.state.state === 'play') {
+			this.state.state = 'pause';
+		}
+	} else switch (this.state.state) {
 	case 'end':
 		Snake.Game.initNewGame();
 		this.ui.paint(this.state);
 		break;
+	case 'pause':
+		this.state.state = 'play';
 	case 'menu':
 		Snake.Game.play();
+	case 'play':
 	default:
 		if (action !== 'start') {
 			this.state.inputBuffer.push(action);

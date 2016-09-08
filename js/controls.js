@@ -3,7 +3,7 @@ var Snake = Snake || {};
 Snake.Controls = {};
 
 Snake.Controls.addListeners = function(callback) {
-	document.onkeydown = function (e) {
+	document.addEventListener('keydown', function (e) {
 		var keyCode = e.keyCode;
 
 		// ignore keyboard shortcuts
@@ -19,8 +19,17 @@ Snake.Controls.addListeners = function(callback) {
 			callback('right');
 		} else if (keyCode === 40) {
 			callback('down');
+		} else if (keyCode === 80) { // P pauses the game
+			callback('pause');
 		} else if (keyCode) { // any key can start the game
 			callback('start');
 		}
-	};
+	});
+
+	// pause when page is hidden
+	document.addEventListener('visibilitychange', function(){
+		if (document.hidden) {
+			callback('pause');
+		}
+	});
 };
