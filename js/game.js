@@ -171,7 +171,13 @@ Snake.Game.initEdible = function(type) {
 			((randomX === minX && randomY === minY)
 			|| (randomX === minX && randomY === maxY)
 			|| (randomX === maxX && randomY === minY)
-			|| (randomX === maxX && randomY === maxY)));
+			|| (randomX === maxX && randomY === maxY))
+		||
+			// always exclude wall's corners
+			((randomX === this.state.boardWidth - this.state.borderOffset.right)
+			|| (randomX === offset.left)
+			|| (randomY === this.state.boardHeight - this.state.borderOffset.bottom)
+			|| (randomY === offset.top)));
 
 	//if edible happens to be on wall glitch opposite wall so snake can go through
 	if (this.state.board[randomX][randomY].type === 'wall') {
@@ -275,13 +281,6 @@ Snake.Game.update = function() {
 			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
 				this.state.prevLength = null;
 			}
-			//make the snake smaller immediately
-			// if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
-			// 	var elementsNo = this.state.snake.length - this.state.prevLength;
-			// 	this.state.snake.splice(0, elementsNo);
-			// } else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
-			// 	this.state.prevLength = null;
-			// }
 		} else {
 			this.state.score += 1; //score one point for every piece grown in tron mode
 		}
