@@ -231,9 +231,10 @@ Snake.UI.addPad = function(number, pad) {
 };
 
 Snake.UI.showEndGame = function(state) {
-	this.paintString(11, 60, '        GAME OVER         ', state.mode === 'tron' ? this.snakeTron : this.wall);
+	var color =  state.mode === 'tron' ? this.snakeTron : this.wall;
+	this.paintString(11, 60, '        GAME OVER         ', color);
 	// TODO: not needed?
-	this.paintString(9, 70, Snake.MOBILE ? '      touch to start' : '    press key to start   ', this.wall);
+	this.paintString(9, 70, Snake.MOBILE ? '      touch to start' : '    press key to start   ', color);
 };
 
 Snake.UI.showPause = function(state) {
@@ -259,7 +260,9 @@ Snake.UI.paint = function(state) {
 
 	this.paintScore(state);
 
-	document.body.className = state.mode;
+	if (document.body.className !== state.mode) {
+		document.body.className = state.mode;
+	}
 
 	//paint the snake
 	for (var i = 0; i < state.snake.length; i++) {

@@ -32,10 +32,11 @@
 
 ### MOBILE
 
-- [ ] controls
+- [x] controls
   - [x] just touch on game screen?
-  - [ ] some buttons below the screen
-- [ ] sound doesn't work at all (user input needed)
+  - [x] some buttons below the screen
+- [x] sound doesn't work at all (user input needed)
+  - [ ] sound on iPad has lags...
 - [ ] don't draw all the pixels
   - [x] only draw pixels that are on?
   - [ ] have separate background canvas that is not redrawn?

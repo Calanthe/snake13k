@@ -1,6 +1,9 @@
 var Snake = Snake || {};
 
 Snake.MOBILE = "ontouchstart" in document;
+if (Snake.MOBILE) {
+	document.documentElement.className='mobile';
+}
 
 Snake.Game = {};
 

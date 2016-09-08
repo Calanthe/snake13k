@@ -3,22 +3,25 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=650, user-scalable=no">
+	<meta name="theme-color" content="#333">
 	<title>SnAkE</title>
 	<link rel="stylesheet" href="css/style.css" />
 	<link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
 	<link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
 </head>
 <body>
-<div class="screen">
-	<canvas id="c"></canvas>
-	<div class="glare"></div>
+	<div class="screen-wrapper">
+		<div class="screen">
+			<canvas id="c"></canvas>
+			<div class="glare"></div>
+		</div>
+	</div>
 	<div class="controls">
 		<button data-action="up"></button>
 		<button data-action="down"></button>
 		<button data-action="left"></button>
 		<button data-action="right"></button>
 	</div>
-</div>
 
 <script src="lib/jsfxr.js"></script>
 <script src="js/sound.js"></script>
