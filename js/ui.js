@@ -223,6 +223,11 @@ Snake.UI.paintScore = function(state) {
 		var paddedTimeLeft = this.addPad(state.buggyBugTimeLeft, '00');
 		this.paintString(105, 7, '' + paddedTimeLeft, state.mode === 'tron' ? this.snakeTron : this.wall);
 	}
+
+	if (state.mode === 'tron') {
+		this.paintString(97, 7, 'TRON', this.wallTron);
+	}
+
 	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
