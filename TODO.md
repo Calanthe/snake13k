@@ -24,7 +24,7 @@
 - [x] favicon
   - [ ] favicons are too big (we can have only one if optimized)
   - [ ] maybe generate favicon from canvas?
-- [ ] game loop during menu/game over for glitch animation
+- [x] game loop during menu/game over for glitch animation
   - [ ] make whole screen glitch a lot after game over and disappear into menu
 - [ ] snake disappearing after game over
  - [ ] make is smaller step by step

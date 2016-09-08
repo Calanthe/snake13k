@@ -62,20 +62,22 @@ Snake.Game.initNewGame = function() {
 
 	//initialise food
 	this.initFood();
-};
-
-Snake.Game.startNewGame = function() {
-	this.state.state = 'play';
 
 	this.vars.then = performance.now();
 
+	// stop previous game loop
+	window.cancelAnimationFrame(this.vars.animationId);
+
 	//start the game
-	this.startGameLoop();
+	this.loop();
 };
 
-Snake.Game.startGameLoop = function() {
-	this.vars.animationId = window.requestAnimationFrame(this.startGameLoop.bind(this));
+Snake.Game.play = function() {
+	this.state.state = 'play';
+};
 
+Snake.Game.loop = function() {
+	this.vars.animationId = window.requestAnimationFrame(this.loop.bind(this));
 	var now = performance.now();
 	var elapsed = now - this.vars.then;
 
@@ -186,7 +188,9 @@ Snake.Game.getDistanceFromHead = function(x, y) {
 };
 
 Snake.Game.tick = function() {
-	this.update();
+	if (this.state.state === 'play') {
+		this.update();
+	}
 	this.ui.paint(this.state);
 };
 
@@ -349,8 +353,6 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 				&& !this.state.board[snakeX][snakeY].isGlitched)) { // but not glitched walls
 
 		this.sound.playDie(this.state.mode);
-		//stop the game loop
-		window.cancelAnimationFrame(this.vars.animationId);
 		console.log('ifCollidedWithItself', this.ifCollidedWithSnake(snakeX, snakeY));
 		console.log('ifCollidedWithWalls', this.state.board[snakeX][snakeY].type === 'wall');
 		this.state.state = 'end';
@@ -381,7 +383,7 @@ Snake.Game.onInput = function(action) {
 		this.ui.paint(this.state);
 		break;
 	case 'menu':
-		Snake.Game.startNewGame();
+		Snake.Game.play();
 	default:
 		if (action !== 'start') {
 			this.state.inputBuffer.push(action);
