@@ -442,5 +442,53 @@ Snake.UI.paintPixels = function() {
 			}
 		});
 	});
+};
 
+Snake.UI.paintFavicon = function() {
+	var canvasWH = 32;
+	var canvas = document.createElement('canvas');
+	canvas.width = canvasWH;
+	canvas.height = canvasWH;
+
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = Snake.Game.state.mode === 'tron' ? "#003" : "rgb(150,200,50)";
+	ctx.fillRect(0, 0, canvasWH, canvasWH);
+	ctx.fillStyle = Snake.Game.state.mode === 'tron' ? this.foodTron : this.food;
+	this.paintFaviconFood(ctx, canvasWH, this.cells.food);
+	ctx.fillStyle = Snake.Game.state.mode === 'tron' ? this.wallTron : this.wall;
+	this.paintFaviconWall(ctx, 28);
+
+	var link = document.createElement('link');
+	var prevLink = document.getElementById('canvas-favicon');
+	link.type = 'image/x-icon';
+	link.id = 'canvas-favicon';
+	link.rel = 'shortcut icon';
+	link.href = canvas.toDataURL("image/x-icon");
+	if (prevLink) {
+		document.head.removeChild(prevLink);
+	}
+	document.getElementsByTagName('head')[0].appendChild(link);
+};
+
+Snake.UI.paintFaviconFood = function(ctx, canvasWH, cellPixels) {
+	var cellWH = 4;
+	for (var i = 0; i < cellWH; i++) {
+		for (var j = 0; j < cellWH; j++) {
+			if (cellPixels[j][i]) {
+				ctx.fillRect(j * cellWH * 1.6, i * cellWH * 1.6, cellWH * 1.5, cellWH * 1.5);
+			}
+		}
+	}
+};
+
+Snake.UI.paintFaviconWall = function(ctx, canvasWH) {
+	var cellWH = 2;
+	var maxW = maxH = canvasWH / cellWH;
+	for (var i = 0; i < maxH; i++) {
+		for (var j = 0; j < maxW; j++) {
+			if (i === 0 || j === 0 || i === maxW - 1 || j === maxW - 1) {
+				ctx.fillRect(j * cellWH + 2, i * cellWH + 2, cellWH, cellWH);
+			}
+		}
+	}
 };

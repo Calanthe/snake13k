@@ -43,6 +43,8 @@ Snake.Game.init = function() {
 
 	this.initNewGame();
 
+	this.ui.paintFavicon();
+
 	this.ui.paint(this.state);
 
 	this.controls.addListeners(this.onInput.bind(this));
@@ -312,6 +314,7 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.state.foodEaten += 1;
 	if (this.state.foodEaten % 5 === 0) this.state.level += 1;
 	this.state.mode = 'snake'; //fix the snake so the tail can move
+	this.ui.paintFavicon(); //change favicon colours
 	this.addEdible(); // add new food before removing old one (to prevent it showing on same place)
 	this.state.board[snakeX][snakeY].type = '';
 	if (this.state.prevLength) this.state.prevLength += 1;
@@ -324,6 +327,7 @@ Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 	if (this.state.direction === 'right' || this.state.direction === 'left') {
 		// add extra points and enlarge snake without moving the tail until normal food is eaten
 		this.state.mode = 'tron';
+		this.ui.paintFavicon(); //change favicon colours
 		this.state.score += 1;
 		this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
 	} else {
