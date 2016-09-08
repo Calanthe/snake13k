@@ -83,7 +83,11 @@ Snake.Sound.sounds = {
 };
 
 Snake.Sound.init = function() {
-	this.player = new Audio();
+	if (Snake.MOBILE) {
+		Snake.Sound.initMobile();
+	} else {
+		this.player = new Audio();
+	}
 };
 
 Snake.Sound.play = function(name) {
@@ -91,10 +95,15 @@ Snake.Sound.play = function(name) {
 	console.log("play", name, i);
 
 	this.player.src = this.sounds[name][i];
-	this.promise = this.player.play().catch(function(reason) {
-		// TODO: silently ignore
-		console.warn("Sound error:", reason);
-	});
+
+	var promise = this.player.play();
+
+	// Firefox doesn't return promise
+	if (promise && promise.catch) {
+		promise.catch(function() {
+		// silently ignore any play errors
+		});
+	}
 };
 
 Snake.Sound.playEatFood = function(mode) {
@@ -121,4 +130,47 @@ Snake.Sound.playGlitchedWall = function() {
 
 Snake.Sound.playHiScore = function() {
 	this.play('hiScore');
+};
+
+
+Snake.Sound.initMobilePlayer = function() {
+	// turn all audio clips into audio elements, play and pause them
+	// to make them playable on mobile
+	Object.keys(this.sounds).forEach(function(name){
+		var sounds = this.sounds[name];
+
+		sounds = sounds.map(function(sound){
+			var player = new Audio();
+			player.src = sound;
+			var promise = player.play();
+
+			// Firefox doesn't return promise
+			if (promise && promise.catch) {
+				promise.catch(function() {
+				// silently ignore any play errors
+				});
+			}
+			player.pause();
+			return player;
+		});
+
+		this.sounds[name] = sounds;
+	}.bind(this));
+};
+
+Snake.Sound.initMobile = function() {
+	// init sound on touch event
+	document.addEventListener('touchstart', function(e){
+		if (e) {
+			e.currentTarget.removeEventListener(e.type, arguments.callee);
+		}
+		Snake.Sound.initMobilePlayer();
+	});
+
+	// override .play method to use mobile audio clips
+	Snake.Sound.play = function(name) {
+		var i = Snake.Game.random(0, this.sounds[name].length - 1);
+		this.sounds[name][i].currentTime = 0;
+		this.sounds[name][i].play();
+	};
 };
