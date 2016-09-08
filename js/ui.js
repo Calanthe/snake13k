@@ -136,6 +136,7 @@ Snake.UI.initPixels = function(state) {
 Snake.UI.initSnakeCells = function() {
 	this.cells.snake = {
 		// head and tail
+		"__": this.cells.snakeHeadLeft, // single cell snake
 		"_T": this.cells.snakeHeadTop,
 		"_B": this.cells.snakeBottomRight,
 		"T_": this.cells.snakeHeadTop,
@@ -196,7 +197,7 @@ Snake.UI.initWallCells = function() {
 Snake.UI.showMainMenu = function() {
 	this.paintString(60, 60, 'SnAkE', this.wall);
 	// TODO: not needed?
-	this.paintString(9, 70, Snake.MOBILE ? '      touch to start' : '    press key to start   ', this.wall);
+	this.paintString(11, 70, Snake.MOBILE ? '  press button to start' : '    press key to start   ', this.wall);
 	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
 };
 
@@ -234,7 +235,7 @@ Snake.UI.showEndGame = function(state) {
 	var color =  state.mode === 'tron' ? this.snakeTron : this.wall;
 	this.paintString(11, 60, '        GAME OVER         ', color);
 	// TODO: not needed?
-	this.paintString(9, 70, Snake.MOBILE ? '      touch to start' : '    press key to start   ', color);
+	this.paintString(9, 70, Snake.MOBILE ? ' press button to start' : '    press key to start   ', color);
 };
 
 Snake.UI.showPause = function(state) {

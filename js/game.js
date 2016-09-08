@@ -221,6 +221,10 @@ Snake.Game.tick = function() {
 				this.sound.playHiScore();
 			}
 		}
+		// make the snake shorter every frame
+		if (this.state.snake.length) {
+			this.state.snake.shift();
+		}
 	}
 
 	// paint everything
