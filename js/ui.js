@@ -387,7 +387,7 @@ Snake.UI.glitchPixels = function() {
 	for (var g = 0; g < state.level - 1; g++) {
 		// glitch columns (simple shifting/pushing pixels around)
 		var glitchOffset = Snake.Game.random(0, state.level - 1); // move by how many pixels
-		var glitchWidth = Snake.Game.random(state.level, state.boardWidth * this.pixelsPerCell / 2);  // group of how many columns/rows to move
+		var glitchWidth = Snake.Game.random(1, state.boardWidth * this.pixelsPerCell / 2);  // group of how many columns/rows to move
 		var rand = Math.random(); // direction of move
 
 		var column = Snake.Game.random(0, state.boardWidth * this.pixelsPerCell - 1 - glitchWidth); // which column to move
@@ -407,7 +407,7 @@ Snake.UI.glitchPixels = function() {
 
 		// glitch rows (we need to move pixels between columns)
 		glitchOffset = Snake.Game.random(0, state.level - 1);
-		glitchWidth = Snake.Game.random(state.level, state.boardHeight * this.pixelsPerCell / 2);
+		glitchWidth = Snake.Game.random(1, state.boardHeight * this.pixelsPerCell / 2);
 		rand = Math.random();
 		var row = Snake.Game.random(0, state.boardHeight * this.pixelsPerCell - 1 - glitchWidth);
 

@@ -1,10 +1,14 @@
 ### GLITCHES:
 
 - [ ] buggybug
-  - [ ] **BUG** if buggybug right side only is on wall glitched wall doesn't appear (if whole bug is on top/bottom wall 2 glitched walls should appear?)
+  - [ ] **BUG** if buggybug right side only is on wall glitched wall doesn't appear
+      - [ ] (if whole bug is on top/bottom wall 2 glitched walls should appear?)
+  - [ ] **BUG** buggybug can show up partially on snake (right side)
   - [ ] only show it inside the board?
   - [ ] remove the biggest one?
+  - [ ] add some more bugs? (easter eggs?)
 
+- [ ] nyan cat mode?
 
 ### TRON MODE:
 
@@ -15,39 +19,30 @@
 ### GAME FEATURES:
 
 - [ ] improve menu/game over text
-- [x] buggybug on 2 pixels (can be eaten on any of them)
-  - [ ] add 0 in the first column and row, also choose only 7 length bugs
-- [ ] better score board
-  - [x] countdown for bugs
-  - [ ] countdown for food eaten in level
-- [x] favicon
-  - [ ] favicons are too big (we can have only one if optimized)
-  - [ ] maybe generate favicon from canvas?
-- [x] game loop during menu/game over for glitch animation
-  - [ ] make whole screen glitch a lot after game over and disappear into menu
+  - [ ] show 'press button' after some timeout, different text on game over?
 - [x] snake disappearing after game over
  - [x] make is smaller step by step
  - [ ] make it explode into particles
 - [ ] separate background canvas (for mobile performance and tron background)
+- [ ] get rid of transition in background on desktop too (?)
 
 ### MOBILE
 
-- [x] controls
-  - [x] just touch on game screen?
-  - [x] some buttons below the screen
 - [x] sound doesn't work at all (user input needed)
   - [ ] sound on iPad has lags...
 - [ ] don't draw all the pixels
   - [x] only draw pixels that are on?
   - [ ] have separate background canvas that is not redrawn?
-- [ ] check if getting rid of gradients helps
 
 ### CODE:
 
 - [ ] TODOs from code
+- [ ] eslint rules (switch indent)
+- [ ] turn some long if/else into switches
 - [ ] clean up quick and dirty prototyping, remove console.logs
+- [ ] remove 0s from 0/1 arrays (they can be undefined to save some space)
 - [ ] check also other browsers like eg IE?
 
 ### BUILD:
 
-- [ ] add favicon? (first try to make canvas favicon)
+ALL DONE!

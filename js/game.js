@@ -393,7 +393,7 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		this.state.pauseInput = true;
 		setTimeout(function(state){
 			state.pauseInput = false;
-		}, 1000, this.state);
+		}, 500, this.state);
 
 		if (this.state.score > this.state.hiscore) {
 			Snake.Game.saveHiScore(this.state.score);
@@ -419,8 +419,11 @@ Snake.Game.onInput = function(action) {
 		}
 	} else switch (this.state.state) {
 	case 'end':
-		Snake.Game.initNewGame();
-		this.ui.paint(this.state);
+		this.state.level = 50; // make sceen glitch a lot for a while
+		setTimeout(function(){
+			Snake.Game.initNewGame();
+			this.ui.paint(this.state);
+		}.bind(this), 500);
 		break;
 	case 'pause':
 		this.state.state = 'play';
