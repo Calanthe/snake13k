@@ -240,7 +240,7 @@ Snake.UI.showEndGame = function(state) {
 	var color =  state.mode === 'tron' ? this.snakeTron : this.wall;
 	this.paintString(11, 60, '        GAME OVER         ', color);
 	// TODO: not needed?
-	this.paintString(9, 70, Snake.MOBILE ? ' press button to start' : '    press key to start   ', color);
+	this.paintString(9, 70, Snake.MOBILE ? ' press button to start' : '    press key to reset   ', color);
 };
 
 Snake.UI.showPause = function(state) {

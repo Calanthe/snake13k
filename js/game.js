@@ -171,13 +171,17 @@ Snake.Game.initEdible = function(type) {
 			((randomX === minX && randomY === minY)
 			|| (randomX === minX && randomY === maxY)
 			|| (randomX === maxX && randomY === minY)
-			|| (randomX === maxX && randomY === maxY)));
-		/*||
-			// TODO always exclude wall's corners or fix glitched walls
-			((randomX === this.state.boardWidth - this.state.borderOffset.right - 1)
-			|| (randomX === offset.left)
-			|| (randomY === this.state.boardHeight - this.state.borderOffset.bottom - 1)
-			|| (randomY === offset.top)));*/
+			|| (randomX === maxX && randomY === maxY))
+		||
+			// also exclude top right corner of the wall
+			((randomX === this.state.boardWidth - this.state.borderOffset.right - 1 && randomY === offset.top)
+			// top left corner
+			|| (randomX === offset.left && randomY === offset.top)
+			// bottom right corner
+			|| (randomY === this.state.boardHeight - this.state.borderOffset.bottom - 1
+				&& randomX === this.state.boardWidth - this.state.borderOffset.right - 1)
+			// bottom left corner
+			|| (randomY === this.state.boardHeight - this.state.borderOffset.bottom - 1 && randomX === offset.left)));
 
 	//if edible happens to be on wall glitch opposite wall so snake can go through
 	if (this.state.board[randomX][randomY].type === 'wall') {
