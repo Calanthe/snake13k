@@ -3,18 +3,12 @@
 - [x] snake disappearing after game over
  - [x] make is smaller step by step
  - [ ] make it glitch out gradually (different probability)
-
-### MOBILE
-
-- [x] sound doesn't work at all (user input needed)
-  - [ ] sound on iPad has lags...
-- [x] vibrations
-- [ ] mute audio (especially on iOS)
+- [ ] mute on desktop work with M key but is not visible
 
 ### CODE:
 
 - [ ] TODOs from code
-- [ ] refactor colors to use something like color[mode].wall
+- [x] refactor colors to use something like color[mode].wall
 - [ ] eslint rules (switch indent)
 - [ ] turn some long if/else into switches
 - [ ] clean up quick and dirty prototyping, remove console.logs
