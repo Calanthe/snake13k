@@ -6,7 +6,9 @@
 
 var Snake = Snake || {};
 
-Snake.Sound = {};
+Snake.Sound = {
+	isMuted: false
+};
 
 Snake.Sound.sounds = {
 
@@ -92,16 +94,10 @@ Snake.Sound.init = function() {
 			}
 			Snake.Sound.initAudio();
 		});
+		this.toggleMute(); // start muted on mobile
 	} else {
 		Snake.Sound.initAudio();
 	}
-
-	// override .play method to use mobile audio clips
-	Snake.Sound.play = function(name) {
-		var i = Snake.Game.random(0, this.sounds[name].length - 1);
-		this.sounds[name][i].currentTime = 0;
-		this.sounds[name][i].play();
-	};
 };
 
 Snake.Sound.initAudio = function() {
@@ -156,6 +152,24 @@ Snake.Sound.play = function(name) {
 	}
 };
 
+// override .play method to use mobile audio clips
+Snake.Sound.play = function(name) {
+	if (this.isMuted) return;
+
+	var i = Snake.Game.random(0, this.sounds[name].length - 1);
+	this.sounds[name][i].currentTime = 0;
+	this.sounds[name][i].play();
+
+	var promise = this.sounds[name][i].play();
+
+	// Firefox doesn't return promise
+	if (promise && promise.catch) {
+		promise.catch(function() {
+		// silently ignore any play errors
+		});
+	}
+};
+
 Snake.Sound.playEatFood = function(mode) {
 	this.play(mode === 'tron' ? 'tronEatFood' : 'snakeEatFood');
 };
@@ -184,4 +198,12 @@ Snake.Sound.playGlitchedWall = function() {
 
 Snake.Sound.playHiScore = function() {
 	this.play('hiScore');
+};
+
+Snake.Sound.toggleMute = function() {
+	this.isMuted = !this.isMuted;
+	this.playEatFood(); // play sample sound so user can hear how loud it will be
+
+	// it's not nice to depend on DOM here, but it's simplest solution
+	document.querySelector('[data-action=mute]').classList.toggle('on');
 };

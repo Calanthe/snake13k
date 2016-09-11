@@ -473,7 +473,10 @@ Snake.Game.ifCollidedWithSnake = function(x, y) {
 Snake.Game.onInput = function(action) {
 	if (this.state.pauseInput) return;
 
-	if (action === 'pause') {
+	if (action === 'mute') {
+		// TODO: mute state is not visible in UI anywhere :(
+		this.sound.toggleMute();
+	} else if (action === 'pause') {
 		if (this.state.state === 'play') {
 			this.state.state = 'pause';
 		}

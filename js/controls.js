@@ -19,6 +19,8 @@ Snake.Controls.addListeners = function(callback) {
 			callback('right');
 		} else if (keyCode === 40) {
 			callback('down');
+		} else if (keyCode === 77) { // M toggles mute
+			callback('mute');
 		} else if (keyCode === 80) { // P pauses the game
 			callback('pause');
 		} else if (keyCode) { // any key can start the game
@@ -34,14 +36,15 @@ Snake.Controls.addListeners = function(callback) {
 	});
 
 	document.ontouchstart = function(e) {
-		if (e.target.dataset.action) {
+		var action = e.target.dataset.action;
+		if (action) {
 			e.target.classList.add('active');
 
 			if (window.navigator.vibrate) {
 				window.navigator.vibrate(50);
 			}
 
-			callback(e.target.dataset.action);
+			callback(action);
 			e.preventDefault();
 		}
 	};

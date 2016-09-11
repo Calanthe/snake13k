@@ -115,6 +115,11 @@ canvas {
   display: none;
 }
 
+.controls.mini {
+  position: relative;
+  top: -700px;
+}
+
 .mobile .controls {
   display: block;
 }
@@ -130,12 +135,51 @@ canvas {
   border-radius: 100%;
 }
 
+.mini button {
+  width: 100px;
+  height: 100px;
+}
+
+.controls button[data-action=mute] {
+  right: 0;
+}
+
+.controls button:after {
+  font-family: monospace;
+  font-size: 24px;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 100px;
+  text-shadow: #777 0 0 2px;
+}
+
+.controls button[data-action=mute]:after {
+  content: "MUTE";
+}
+
+.controls button[data-action=mute].on:after {
+  content: "UNMUTE";
+}
+
+/* TODO: add pause button? needs some changes in how pause works
+.controls button[data-action=pause]:after {
+  content: "PAUSE";
+}
+.controls button[data-action=pause].on:after {
+  content: "PLAY";
+}
+*/
+
 .controls button:focus {
   outline: none;
 }
 
 .controls.hint button,
-.controls button.active {
+.controls button.active,
+.controls button.on {
   background: rgba(255,255,255,0.2);
   outline: none;
 }
