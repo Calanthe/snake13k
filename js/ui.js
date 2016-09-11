@@ -243,12 +243,12 @@ Snake.UI.initWallCells = function() {
 };
 
 Snake.UI.showMainMenu = function(state) {
-	this.paintString(60, 60, 'SnAkE', this.wall);
-	// TODO: show it after some time?
+	var color = this.color[state.mode].wall;
+	this.paintString(60, 60, 'SnAkE', color);
 	if (state.showHint) {
-		this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', this.wall);
+		this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', color);
 	}
-	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
+	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', color);
 };
 
 Snake.UI.paintScore = function(state) {
