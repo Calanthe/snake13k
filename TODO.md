@@ -2,7 +2,7 @@
 
 - [ ] buggybug
   - [ ] **BUG** if buggybug right side only is on wall glitched wall doesn't appear
-      - [ ] (if whole bug is on top/bottom wall 2 glitched walls should appear?)
+      - [x] (if whole bug is on top/bottom wall 2 glitched walls should appear?)
   - [ ] **BUG** buggybug can show up partially on snake (right side)
   - [ ] add some easter eggs bugs?
 

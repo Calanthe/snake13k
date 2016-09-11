@@ -147,7 +147,7 @@ Snake.Game.initEdible = function(type) {
 		maxY = this.state.boardHeight - this.state.borderOffset.bottom - 1 - offset;
 	} else {
 		// if there is a hole, edible can be outside of the board walls
-		minX = minY = 0; //TODO fix if buggybug is on the edge
+		minX = minY = 0;
 		maxX = this.state.boardWidth - 1;
 		maxY = this.state.boardHeight - 1;
 	}
@@ -186,6 +186,11 @@ Snake.Game.initEdible = function(type) {
 	if (this.state.board[randomX][randomY].type === 'wall') {
 		this.board.glitchOppositeWall(randomX, randomY);
 		this.state.holeInTheWall = true;
+
+		//if edible is a buggy bug and is located on the top or bottom wall, glitch another wall next to the previous one
+		if (type === 'buggybug' && (randomX === minX || randomX === maxX)) {
+			this.board.glitchOppositeWall(randomX + 1, randomY);
+		}
 	}
 
 	Snake.Game.state.board[randomX][randomY] = {
