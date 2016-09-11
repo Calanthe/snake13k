@@ -356,17 +356,6 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 	this.sound.playEatBuggyBug();
 
-	// TODO: do we want to keep eating bug from left/right?
-	// trigger tron mode when buggy bug is eaten from left to right or right to left
-	// if (this.state.direction === 'right' || this.state.direction === 'left') {
-	// 	// add extra points and enlarge snake without moving the tail until normal food is eaten
-	// 	this.state.mode = 'tron';
-	// 	this.state.score += 1;
-	// 	this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
-	// } else {
-	// 	this.state.score += 9 + this.state.level;
-	// }
-
 	this.state.mode = 'sticky';
 	this.state.score += this.state.buggyBugTimeLeft + this.state.level;
 	if (!this.state.prevLength) {

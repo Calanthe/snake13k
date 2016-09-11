@@ -1,30 +1,8 @@
-### GLITCHES:
-
-- [ ] buggybug
-  - [x] **BUG** if buggybug right side only is on wall glitched wall doesn't appear
-      - [x] (if whole bug is on top/bottom wall 2 glitched walls should appear?)
-  - [x] **BUG** buggybug can show up partially on snake (right side)
-  - [ ] add some easter eggs bugs?
-
-- [ ] nyan cat mode?
-
-### TRON MODE:
-
-- [ ] better tron mode background
-- [x] eating 'buggy bug' gives 10 points at once and after growing snake by 10 elements it enters tron mode and gives one point every step
-  - [x] play sound when entering tron mode (not when bug is eaten), bug eaten should have different sound
-
 ### GAME FEATURES:
 
-- [x] improve menu/game over text
-  - [x] show 'press button' after some timeout, different text on game over?
 - [x] snake disappearing after game over
  - [x] make is smaller step by step
  - [ ] make it glitch out gradually (different probability)
- - [ ] make it explode into particles
-- [ ] get rid of transition in background on desktop too (?)
-- [x] don't redraw favicon if not needed
-  - [ ] only draw favicon on integer pixels (avoid multiplying by 1.6, 1.5, etc) as it gets blurry
 
 ### MOBILE
 
@@ -40,8 +18,4 @@
 - [ ] eslint rules (switch indent)
 - [ ] turn some long if/else into switches
 - [ ] clean up quick and dirty prototyping, remove console.logs
-- [ ] check also other browsers like eg IE?
-
-### BUILD:
-
-ALL DONE!
+- [ ] check also other browsers like eg IE?, do it also after minification

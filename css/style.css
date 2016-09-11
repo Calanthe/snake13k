@@ -22,10 +22,7 @@ body {
   position: relative;
   border-radius: 65px;
   background: rgb(150,200,50);
-  transition: 200ms;
 }
-
-.mobile .screen { transition: none; }
 
 .tron .screen { background: #003; }
 
