@@ -204,8 +204,8 @@ Snake.UI.initWallCells = function() {
 
 Snake.UI.showMainMenu = function() {
 	this.paintString(60, 60, 'SnAkE', this.wall);
-	// TODO: not needed?
-	this.paintString(11, 70, Snake.MOBILE ? '  press button to start' : '    press key to start   ', this.wall);
+	// TODO: show it after some time?
+	this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', this.wall);
 	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
 };
 
@@ -218,10 +218,7 @@ Snake.UI.paintScore = function(state) {
 
 	paddedScore = this.addPad(state.hiscore, '0000');
 	this.paintString(47, 7, 'HI ' + paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
-	// TODO: put it somewhere else? - makes food hard to see during game
-	// if (state.holeInTheWall) {
-	// 	this.paintString(11, 113, 'every glitch is a feature', state.mode === 'tron' ? this.snakeTron : this.wall);
-	// }
+
 	if (state.buggyBugTimeLeft !== -1 && buggyBugOnBoard.length === 2) {
 		// paint two parts of buggy bug in the top right corner
 		this.paintCell(24, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[0].body]);
@@ -245,10 +242,10 @@ Snake.UI.addPad = function(number, pad) {
 };
 
 Snake.UI.showEndGame = function(state) {
-	var color =  state.mode === 'tron' ? this.snakeTron : this.wall;
+	var color =  state.mode === 'tron' ? this.wallTron : this.wall;
 	this.paintString(11, 60, '        GAME OVER         ', color);
-	// TODO: not needed?
-	this.paintString(9, 70, Snake.MOBILE ? ' press button to start' : '    press key to reset   ', color);
+	// TODO: show it after some time?
+	this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', color);
 };
 
 Snake.UI.showPause = function(state) {

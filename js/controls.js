@@ -36,6 +36,11 @@ Snake.Controls.addListeners = function(callback) {
 	document.ontouchstart = function(e) {
 		if (e.target.dataset.action) {
 			e.target.classList.add('active');
+
+			if (window.navigator.vibrate) {
+				window.navigator.vibrate(50);
+			}
+
 			callback(e.target.dataset.action);
 			e.preventDefault();
 		}

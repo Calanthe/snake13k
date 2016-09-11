@@ -29,7 +29,7 @@
 
 - [x] sound doesn't work at all (user input needed)
   - [ ] sound on iPad has lags...
-- [ ] vibrations
+- [x] vibrations
 
 ### CODE:
 

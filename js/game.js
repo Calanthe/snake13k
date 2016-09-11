@@ -388,22 +388,32 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 		|| (this.state.board[snakeX][snakeY].type === 'wall' // or if the snake will collide with the walls
 				&& !this.state.board[snakeX][snakeY].isGlitched)) { // but not glitched walls
 
-		this.sound.playDie(this.state.mode);
 		console.log('ifCollidedWithItself', this.ifCollidedWithSnake(snakeX, snakeY));
 		console.log('ifCollidedWithWalls', this.state.board[snakeX][snakeY].type === 'wall');
-		this.state.state = 'end';
 
-		// pause input for a while, so end game screen is not closed by quick input
-		this.state.pauseInput = true;
-		setTimeout(function(state){
-			state.pauseInput = false;
-		}, 500, this.state);
-
-		if (this.state.score > this.state.hiscore) {
-			Snake.Game.saveHiScore(this.state.score);
-		}
+		this.gameOver();
 	}
 };
+
+Snake.Game.gameOver = function() {
+	this.sound.playDie(this.state.mode);
+
+	if (window.navigator.vibrate) {
+		window.navigator.vibrate(400);
+	}
+
+	this.state.state = 'end';
+
+	// pause input for a while, so end game screen is not closed by quick input
+	this.state.pauseInput = true;
+	setTimeout(function(state){
+		state.pauseInput = false;
+	}, 500, this.state);
+
+	if (this.state.score > this.state.hiscore) {
+		Snake.Game.saveHiScore(this.state.score);
+	}
+}
 
 Snake.Game.ifCollidedWithSnake = function(x, y) {
 	//check if the x/y coordinates exist in the snake array
