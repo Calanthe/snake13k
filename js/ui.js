@@ -9,6 +9,9 @@ Snake.UI = {
 
 	cellSize: 20, //dimension of one cell
 
+	iconLink: null, // <link> element for favicon
+	icons: {}, // icons generated from canvas for each mode
+
 	pixels: [],
 	pixelsPerCell: 4,
 
@@ -149,6 +152,7 @@ Snake.UI.init = function(state) {
 	this.bgCanvas.width = state.boardWidth * this.cellSize;
 	this.bgCanvas.height = state.boardHeight * this.cellSize;
 
+	Snake.UI.initFavicons(state.mode);
 	Snake.UI.initPixels(state);
 	Snake.UI.initSnakeCells();
 	Snake.UI.initWallCells();
@@ -292,6 +296,8 @@ Snake.UI.paintBG = function(state) {
 };
 
 Snake.UI.paint = function(state) {
+	this.updateFavicon(state.mode);
+
 	//paint the board
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -487,30 +493,44 @@ Snake.UI.paintPixels = function() {
 	});
 };
 
-Snake.UI.paintFavicon = function() {
+Snake.UI.initFavicons = function(mode) {
+	this.icons = {};
+	this.icons['snake'] = this.getFavicon('snake');
+	this.icons['sticky'] = this.icons['snake'];
+	this.icons['tron'] = this.getFavicon('tron');
+
+	var link = document.createElement('link');
+	link.type = 'image/x-icon';
+	link.id = 'canvas-favicon';
+	link.rel = 'shortcut icon';
+	document.getElementsByTagName('head')[0].appendChild(link);
+
+	this.iconLink = link;
+	this.updateFavicon(mode);
+};
+
+Snake.UI.updateFavicon = function(mode) {
+	if (this.iconLink.dataset.mode !== mode) {
+		this.iconLink.href = this.icons[mode];
+		this.iconLink.dataset.mode = mode;
+	}
+};
+
+Snake.UI.getFavicon = function(mode) {
 	var canvasWH = 32;
 	var canvas = document.createElement('canvas');
 	canvas.width = canvasWH;
 	canvas.height = canvasWH;
 
 	var ctx = canvas.getContext('2d');
-	ctx.fillStyle = Snake.Game.state.mode === 'tron' ? "#003" : "rgb(150,200,50)";
+	ctx.fillStyle = mode === 'tron' ? "#003" : "rgb(150,200,50)";
 	ctx.fillRect(0, 0, canvasWH, canvasWH);
-	ctx.fillStyle = Snake.Game.state.mode === 'tron' ? this.foodTron : this.food;
+	ctx.fillStyle = mode === 'tron' ? this.foodTron : this.food;
 	this.paintFaviconFood(ctx, canvasWH, this.cells.food);
-	ctx.fillStyle = Snake.Game.state.mode === 'tron' ? this.wallTron : this.wall;
+	ctx.fillStyle = mode === 'tron' ? this.wallTron : this.wall;
 	this.paintFaviconWall(ctx, 28);
 
-	var link = document.createElement('link');
-	var prevLink = document.getElementById('canvas-favicon');
-	link.type = 'image/x-icon';
-	link.id = 'canvas-favicon';
-	link.rel = 'shortcut icon';
-	link.href = canvas.toDataURL("image/x-icon");
-	if (prevLink) {
-		document.head.removeChild(prevLink);
-	}
-	document.getElementsByTagName('head')[0].appendChild(link);
+	return canvas.toDataURL("image/x-icon");
 };
 
 Snake.UI.paintFaviconFood = function(ctx, canvasWH, cellPixels) {
