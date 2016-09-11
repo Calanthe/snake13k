@@ -243,14 +243,16 @@ Snake.UI.paintScore = function(state) {
 	paddedScore = this.addPad(state.hiscore, '0000');
 	this.paintString(47, 7, 'HI ' + paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
 
-	if (state.buggyBugTimeLeft !== -1 && buggyBugOnBoard.length === 2) {
+	if (buggyBugOnBoard.length === 2) {
 		// paint two parts of buggy bug in the top right corner
 		this.paintCell(24, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[0].body]);
 		this.paintCell(25, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[1].body]);
+	}
 
+	if (state.buggyBugTimeLeft !== -1) {
 		// paint also remaining time
 		var paddedTimeLeft = this.addPad(state.buggyBugTimeLeft, '00');
-		this.paintString(105, 7, '' + paddedTimeLeft, state.mode === 'tron' ? this.snakeTron : this.wall);
+		this.paintString(105, 7, '' + paddedTimeLeft, this.wall);
 	}
 
 	if (state.mode === 'tron') {

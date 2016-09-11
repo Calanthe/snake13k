@@ -26,7 +26,7 @@ Snake.Game.initStateValues = function() {
 		score: 0,
 		hiscore: Snake.Game.readHiScore(),
 		level: 1,
-		mode: 'snake',
+		mode: 'snake', // snake, sticky, tron
 		prevLength: null, // real snake length (during tron mode),
 		glitchedLength: 0, // glitched length of snake (during end game animation)
 		foodEaten: 0,
@@ -96,7 +96,7 @@ Snake.Game.loop = function() {
 		fps = this.state.level + 4;
 		// speed up in tron mode
 		if (this.state.mode === 'tron') {
-			fps += 2;
+			fps += 3;
 		}
 	}
 
@@ -282,9 +282,14 @@ Snake.Game.update = function() {
 			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
 				this.state.prevLength = null;
 			}
-		} else {
+		} else if (this.state.mode === 'tron') {
 			this.state.score += 1; //score one point for every piece grown in tron mode
 		}
+	}
+
+	if (this.state.mode === 'sticky' && this.state.buggyBugTimeLeft-- < 0) {
+		this.state.mode = 'tron';
+		this.ui.paintFavicon(); //change favicon colours
 	}
 
 	this.checkCollision(snakeX, snakeY);
@@ -326,15 +331,22 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 Snake.Game.consumeBuggyBug = function(snakeX, snakeY) {
 	this.sound.playEatBuggyBug();
 
+	// TODO: do we want to keep eating bug from left/right?
 	// trigger tron mode when buggy bug is eaten from left to right or right to left
-	if (this.state.direction === 'right' || this.state.direction === 'left') {
-		// add extra points and enlarge snake without moving the tail until normal food is eaten
-		this.state.mode = 'tron';
-		this.ui.paintFavicon(); //change favicon colours
-		this.state.score += 1;
+	// if (this.state.direction === 'right' || this.state.direction === 'left') {
+	// 	// add extra points and enlarge snake without moving the tail until normal food is eaten
+	// 	this.state.mode = 'tron';
+	// 	this.ui.paintFavicon(); //change favicon colours
+	// 	this.state.score += 1;
+	// 	this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
+	// } else {
+	// 	this.state.score += 9 + this.state.level;
+	// }
+
+	this.state.mode = 'sticky';
+	this.state.score += this.state.buggyBugTimeLeft + this.state.level;
+	if (!this.state.prevLength) {
 		this.state.prevLength = this.state.snake.length; // need to remember the actual length of the snake
-	} else {
-		this.state.score += 9 + this.state.level;
 	}
 
 	this.removeBuggyBug(snakeX, snakeY);
