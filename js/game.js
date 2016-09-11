@@ -182,6 +182,7 @@ Snake.Game.initEdible = function(type) {
 	} while ((this.state.board[randomX][randomY].type === 'food')
 		|| (this.state.board[randomX][randomY].type === 'buggybug')
 		|| this.ifCollidedWithSnake(randomX, randomY)
+		|| (type === 'buggybug' && this.ifCollidedWithSnake(randomX + 1, randomY))
 		||
 			// exclude corners, so food don't show in wall corners if there is no hole yet
 			// and then it doesn't show in invisible rounded corners
