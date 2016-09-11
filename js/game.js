@@ -310,6 +310,7 @@ Snake.Game.update = function() {
 
 	if (this.state.mode === 'sticky' && this.state.buggyBugTimeLeft-- < 0) {
 		this.state.mode = 'tron';
+		this.sound.playEnterTronMode();
 	}
 
 	this.checkCollision(snakeX, snakeY);

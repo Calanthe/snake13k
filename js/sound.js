@@ -29,7 +29,7 @@ Snake.Sound.sounds = {
 	],
 
 	// Starting tron mode: [POWERUP]
-	snakeEatBuggyBug: [
+	enterTronMode: [
 		jsfxr([0,,0.0864,,0.4458,0.2053,,0.3603,,,,,,0.2349,,0.4484,,,1,,,,,0.5]),
 		jsfxr([0,,0.2012,,0.4803,0.2939,,0.326,,,,,,0.525,,0.6112,,,1,,,,,0.5]),
 		jsfxr([0,,0.2424,,0.2184,0.2631,,0.2023,,,,,,0.2315,,,,,1,,,,,0.5]),
@@ -85,56 +85,26 @@ Snake.Sound.sounds = {
 
 Snake.Sound.init = function() {
 	if (Snake.MOBILE) {
-		Snake.Sound.initMobile();
-	} else {
-		this.player = new Audio();
-	}
-};
-
-Snake.Sound.play = function(name) {
-	var i = Snake.Game.random(0, this.sounds[name].length - 1);
-	console.log("play", name, i);
-
-	this.player.src = this.sounds[name][i];
-
-	var promise = this.player.play();
-
-	// Firefox doesn't return promise
-	if (promise && promise.catch) {
-		promise.catch(function() {
-		// silently ignore any play errors
+		// init sound on touch event
+		document.addEventListener('touchstart', function(e){
+			if (e) {
+				e.currentTarget.removeEventListener(e.type, arguments.callee);
+			}
+			Snake.Sound.initAudio();
 		});
+	} else {
+		Snake.Sound.initAudio();
 	}
+
+	// override .play method to use mobile audio clips
+	Snake.Sound.play = function(name) {
+		var i = Snake.Game.random(0, this.sounds[name].length - 1);
+		this.sounds[name][i].currentTime = 0;
+		this.sounds[name][i].play();
+	};
 };
 
-Snake.Sound.playEatFood = function(mode) {
-	this.play(mode === 'tron' ? 'tronEatFood' : 'snakeEatFood');
-};
-
-Snake.Sound.playEatBuggyBug = function() {
-	this.play('snakeEatBuggyBug');
-};
-
-Snake.Sound.playDie = function(mode) {
-	this.play(mode === 'tron' ? 'tronDie' : 'snakeDie');
-};
-
-Snake.Sound.playMove = function(mode) {
-	if (mode === 'tron') {
-		this.play('tronMove');
-	}
-};
-
-Snake.Sound.playGlitchedWall = function() {
-	this.play('glitchedWall');
-};
-
-Snake.Sound.playHiScore = function() {
-	this.play('hiScore');
-};
-
-
-Snake.Sound.initMobilePlayer = function() {
+Snake.Sound.initAudio = function() {
 	// turn all audio clips into audio elements, play and pause them
 	// to make them playable on mobile
 
@@ -170,19 +140,48 @@ Snake.Sound.initMobilePlayer = function() {
 	}.bind(this));
 };
 
-Snake.Sound.initMobile = function() {
-	// init sound on touch event
-	document.addEventListener('touchstart', function(e){
-		if (e) {
-			e.currentTarget.removeEventListener(e.type, arguments.callee);
-		}
-		Snake.Sound.initMobilePlayer();
-	});
+Snake.Sound.play = function(name) {
+	var i = Snake.Game.random(0, this.sounds[name].length - 1);
+	console.log("play", name, i);
 
-	// override .play method to use mobile audio clips
-	Snake.Sound.play = function(name) {
-		var i = Snake.Game.random(0, this.sounds[name].length - 1);
-		this.sounds[name][i].currentTime = 0;
-		this.sounds[name][i].play();
-	};
+	this.player.src = this.sounds[name][i];
+
+	var promise = this.player.play();
+
+	// Firefox doesn't return promise
+	if (promise && promise.catch) {
+		promise.catch(function() {
+		// silently ignore any play errors
+		});
+	}
+};
+
+Snake.Sound.playEatFood = function(mode) {
+	this.play(mode === 'tron' ? 'tronEatFood' : 'snakeEatFood');
+};
+
+Snake.Sound.playEatBuggyBug = function() {
+	this.play('tronEatFood');
+};
+
+Snake.Sound.playEnterTronMode = function() {
+	this.play('enterTronMode');
+};
+
+Snake.Sound.playDie = function(mode) {
+	this.play(mode === 'tron' ? 'tronDie' : 'snakeDie');
+};
+
+Snake.Sound.playMove = function(mode) {
+	if (mode === 'tron') {
+		this.play('tronMove');
+	}
+};
+
+Snake.Sound.playGlitchedWall = function() {
+	this.play('glitchedWall');
+};
+
+Snake.Sound.playHiScore = function() {
+	this.play('hiScore');
 };

@@ -12,7 +12,7 @@
 
 - [ ] better tron mode background
 - [x] eating 'buggy bug' gives 10 points at once and after growing snake by 10 elements it enters tron mode and gives one point every step
-  - [ ] play sound when entering tron mode (not when bug is eaten), bug eaten should have different sound
+  - [x] play sound when entering tron mode (not when bug is eaten), bug eaten should have different sound
 
 ### GAME FEATURES:
 
@@ -31,6 +31,7 @@
 - [x] sound doesn't work at all (user input needed)
   - [ ] sound on iPad has lags...
 - [x] vibrations
+- [ ] mute audio (especially on iOS)
 
 ### CODE:
 
