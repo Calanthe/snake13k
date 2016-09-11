@@ -82,23 +82,12 @@ canvas {
   border-radius: 65px;
   z-index: 1;
   background:
-    -webkit-gradient(linear, left top, right bottom,
-      color-stop(0, rgba(255, 255, 255, 0)),
-      color-stop(0.55, rgba(255, 255, 255, .05)),
-      color-stop(0.551, rgba(0, 0, 0, .05)),
-      color-stop(1, rgba(0, 0, 0, 0)));
-  background:
-    -moz-linear-gradient(left top,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, .05) 55%,
-      rgba(0, 0, 0, .05) 55%,
-      rgba(0, 0, 0, 0));
-  background:
-    linear-gradient(left top,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, .05) 55%,
-      rgba(0, 0, 0, .05) 55%,
-      rgba(0, 0, 0, 0));
+    radial-gradient(farthest-corner at -300px -300px,
+      rgba(255,255,255,0) 0%,
+      rgba(255, 255, 255, 0.05) 76%,
+      rgba(0,0,0,0.05) 76%,
+      rgba(0, 0, 0, 0) 100%
+    )
 }
 
 #c {
