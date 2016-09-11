@@ -138,7 +138,7 @@ Snake.UI = {
 	// colors
 	color: {
 		snake: { // mode
-			bg: 'rgb(150,200,50)',
+			bg: '#9c3',
 			boardCell: 'rgba(0,0,255,0.05)',
 			wall: 'rgba(0,0,0,0.7)',
 			food: 'rgba(0,0,0,0.7)',
@@ -147,10 +147,10 @@ Snake.UI = {
 		},
 		tron: {
 			bg: '#003',
-			wall: 'rgb(255,255,0)',
-			food: 'rgb(255,0,0)',
-			bug: 'rgb(255,255,255)',
-			snake: 'rgb(0,255,255)'
+			wall: '#FF0',
+			food: '#F00',
+			bug: '#FFF',
+			snake: '#0FF'
 		}
 	}
 };

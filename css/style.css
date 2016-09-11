@@ -21,7 +21,7 @@ body {
   margin: 50px auto;
   position: relative;
   border-radius: 65px;
-  background: rgb(150,200,50);
+  background: #9c3;
 }
 
 .tron .screen { background: #003; }
