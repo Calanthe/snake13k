@@ -282,7 +282,7 @@ Snake.UI.paint = function(state) {
 	for (var i = 0; i < state.snake.length; i++) {
 		var cell = state.snake[i];
 		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
-		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels);
+		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels, cell.isGlitched);
 	}
 
 	//paint the board

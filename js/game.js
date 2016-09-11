@@ -28,6 +28,7 @@ Snake.Game.initStateValues = function() {
 		level: 1,
 		mode: 'snake',
 		prevLength: null, // real snake length (during tron mode),
+		glitchedLength: 0, // glitched length of snake (during end game animation)
 		foodEaten: 0,
 		buggyBugTimeLeft: -1 // no buggy bug on the board
 	};
@@ -212,23 +213,15 @@ Snake.Game.getDistanceFromHead = function(x, y) {
 };
 
 Snake.Game.tick = function() {
+	var state = this.state;
 	// update game state (move snake) when game is playing
-	if (this.state.state === 'play') {
+	if (state.state === 'play') {
 		this.update();
 	}
 
 	// animate hiscore on game over screen
-	if (this.state.state === 'end') {
-		if (this.state.score > this.state.hiscore) {
-			this.state.hiscore++;
-			if (this.state.hiscore % 10 === 0) {
-				this.sound.playHiScore();
-			}
-		}
-		// make the snake shorter every frame
-		if (this.state.snake.length) {
-			this.state.snake.shift();
-		}
+	if (state.state === 'end') {
+		this.gameOverUpdate();
 	}
 
 	// paint everything
@@ -413,7 +406,32 @@ Snake.Game.gameOver = function() {
 	if (this.state.score > this.state.hiscore) {
 		Snake.Game.saveHiScore(this.state.score);
 	}
-}
+};
+
+Snake.Game.gameOverUpdate = function() {
+	var state = this.state;
+	var snake = state.snake;
+
+	if (state.score > state.hiscore) {
+		this.state.hiscore++;
+		if (state.hiscore % 10 === 0) {
+			this.sound.playHiScore();
+		}
+	}
+	// make the snake shorter every frame
+	if (snake.length) {
+		if (state.glitchedLength === 10 || state.glitchedLength >= snake.length) {
+			snake.shift();
+		}
+		if (snake[state.glitchedLength]) {
+			state.snake[state.glitchedLength].isGlitched = true;
+			if (state.glitchedLength < 10) {
+				state.glitchedLength++;
+			}
+		}
+	}
+};
+
 
 Snake.Game.ifCollidedWithSnake = function(x, y) {
 	//check if the x/y coordinates exist in the snake array
@@ -421,6 +439,7 @@ Snake.Game.ifCollidedWithSnake = function(x, y) {
 		return cell.x === x && cell.y === y;
 	}).length;
 };
+
 
 /* eslint no-fallthrough: "off" */
 
