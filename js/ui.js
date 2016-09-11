@@ -7,6 +7,9 @@ Snake.UI = {
 	bgCanvas: document.getElementById('bg'),
 	bgCtx: document.getElementById('bg').getContext('2d'),
 
+	buttons: document.getElementById("buttons"),
+	body: document.body,
+
 	cellSize: 20, //dimension of one cell
 
 	iconLink: null, // <link> element for favicon
@@ -230,10 +233,12 @@ Snake.UI.initWallCells = function() {
 	};
 };
 
-Snake.UI.showMainMenu = function() {
+Snake.UI.showMainMenu = function(state) {
 	this.paintString(60, 60, 'SnAkE', this.wall);
 	// TODO: show it after some time?
-	this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', this.wall);
+	if (state.showHint) {
+		this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', this.wall);
+	}
 	this.paintString(9, 113, 'js13k 2016 intuitio bartaz', this.wall);
 };
 
@@ -274,8 +279,9 @@ Snake.UI.addPad = function(number, pad) {
 Snake.UI.showEndGame = function(state) {
 	var color =  state.mode === 'tron' ? this.wallTron : this.wall;
 	this.paintString(11, 60, '        GAME OVER         ', color);
-	// TODO: show it after some time?
-	this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', color);
+	if (state.showHint) {
+		this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', color);
+	}
 };
 
 Snake.UI.showPause = function(state) {
@@ -306,8 +312,12 @@ Snake.UI.paint = function(state) {
 
 	this.paintScore(state);
 
-	if (document.body.className !== state.mode) {
-		document.body.className = state.mode;
+	if (this.body.className !== state.mode) {
+		this.body.className = state.mode;
+	}
+
+	if (Snake.MOBILE && !(state.showHint === this.buttons.classList.contains("hint"))) {
+		this.buttons.classList[state.showHint ? "add" : "remove"]("hint");
 	}
 
 	//paint the snake
@@ -333,7 +343,7 @@ Snake.UI.paint = function(state) {
 	}
 
 	if (state.state === 'menu') {
-		this.showMainMenu();
+		this.showMainMenu(state);
 	} else if (state.state === 'pause') {
 		this.showPause(state);
 	} else if (state.state === 'end') {
