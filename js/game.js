@@ -30,7 +30,8 @@ Snake.Game.initStateValues = function() {
 		prevLength: null, // real snake length (during tron mode),
 		glitchedLength: 0, // glitched length of snake (during end game animation)
 		foodEaten: 0,
-		buggyBugTimeLeft: -1 // no buggy bug on the board
+		buggyBugTimeLeft: -1, // no buggy bug on the board
+		showHint: false
 	};
 };
 
@@ -60,6 +61,7 @@ Snake.Game.init = function() {
 
 Snake.Game.initNewGame = function() {
 	this.initStateValues();
+	this.delayHint();
 
 	//initialise walls on the board
 	this.board.initBoard(this.state);
@@ -81,6 +83,7 @@ Snake.Game.initNewGame = function() {
 
 Snake.Game.play = function() {
 	this.state.state = 'play';
+	this.clearHint();
 };
 
 Snake.Game.loop = function() {
@@ -121,6 +124,21 @@ Snake.Game.initSnake = function() {
 
 Snake.Game.random = function(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+Snake.Game.delayHint = function(delay) {
+	this.clearHint();
+	delay = delay || 5000;
+
+	// show controls hint after 5s
+	this.hintTimeout = setTimeout(function(state){
+		state.showHint = true;
+	}, 5000, this.state);
+};
+
+Snake.Game.clearHint = function() {
+	clearTimeout(this.hintTimeout);
+	this.state.showHint = false;
 };
 
 Snake.Game.initFood = function() {
@@ -409,6 +427,8 @@ Snake.Game.gameOver = function() {
 	setTimeout(function(state){
 		state.pauseInput = false;
 	}, 500, this.state);
+
+	this.delayHint();
 
 	if (this.state.score > this.state.hiscore) {
 		Snake.Game.saveHiScore(this.state.score);

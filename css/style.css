@@ -137,6 +137,7 @@ canvas {
   outline: none;
 }
 
+.controls.hint button,
 .controls button.active {
   background: rgba(255,255,255,0.2);
   outline: none;
