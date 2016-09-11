@@ -135,17 +135,24 @@ Snake.UI = {
 		]
 	},
 
-	//colors
-	boardCellTron: 0, // don't draw anything, as background is in CSS (was 'rgba(0,0,255,0.2)'),
-	boardCell: 'rgba(0,0,255,0.05)',
-	wallTron: 'rgb(255,255,0)',
-	foodTron: 'rgb(255,0,0)',
-	bugTron: 'rgb(255,255,255)',
-	wall: 'rgba(0,0,0,0.7)',
-	food: 'rgba(0,0,0,0.7)',
-	bug: 'rgba(0,0,0,0.7)',
-	snakeTron: 'rgb(0,255,255)',
-	snake: 'rgba(0,0,0,0.7)'
+	// colors
+	color: {
+		snake: { // mode
+			bg: 'rgb(150,200,50)',
+			boardCell: 'rgba(0,0,255,0.05)',
+			wall: 'rgba(0,0,0,0.7)',
+			food: 'rgba(0,0,0,0.7)',
+			bug: 'rgba(0,0,0,0.7)',
+			snake: 'rgba(0,0,0,0.7)'
+		},
+		tron: {
+			bg: '#003',
+			wall: 'rgb(255,255,0)',
+			food: 'rgb(255,0,0)',
+			bug: 'rgb(255,255,255)',
+			snake: 'rgb(0,255,255)'
+		}
+	}
 };
 
 Snake.UI.init = function(state) {
@@ -163,6 +170,8 @@ Snake.UI.init = function(state) {
 	this.paintBG(state);
 
 	this.font = Snake.Font;
+
+	this.color['sticky'] = this.color['snake'];
 };
 
 Snake.UI.initPixels = function(state) {
@@ -247,28 +256,28 @@ Snake.UI.paintScore = function(state) {
 
 	var buggyBugOnBoard = Snake.Game.findBuggyBugOnBoard();
 
-	this.paintString(9, 7, paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(9, 7, paddedScore, this.color[state.mode].wall);
 
 	paddedScore = this.addPad(state.hiscore, '0000');
-	this.paintString(47, 7, 'HI ' + paddedScore, state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(47, 7, 'HI ' + paddedScore, this.color[state.mode].wall);
 
 	if (buggyBugOnBoard.length === 2) {
 		// paint two parts of buggy bug in the top right corner
-		this.paintCell(24, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[0].body]);
-		this.paintCell(25, 2, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[buggyBugOnBoard[1].body]);
+		this.paintCell(24, 2, this.color[state.mode].bug, this.cells[buggyBugOnBoard[0].body]);
+		this.paintCell(25, 2, this.color[state.mode].bug, this.cells[buggyBugOnBoard[1].body]);
 	}
 
 	if (state.buggyBugTimeLeft !== -1) {
 		// paint also remaining time
 		var paddedTimeLeft = this.addPad(state.buggyBugTimeLeft, '00');
-		this.paintString(105, 7, '' + paddedTimeLeft, this.wall);
+		this.paintString(105, 7, '' + paddedTimeLeft, this.color[state.mode].wall);
 	}
 
 	if (state.mode === 'tron') {
-		this.paintString(97, 7, 'TRON', this.wallTron);
+		this.paintString(97, 7, 'TRON', this.color[state.mode].wall);
 	}
 
-	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintLine(9, 13, (state.boardWidth - (state.borderOffset.left + state.borderOffset.right)) * this.pixelsPerCell - 1, this.color[state.mode].snake);
 };
 
 Snake.UI.addPad = function(number, pad) {
@@ -277,15 +286,14 @@ Snake.UI.addPad = function(number, pad) {
 };
 
 Snake.UI.showEndGame = function(state) {
-	var color =  state.mode === 'tron' ? this.wallTron : this.wall;
-	this.paintString(11, 60, '        GAME OVER         ', color);
+	this.paintString(11, 60, '        GAME OVER         ', this.color[state.mode].wall);
 	if (state.showHint) {
-		this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', color);
+		this.paintString(Snake.MOBILE ? 29 : 35, 70, Snake.MOBILE ? 'touch any button' : 'press any key', this.color[state.mode].wall);
 	}
 };
 
 Snake.UI.showPause = function(state) {
-	this.paintString(11, 60, '          PAUSE           ', state.mode === 'tron' ? this.snakeTron : this.wall);
+	this.paintString(11, 60, '          PAUSE           ', this.color[state.mode].wall);
 };
 
 Snake.UI.paintBG = function(state) {
@@ -295,7 +303,7 @@ Snake.UI.paintBG = function(state) {
 	var ctx = this.bgCtx;
 	for (var x = 0; x < state.boardWidth * this.pixelsPerCell; x++) {
 		for(var y = 0; y < state.boardHeight * this.pixelsPerCell; y++) {
-			ctx.fillStyle = this.boardCell;
+			ctx.fillStyle = this.color['snake'].boardCell;
 			ctx.fillRect(x * (pixelWidth + pixelSpacing), y * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
 		}
 	}
@@ -324,7 +332,7 @@ Snake.UI.paint = function(state) {
 	for (var i = 0; i < state.snake.length; i++) {
 		var cell = state.snake[i];
 		cellPixels = this.cells.snake[this.getSnakeCellType(i, state.snake)];
-		this.paintCell(cell.x, cell.y, state.mode === 'tron' ? this.snakeTron : this.snake, cellPixels, cell.isGlitched);
+		this.paintCell(cell.x, cell.y, this.color[state.mode].snake, cellPixels, cell.isGlitched);
 	}
 
 	//paint the board
@@ -333,11 +341,11 @@ Snake.UI.paint = function(state) {
 			cell = state.board[x][y];
 			if (cell.type === 'wall') {
 				var cellPixels = this.cells.wall[this.getWallCellType(x, y, state.board)];
-				this.paintCell(x, y, state.mode === 'tron' ? this.wallTron : this.wall, cellPixels, cell.isGlitched);
+				this.paintCell(x, y, this.color[state.mode].wall, cellPixels, cell.isGlitched);
 			} else if (cell.type === 'food') {
-				this.paintCell(x, y, state.mode === 'tron' ? this.foodTron : this.food, this.cells.food);
+				this.paintCell(x, y, this.color[state.mode].food, this.cells.food);
 			} else if (cell.type === 'buggybug') {
-				this.paintCell(x, y, state.mode === 'tron' ? this.bugTron : this.bug, this.cells[cell.body]);
+				this.paintCell(x, y, this.color[state.mode].bug, this.cells[cell.body]);
 			}
 		}
 	}
@@ -396,38 +404,38 @@ Snake.UI.getWallCellType = function(x, y, board) {
 	return (top ? 'T' : '_') + (bottom ? 'B' : '_') + (left ? 'L' : '_') + (right ? 'R' : '_');
 };
 
-Snake.UI.paintCell = function(x, y, colour, cellPixels, isGlitched) {
+Snake.UI.paintCell = function(x, y, color, cellPixels, isGlitched) {
 	for (var i = 0; i < this.pixelsPerCell; i++) {
 		for (var j = 0; j < this.pixelsPerCell; j++) {
 			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
-				this.pixels[x * this.pixelsPerCell + i][y * this.pixelsPerCell + j] = colour;
+				this.pixels[x * this.pixelsPerCell + i][y * this.pixelsPerCell + j] = color;
 			}
 		}
 	}
 };
 
-Snake.UI.paintLine = function(x, y, width, colour) {
+Snake.UI.paintLine = function(x, y, width, color) {
 	for (var i = 0; i < width; i++) {
-		this.pixels[x + i][y] = colour;
+		this.pixels[x + i][y] = color;
 	}
 };
 
-Snake.UI.paintCharacter = function(x, y, character, colour) {
+Snake.UI.paintCharacter = function(x, y, character, color) {
 	var characterPixels = this.font.font[character] || this.font.font["0"];
 	if (characterPixels) {
 		for (var j = 0; j < characterPixels.length; j++) {
 			for (var i = 0; i < characterPixels[j].length; i++) {
 				if (characterPixels[j][i]) {
-					this.pixels[x + i][y + j] = colour;
+					this.pixels[x + i][y + j] = color;
 				}
 			}
 		}
 	}
 };
 
-Snake.UI.paintString = function(x, y, stringValue, colour) {
+Snake.UI.paintString = function(x, y, stringValue, color) {
 	for (var i = 0; i < stringValue.length; i++) { //iterate over string characters
-		this.paintCharacter(x + (this.font.characterPixelsWidth + 1) * i, y, stringValue.charAt(i), colour);
+		this.paintCharacter(x + (this.font.characterPixelsWidth + 1) * i, y, stringValue.charAt(i), color);
 	}
 };
 
@@ -533,11 +541,11 @@ Snake.UI.getFavicon = function(mode) {
 	canvas.height = canvasWH;
 
 	var ctx = canvas.getContext('2d');
-	ctx.fillStyle = mode === 'tron' ? "#003" : "rgb(150,200,50)";
+	ctx.fillStyle = this.color[mode].bg;
 	ctx.fillRect(0, 0, canvasWH, canvasWH);
-	ctx.fillStyle = mode === 'tron' ? this.foodTron : this.food;
+	ctx.fillStyle = this.color[mode].food;
 	this.paintFaviconFood(ctx, canvasWH, this.cells.food);
-	ctx.fillStyle = mode === 'tron' ? this.wallTron : this.wall;
+	ctx.fillStyle = this.color[mode].wall;
 	this.paintFaviconWall(ctx, 28);
 
 	return canvas.toDataURL("image/x-icon");
