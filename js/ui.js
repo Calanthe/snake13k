@@ -503,7 +503,7 @@ Snake.UI.paintFaviconFood = function(ctx, canvasWH, cellPixels) {
 
 Snake.UI.paintFaviconWall = function(ctx, canvasWH) {
 	var cellWH = 2;
-	var maxW = maxH = canvasWH / cellWH;
+	var maxH, maxW = maxH = canvasWH / cellWH;
 	for (var i = 0; i < maxH; i++) {
 		for (var j = 0; j < maxW; j++) {
 			if (i === 0 || j === 0 || i === maxW - 1 || j === maxW - 1) {
