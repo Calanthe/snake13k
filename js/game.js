@@ -447,14 +447,16 @@ Snake.Game.gameOverUpdate = function() {
 	}
 	// make the snake shorter every frame
 	if (snake.length) {
-		if (state.glitchedLength === 10 || state.glitchedLength >= snake.length) {
+		if (state.glitchedLength === 20 || state.glitchedLength >= snake.length) {
 			snake.shift();
 		}
-		if (snake[state.glitchedLength]) {
-			state.snake[state.glitchedLength].isGlitched = true;
-			if (state.glitchedLength < 10) {
-				state.glitchedLength++;
+		for (var i = 0; i <= state.glitchedLength; i++) {
+			if (state.snake[i]) {
+				state.snake[i].isGlitched = 0.045 * (i+1);
 			}
+		}
+		if (state.glitchedLength < 20) {
+			state.glitchedLength++;
 		}
 	}
 };

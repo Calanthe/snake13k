@@ -267,7 +267,7 @@ Snake.UI.paintScore = function(state) {
 		this.paintCell(25, 2, this.color[state.mode].bug, this.cells[buggyBugOnBoard[1].body]);
 	}
 
-	if (state.buggyBugTimeLeft !== -1) {
+	if (state.buggyBugTimeLeft >= 0) {
 		// paint also remaining time
 		var paddedTimeLeft = this.addPad(state.buggyBugTimeLeft, '00');
 		this.paintString(105, 7, '' + paddedTimeLeft, this.color[state.mode].wall);
@@ -405,9 +405,13 @@ Snake.UI.getWallCellType = function(x, y, board) {
 };
 
 Snake.UI.paintCell = function(x, y, color, cellPixels, isGlitched) {
+	if (isGlitched && typeof isGlitched !== 'number') {
+		isGlitched = 0.9;
+	}
+
 	for (var i = 0; i < this.pixelsPerCell; i++) {
 		for (var j = 0; j < this.pixelsPerCell; j++) {
-			if (cellPixels[j][i] && (!isGlitched || Math.random() < 0.9)) {
+			if (cellPixels[j][i] && (!isGlitched || Math.random() < isGlitched)) {
 				this.pixels[x * this.pixelsPerCell + i][y * this.pixelsPerCell + j] = color;
 			}
 		}
