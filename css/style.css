@@ -104,6 +104,11 @@ canvas {
       rgba(0, 0, 0, 0));
 }
 
+#c {
+  position: absolute;
+  top: 0;
+}
+
 .controls {
   width: 600px;
   margin: 0 auto;

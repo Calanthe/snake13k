@@ -23,16 +23,13 @@
 - [x] snake disappearing after game over
  - [x] make is smaller step by step
  - [ ] make it explode into particles
-- [ ] separate background canvas (for mobile performance and tron background)
 - [ ] get rid of transition in background on desktop too (?)
 
 ### MOBILE
 
 - [x] sound doesn't work at all (user input needed)
   - [ ] sound on iPad has lags...
-- [ ] don't draw all the pixels
-  - [x] only draw pixels that are on?
-  - [ ] have separate background canvas that is not redrawn?
+- [ ] vibrations
 
 ### CODE:
 

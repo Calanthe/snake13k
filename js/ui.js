@@ -4,6 +4,9 @@ Snake.UI = {
 	canvas: document.getElementById('c'),
 	ctx: document.getElementById('c').getContext('2d'),
 
+	bgCanvas: document.getElementById('bg'),
+	bgCtx: document.getElementById('bg').getContext('2d'),
+
 	cellSize: 20, //dimension of one cell
 
 	pixels: [],
@@ -119,9 +122,14 @@ Snake.UI.init = function(state) {
 	this.canvas.width = state.boardWidth * this.cellSize;
 	this.canvas.height = state.boardHeight * this.cellSize;
 
+	this.bgCanvas.width = state.boardWidth * this.cellSize;
+	this.bgCanvas.height = state.boardHeight * this.cellSize;
+
 	Snake.UI.initPixels(state);
 	Snake.UI.initSnakeCells();
 	Snake.UI.initWallCells();
+
+	Snake.UI.paintBG(state);
 
 	this.font = Snake.Font;
 };
@@ -247,22 +255,25 @@ Snake.UI.showPause = function(state) {
 	this.paintString(11, 60, '          PAUSE           ', state.mode === 'tron' ? this.snakeTron : this.wall);
 };
 
+Snake.UI.paintBG = function(state) {
+	// paint pixels on whole screen
+	var pixelWidth = (this.cellSize - this.pixelsPerCell) / this.pixelsPerCell;
+	var pixelSpacing = 1;
+	var ctx = this.bgCtx;
+	for (var x = 0; x < state.boardWidth * this.pixelsPerCell; x++) {
+		for(var y = 0; y < state.boardHeight * this.pixelsPerCell; y++) {
+			ctx.fillStyle = this.boardCell;
+			ctx.fillRect(x * (pixelWidth + pixelSpacing), y * (pixelWidth + pixelSpacing), pixelWidth, pixelWidth);
+		}
+	}
+};
+
 Snake.UI.paint = function(state) {
 	//paint the board
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-	// paint pixels on whole screen
-	for (var x = 0; x < state.boardWidth; x++) {
-		for (var y = 0; y < state.boardHeight; y++) {
-			if (Snake.MOBILE) {
-				// don't draw background pixels on mobile
-				// TODO: draw them on background canvas just once
-				this.paintCell(x, y, null, this.cells.full);
-			} else {
-				this.paintCell(x, y, state.mode === 'tron' ? this.boardCellTron : this.boardCell, this.cells.full);
-			}
-		}
-	}
+	// reset pixels matrix
+	this.initPixels(state);
 
 	this.paintScore(state);
 
@@ -278,8 +289,8 @@ Snake.UI.paint = function(state) {
 	}
 
 	//paint the board
-	for (x = 0; x < state.boardWidth; x++) {
-		for (y = 0; y < state.boardHeight; y++) {
+	for (var x = 0; x < state.boardWidth; x++) {
+		for (var y = 0; y < state.boardHeight; y++) {
 			cell = state.board[x][y];
 			if (cell.type === 'wall') {
 				var cellPixels = this.cells.wall[this.getWallCellType(x, y, state.board)];
