@@ -157,7 +157,9 @@ Snake.Sound.play = function(name) {
 	if (this.isMuted) return;
 
 	var i = Snake.Game.random(0, this.sounds[name].length - 1);
-	this.sounds[name][i].currentTime = 0;
+	if (Snake.MOBILE) {
+		this.sounds[name][i].currentTime = 0;
+	}
 	this.sounds[name][i].play();
 
 	var promise = this.sounds[name][i].play();

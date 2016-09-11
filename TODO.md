@@ -4,6 +4,7 @@
  - [x] make is smaller step by step
  - [ ] make it glitch out gradually (different probability)
 - [ ] mute on desktop work with M key but is not visible
+- [ ] pause on mobile
 
 ### CODE:
 
