@@ -195,7 +195,7 @@ Snake.Game.initEdible = function(type) {
 	};
 
 	if (type === 'buggybug') { // buggybug's body has two parts
-		var bugNo = this.random(1, 3);
+		var bugNo = this.random(1, 5);
 		Snake.Game.state.board[randomX][randomY].body = 'bug' + bugNo + 'Left'; // info about the body part
 		Snake.Game.state.board[randomX + 1][randomY] = {
 			type: type,

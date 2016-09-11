@@ -1,4 +1,3 @@
-/* eslint no-sparse-arrays: "off" */
 var Snake = Snake || {};
 
 Snake.Font = {

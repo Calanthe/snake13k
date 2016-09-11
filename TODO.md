@@ -4,9 +4,7 @@
   - [ ] **BUG** if buggybug right side only is on wall glitched wall doesn't appear
       - [ ] (if whole bug is on top/bottom wall 2 glitched walls should appear?)
   - [ ] **BUG** buggybug can show up partially on snake (right side)
-  - [ ] only show it inside the board?
-  - [ ] remove the biggest one?
-  - [ ] add some more bugs? (easter eggs?)
+  - [ ] add some easter eggs bugs?
 
 - [ ] nyan cat mode?
 
@@ -14,7 +12,6 @@
 
 - [ ] better tron mode background
 - [ ] eating 'buggy bug' gives 10 points at once and after growing snake by 10 elements it enters tron mode and gives one point every step
-- [ ] give a tron bug some tron bike icon
 
 ### GAME FEATURES:
 
@@ -37,7 +34,6 @@
 - [ ] eslint rules (switch indent)
 - [ ] turn some long if/else into switches
 - [ ] clean up quick and dirty prototyping, remove console.logs
-- [ ] remove 0s from 0/1 arrays (they can be undefined to save some space)
 - [ ] check also other browsers like eg IE?
 
 ### BUILD:
