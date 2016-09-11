@@ -15,7 +15,8 @@ Snake.Sound.sounds = {
 		jsfxr([1,,0.1114,,0.1243,0.4982,,,,,,,,,,,,,1,,,0.1,,0.5]),
 		jsfxr([0,,0.1173,,0.1651,0.4355,,,,,,,,0.0803,,,,,1,,,0.1,,0.5]),
 		jsfxr([1,,0.1414,,0.1505,0.4521,,,,,,,,,,,,,1,,,0.1,,0.5]),
-		jsfxr([0,,0.1663,,0.1741,0.5703,,,,,,,,0.0332,,,,,1,,,0.1,,0.5])
+		jsfxr([0,,0.1663,,0.1741,0.5703,,,,,,,,0.0332,,,,,1,,,0.1,,0.5]),
+		jsfxr([1,,0.1717,,0.0341,0.48,,,,,,,,,,,,,1,,,0.1,,0.5])
 	],
 
 	// end tron mode? (sad BLIP)
@@ -74,7 +75,7 @@ Snake.Sound.sounds = {
 
 	// hi score (COIN)
 	hiScore: [
-		jsfxr([0,,0.1663,,0.1741,0.5703,,,,,,,,0.0332,,,,,1,,,0.1,,0.5]),
+		jsfxr([0,,0.0401,0.379,0.4666,0.5605,,,,,,0.44,0.5241,,,,,,1,,,,,0.5]),
 		jsfxr([0,,0.0612,0.5269,0.4113,0.4149,,,,,,0.3262,0.6716,,,,,,1,,,,,0.5]),
 		jsfxr([0,,0.085,0.5219,0.2917,0.4561,,,,,,0.4629,0.5089,,,,,,1,,,,,0.5]),
 		jsfxr([0,,0.0122,0.3796,0.4865,0.823,,,,,,0.482,0.5611,,,,,,1,,,,,0.5]),
@@ -136,8 +137,19 @@ Snake.Sound.playHiScore = function() {
 Snake.Sound.initMobilePlayer = function() {
 	// turn all audio clips into audio elements, play and pause them
 	// to make them playable on mobile
+
+	var isiOS = (navigator.userAgent.match(/iPhone|iPod|iPad/i));
+
 	Object.keys(this.sounds).forEach(function(name){
 		var sounds = this.sounds[name];
+
+		// Mobile Safari on iOS seems to have trouble loading so many audio elements
+		// and their sounds (even from data URLs), so we limit sounds to one per type.
+		// Except tronMove type, because it sounds way better when having different
+		// tone on each turn.
+		if (isiOS && name !== "tronMove") {
+			sounds = [ sounds[Snake.Game.random(0, sounds.length - 1)] ]; // pick up random one so there can be different sounds on each refresh
+		}
 
 		sounds = sounds.map(function(sound){
 			var player = new Audio();
