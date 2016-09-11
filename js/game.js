@@ -24,7 +24,7 @@ Snake.Game.initStateValues = function() {
 		},
 		holeInTheWall: false,
 		score: 0,
-		hiscore: Snake.Game.readHiScore(),
+		hiscore: this.readHiScore(),
 		level: 1,
 		mode: 'snake', // snake, sticky, tron
 		prevLength: null, // real snake length (during tron mode),
@@ -181,7 +181,7 @@ Snake.Game.initEdible = function(type) {
 		var randomY = this.random(minY, maxY);
 	} while ((this.state.board[randomX][randomY].type === 'food')
 		|| (this.state.board[randomX][randomY].type === 'buggybug')
-		|| Snake.Game.ifCollidedWithSnake(randomX, randomY)
+		|| this.ifCollidedWithSnake(randomX, randomY)
 		||
 			// exclude corners, so food don't show in wall corners if there is no hole yet
 			// and then it doesn't show in invisible rounded corners
@@ -200,28 +200,32 @@ Snake.Game.initEdible = function(type) {
 			// bottom left corner
 			|| (randomY === this.state.boardHeight - this.state.borderOffset.bottom - 1 && randomX === offset.left)));
 
-	//if edible happens to be on wall glitch opposite wall so snake can go through
+	// if edible happens to be on wall glitch opposite wall so snake can go through
 	if (this.state.board[randomX][randomY].type === 'wall') {
 		this.board.glitchOppositeWall(randomX, randomY);
 		this.state.holeInTheWall = true;
 
-		//if edible is a buggy bug and is located on the top or bottom wall, glitch another wall next to the previous one
-		if (type === 'buggybug' && (randomX === minX || randomX === maxX)) {
+		// if edible is a buggy bug and is located on the top or bottom wall, glitch another wall next to the previous one
+		if (type === 'buggybug' && (randomY === minY || randomY === maxY)) {
 			this.board.glitchOppositeWall(randomX + 1, randomY);
 		}
 	}
 
-	Snake.Game.state.board[randomX][randomY] = {
+	this.state.board[randomX][randomY] = {
 		type: type
 	};
 
 	if (type === 'buggybug') { // buggybug's body has two parts
 		var bugNo = this.random(1, 5);
-		Snake.Game.state.board[randomX][randomY].body = 'bug' + bugNo + 'Left'; // info about the body part
-		Snake.Game.state.board[randomX + 1][randomY] = {
+		this.state.board[randomX][randomY].body = 'bug' + bugNo + 'Left'; // info about the body part
+		this.state.board[randomX + 1][randomY] = {
 			type: type,
 			body: 'bug' + bugNo + 'Right' // info about the body part
 		};
+		if (this.state.board[randomX + 1][randomY].type === 'wall') { // glitch opposite wall even if only right part is on the wall
+			this.board.glitchOppositeWall(randomX + 1, randomY);
+			this.state.holeInTheWall = true;
+		}
 		var timeout = this.getDistanceFromHead(randomX, randomY) + 10;
 		timeout = timeout - (timeout % 10) + 10;
 		this.state.buggyBugTimeLeft = timeout;
@@ -229,7 +233,7 @@ Snake.Game.initEdible = function(type) {
 };
 
 Snake.Game.getDistanceFromHead = function(x, y) {
-	var head = Snake.Game.state.snake[Snake.Game.state.snake.length - 1];
+	var head = this.state.snake[this.state.snake.length - 1];
 	return Math.abs(head.x - x) + Math.abs(head.y - y);
 };
 
@@ -250,7 +254,7 @@ Snake.Game.tick = function() {
 };
 
 Snake.Game.update = function() {
-	//take the snake's head
+	// take the snake's head
 	var snakeX = this.state.snake[this.state.snake.length - 1].x;
 	var snakeY = this.state.snake[this.state.snake.length - 1].y;
 
@@ -278,7 +282,7 @@ Snake.Game.update = function() {
 	else if (this.state.direction === 'up') snakeY--;
 	else if (this.state.direction === 'down') snakeY++;
 
-	//if we will get out of the board
+	// if we will get out of the board
 	if (snakeX === -1) {
 		snakeX = this.state.boardWidth - 1;
 	} else if (snakeX === this.state.boardWidth) {
@@ -289,22 +293,22 @@ Snake.Game.update = function() {
 		snakeY = 0;
 	}
 
-	//if the new head position matches the food
+	// if the new head position matches the food
 	if (this.state.board[snakeX][snakeY].type === 'food') {
 		this.consumeFood(snakeX, snakeY);
 	} else if (this.state.board[snakeX][snakeY].type === 'buggybug') { //if the head position matches the buggy bug
 		this.consumeBuggyBug(snakeX, snakeY);
 	} else {
 		if (this.state.mode === 'snake') {
-			this.state.snake.shift(); //remove the first cell - tail
-			//make it smaller in every paint
+			this.state.snake.shift(); // remove the first cell - tail
+			// make it smaller in every paint
 			if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
 				this.state.snake.shift();
 			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
 				this.state.prevLength = null;
 			}
 		} else if (this.state.mode === 'tron') {
-			this.state.score += 1; //score one point for every piece grown in tron mode
+			this.state.score += 1; // score one point for every piece grown in tron mode
 		}
 	}
 
@@ -331,7 +335,7 @@ Snake.Game.update = function() {
 		if (this.state.buggyBugTimeLeft === 1) {
 			this.removeBuggyBug(buggyBugOnBoard[0].x, buggyBugOnBoard[0].y);
 			this.state.buggyBugTimeLeft = -1;
-		} else { //decrease remaining time of the buggyBug
+		} else { // decrease remaining time of the buggyBug
 			this.state.buggyBugTimeLeft--;
 		}
 	}
@@ -342,7 +346,7 @@ Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.state.score += 4 + this.state.level;
 	this.state.foodEaten += 1;
 	if (this.state.foodEaten % 5 === 0) this.state.level += 1;
-	this.state.mode = 'snake'; //fix the snake so the tail can move
+	this.state.mode = 'snake'; // fix the snake so the tail can move
 	this.addEdible(); // add new food before removing old one (to prevent it showing on same place)
 	this.state.board[snakeX][snakeY].type = '';
 	if (this.state.prevLength) this.state.prevLength += 1;
@@ -437,7 +441,7 @@ Snake.Game.gameOver = function() {
 	this.delayHint();
 
 	if (this.state.score > this.state.hiscore) {
-		Snake.Game.saveHiScore(this.state.score);
+		this.saveHiScore(this.state.score);
 	}
 };
 
@@ -467,7 +471,7 @@ Snake.Game.gameOverUpdate = function() {
 
 
 Snake.Game.ifCollidedWithSnake = function(x, y) {
-	//check if the x/y coordinates exist in the snake array
+	// check if the x/y coordinates exist in the snake array
 	return this.state.snake.filter(function(cell) {
 		return cell.x === x && cell.y === y;
 	}).length;
@@ -487,14 +491,14 @@ Snake.Game.onInput = function(action) {
 	case 'end':
 		this.state.level = 50; // make sceen glitch a lot for a while
 		setTimeout(function(){
-			Snake.Game.initNewGame();
+			this.initNewGame();
 			this.ui.paint(this.state);
 		}.bind(this), 500);
 		break;
 	case 'pause':
 		this.state.state = 'play';
 	case 'menu':
-		Snake.Game.play();
+		this.play();
 	case 'play':
 	default:
 		if (action !== 'start') {

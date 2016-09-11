@@ -10,7 +10,7 @@ Snake.UI = {
 	buttons: document.getElementById("buttons"),
 	body: document.body,
 
-	cellSize: 20, //dimension of one cell
+	cellSize: 20, // dimension of one cell
 
 	iconLink: null, // <link> element for favicon
 	icons: {}, // icons generated from canvas for each mode
@@ -155,12 +155,12 @@ Snake.UI.init = function(state) {
 	this.bgCanvas.width = state.boardWidth * this.cellSize;
 	this.bgCanvas.height = state.boardHeight * this.cellSize;
 
-	Snake.UI.initFavicons(state.mode);
-	Snake.UI.initPixels(state);
-	Snake.UI.initSnakeCells();
-	Snake.UI.initWallCells();
+	this.initFavicons(state.mode);
+	this.initPixels(state);
+	this.initSnakeCells();
+	this.initWallCells();
 
-	Snake.UI.paintBG(state);
+	this.paintBG(state);
 
 	this.font = Snake.Font;
 };
@@ -304,7 +304,7 @@ Snake.UI.paintBG = function(state) {
 Snake.UI.paint = function(state) {
 	this.updateFavicon(state.mode);
 
-	//paint the board
+	// paint the board
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 	// reset pixels matrix

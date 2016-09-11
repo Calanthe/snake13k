@@ -39,22 +39,22 @@ Snake.Board.getOppositeWallCoords = function(x, y) {
 
 	var offset = state.borderOffset;
 
-	if (y === offset.top) { //if it's at the top wall
+	if (y === offset.top) { // if it's at the top wall
 		coords = {
 			x: x,
 			y: state.boardHeight - offset.bottom - 1
 		};
-	} else if (y === state.boardHeight - offset.bottom - 1) { //if it's at the bottom wall
+	} else if (y === state.boardHeight - offset.bottom - 1) { // if it's at the bottom wall
 		coords = {
 			x: x,
 			y: offset.top
 		};
-	} else if (x === offset.left) { //if on the left wall
+	} else if (x === offset.left) { // if on the left wall
 		coords = {
 			x: state.boardWidth - offset.right - 1,
 			y: y
 		};
-	} else if (x === state.boardWidth - offset.right - 1) { //if on the right wall
+	} else if (x === state.boardWidth - offset.right - 1) { // if on the right wall
 		coords = {
 			x: offset.left,
 			y: y
