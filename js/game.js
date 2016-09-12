@@ -304,9 +304,10 @@ Snake.Game.update = function() {
 			this.state.snake.shift(); // remove the first cell - tail
 			// make it smaller in every paint
 			if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
-				this.state.snake.shift();
+				this.glitchSnakeTail(10, this.state.snake.length - this.state.prevLength);
 			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
 				this.state.prevLength = null;
+				this.state.glitchedLength = 0;
 			}
 		} else if (this.state.mode === 'tron') {
 			this.state.score += 1; // score one point for every piece grown in tron mode
@@ -339,6 +340,27 @@ Snake.Game.update = function() {
 		} else { // decrease remaining time of the buggyBug
 			this.state.buggyBugTimeLeft--;
 		}
+	}
+};
+
+Snake.Game.glitchSnakeTail = function(maxGlitchedLength, glitchedLimit) {
+	var state = this.state;
+	var snake = state.snake;
+
+	var glitchStep = 1 / (maxGlitchedLength + 1);
+
+	// make the snake shorter every frame
+
+	if (state.glitchedLength === maxGlitchedLength || state.glitchedLength >= snake.length) {
+		snake.shift();
+	}
+	for (var i = 0; i <= state.glitchedLength; i++) {
+		if (state.snake[i] && (!glitchedLimit || i < glitchedLimit)) {
+			state.snake[i].isGlitched = glitchStep * (i+1);
+		}
+	}
+	if (state.glitchedLength < maxGlitchedLength) {
+		state.glitchedLength++;
 	}
 };
 
@@ -447,17 +469,7 @@ Snake.Game.gameOverUpdate = function() {
 	}
 	// make the snake shorter every frame
 	if (snake.length) {
-		if (state.glitchedLength === 20 || state.glitchedLength >= snake.length) {
-			snake.shift();
-		}
-		for (var i = 0; i <= state.glitchedLength; i++) {
-			if (state.snake[i]) {
-				state.snake[i].isGlitched = 0.045 * (i+1);
-			}
-		}
-		if (state.glitchedLength < 20) {
-			state.glitchedLength++;
-		}
+		this.glitchSnakeTail(20);
 	}
 };
 
@@ -465,7 +477,7 @@ Snake.Game.gameOverUpdate = function() {
 Snake.Game.ifCollidedWithSnake = function(x, y) {
 	// check if the x/y coordinates exist in the snake array
 	return this.state.snake.filter(function(cell) {
-		return cell.x === x && cell.y === y;
+		return cell.x === x && cell.y === y && !cell.isGlitched;
 	}).length;
 };
 
