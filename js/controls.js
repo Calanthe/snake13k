@@ -28,6 +28,12 @@ Snake.Controls.addListeners = function(callback) {
 		}
 	});
 
+	if (Snake.MOBILE) {
+		document.addEventListener("touchstart", function() {
+			callback('pause');
+		}, false);
+	}
+
 	// pause when page is hidden
 	document.addEventListener('visibilitychange', function(){
 		if (document.hidden) {
