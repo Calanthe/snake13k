@@ -488,8 +488,6 @@ Snake.Game.ifCollidedWithSnake = function(x, y) {
 };
 
 
-/* eslint no-fallthrough: "off" */
-
 Snake.Game.onInput = function(action) {
 	if (this.state.pauseInput) return;
 
