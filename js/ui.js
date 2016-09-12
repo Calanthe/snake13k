@@ -256,10 +256,10 @@ Snake.UI.paintScore = function(state) {
 
 	var buggyBugOnBoard = Snake.Game.findBuggyBugOnBoard();
 
-	this.paintString(9, 7, paddedScore, this.color[state.mode].wall);
+	this.paintString(9, 7, paddedScore, this.color[state.mode].snake);
 
 	paddedScore = this.addPad(state.hiscore, '0000');
-	this.paintString(47, 7, 'HI ' + paddedScore, this.color[state.mode].wall);
+	this.paintString(47, 7, 'HI ' + paddedScore, this.color[state.mode].snake);
 
 	if (buggyBugOnBoard.length === 2) {
 		// paint two parts of buggy bug in the top right corner

@@ -8,6 +8,6 @@
 - [x] uncomment buggubug random placement
 - [x] mute on desktop work with M key but is not visible
 - [x] pause on mobile
-- [ ] fix colors of text in TRON mode
+- [x] fix colors of text in TRON mode
 - [x] change the way snake dissapear after comming back from TRON to SNAKE mode
 - [ ] check if overflow hidden can be done on screen wrapper instead of html(body) - make sure it works on mobile
