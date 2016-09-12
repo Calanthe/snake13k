@@ -14,8 +14,8 @@
 
 ### CODE:
 
-- [ ] TODOs from code, remember about the buggy bug random value
+- [ ] TODOs from code
 - [x] refactor colors to use something like color[mode].wall
-- [ ] turn some long if/else into switches
-- [ ] clean up quick and dirty prototyping, remove console.logs
+- [x] turn some long if/else into switches
+- [x] clean up quick and dirty prototyping, remove console.logs
 - [ ] check also other browsers like eg IE?, do it also after minification

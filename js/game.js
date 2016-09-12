@@ -278,10 +278,16 @@ Snake.Game.update = function() {
 		}
 	}
 
-	if (this.state.direction === 'right') snakeX++;
-	else if (this.state.direction === 'left') snakeX--;
-	else if (this.state.direction === 'up') snakeY--;
-	else if (this.state.direction === 'down') snakeY++;
+	switch (this.state.direction) {
+		case 'right': snakeX++;
+			break;
+		case 'left': snakeX--;
+			break;
+		case 'up': snakeY--;
+			break;
+		case 'down': snakeY++;
+			break;
+	}
 
 	// if we will get out of the board
 	if (snakeX === -1) {
@@ -295,23 +301,25 @@ Snake.Game.update = function() {
 	}
 
 	// if the new head position matches the food
-	if (this.state.board[snakeX][snakeY].type === 'food') {
-		this.consumeFood(snakeX, snakeY);
-	} else if (this.state.board[snakeX][snakeY].type === 'buggybug') { //if the head position matches the buggy bug
-		this.consumeBuggyBug(snakeX, snakeY);
-	} else {
-		if (this.state.mode === 'snake') {
-			this.state.snake.shift(); // remove the first cell - tail
-			// make it smaller in every paint
-			if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
-				this.glitchSnakeTail(10, this.state.snake.length - this.state.prevLength);
-			} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
-				this.state.prevLength = null;
-				this.state.glitchedLength = 0;
+	switch (this.state.board[snakeX][snakeY].type) {
+		case 'food': this.consumeFood(snakeX, snakeY);
+			break;
+		case 'buggybug': this.consumeBuggyBug(snakeX, snakeY);
+			break;
+		default:
+			if (this.state.mode === 'snake') {
+				this.state.snake.shift(); // remove the first cell - tail
+				// make it smaller in every paint
+				if (this.state.prevLength && this.state.snake.length > this.state.prevLength) {
+					this.glitchSnakeTail(10, this.state.snake.length - this.state.prevLength);
+				} else if (this.state.prevLength && this.state.snake.length === this.state.prevLength) { //no need to make it smaller anymore
+					this.state.prevLength = null;
+					this.state.glitchedLength = 0;
+				}
+			} else if (this.state.mode === 'tron') {
+				this.state.score += 1; // score one point for every piece grown in tron mode
 			}
-		} else if (this.state.mode === 'tron') {
-			this.state.score += 1; // score one point for every piece grown in tron mode
-		}
+			break;
 	}
 
 	if (this.state.mode === 'sticky' && this.state.buggyBugTimeLeft-- < 0) {
@@ -366,12 +374,16 @@ Snake.Game.glitchSnakeTail = function(maxGlitchedLength, glitchedLimit) {
 
 Snake.Game.consumeFood = function(snakeX, snakeY) {
 	this.sound.playEatFood(this.state.mode);
+
 	this.state.score += 4 + this.state.level;
 	this.state.foodEaten += 1;
+
 	if (this.state.foodEaten % 5 === 0) this.state.level += 1;
+
 	this.state.mode = 'snake'; // fix the snake so the tail can move
 	this.addEdible(); // add new food before removing old one (to prevent it showing on same place)
 	this.state.board[snakeX][snakeY].type = '';
+
 	if (this.state.prevLength) this.state.prevLength += 1;
 };
 
@@ -427,9 +439,6 @@ Snake.Game.checkCollision = function(snakeX, snakeY) {
 	if (this.ifCollidedWithSnake(snakeX, snakeY) // if the snake will collide with itself
 		|| (this.state.board[snakeX][snakeY].type === 'wall' // or if the snake will collide with the walls
 				&& !this.state.board[snakeX][snakeY].isGlitched)) { // but not glitched walls
-
-		console.log('ifCollidedWithItself', this.ifCollidedWithSnake(snakeX, snakeY));
-		console.log('ifCollidedWithWalls', this.state.board[snakeX][snakeY].type === 'wall');
 
 		this.gameOver();
 	}
@@ -494,22 +503,24 @@ Snake.Game.onInput = function(action) {
 		if (this.state.state === 'play') {
 			this.state.state = 'pause';
 		}
-	} else switch (this.state.state) {
-	case 'end':
-		this.state.level = 50; // make sceen glitch a lot for a while
-		setTimeout(function(){
-			this.initNewGame();
-			this.ui.paint(this.state);
-		}.bind(this), 500);
-		break;
-	case 'pause':
-		this.state.state = 'play';
-	case 'menu':
-		this.play();
-	case 'play':
-	default:
-		if (action !== 'start') {
-			this.state.inputBuffer.push(action);
+	} else {
+		switch (this.state.state) {
+			case 'end':
+				this.state.level = 50; // make sceen glitch a lot for a while
+				setTimeout(function(){
+					this.initNewGame();
+					this.ui.paint(this.state);
+				}.bind(this), 500);
+				break;
+			case 'pause':
+				this.state.state = 'play';
+			case 'menu':
+				this.play();
+			case 'play':
+			default:
+				if (action !== 'start') {
+					this.state.inputBuffer.push(action);
+				}
 		}
 	}
 };
@@ -517,6 +528,7 @@ Snake.Game.onInput = function(action) {
 Snake.Game.readHiScore = function() {
 	var hi = 0;
 	var score;
+
 	if (localStorage) {
 		score = localStorage.getItem('SNAKE_HISCORE');
 		score = +score;
@@ -524,12 +536,11 @@ Snake.Game.readHiScore = function() {
 			hi = score;
 		}
 	}
-	console.log("readHiScore", hi);
+
 	return hi;
 };
 
 Snake.Game.saveHiScore = function(hi) {
-	console.log("saveHiScore", hi);
 	if (localStorage) {
 		localStorage.setItem('SNAKE_HISCORE', hi);
 	}

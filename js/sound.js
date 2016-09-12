@@ -138,7 +138,6 @@ Snake.Sound.initAudio = function() {
 
 Snake.Sound.play = function(name) {
 	var i = Snake.Game.random(0, this.sounds[name].length - 1);
-	console.log("play", name, i);
 
 	this.player.src = this.sounds[name][i];
 

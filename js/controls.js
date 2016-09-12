@@ -11,20 +11,25 @@ Snake.Controls.addListeners = function(callback) {
 
 		e.preventDefault();
 
-		if (keyCode === 37 || keyCode === 65) { //during the game read only arrow keys or WASD
-			callback('left');
-		} else if (keyCode === 38 || keyCode === 87) {
-			callback('up');
-		} else if (keyCode === 39 || keyCode === 68) {
-			callback('right');
-		} else if (keyCode === 40 || keyCode === 83) {
-			callback('down');
-		} else if (keyCode === 77) { // M toggles mute
-			callback('mute');
-		} else if (keyCode === 80) { // P pauses the game
-			callback('pause');
-		} else if (keyCode) { // any key can start the game
-			callback('start');
+		switch (keyCode) {
+			case 37: //during the game read only arrow keys or WASD
+			case 65: callback('left');
+				break;
+			case 38:
+			case 87: callback('up');
+				break;
+			case 39:
+			case 68: callback('right');
+				break;
+			case 40:
+			case 83: callback('down');
+				break;
+			case 77: callback('mute'); // M toggles mute
+				break;
+			case 80: callback('pause'); // P pauses the game
+				break;
+			default: // any key can start the game
+				callback('start');
 		}
 	});
 
