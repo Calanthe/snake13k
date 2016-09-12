@@ -1,15 +1,19 @@
-html {
-  overflow: hidden; /* because screen bevel cause scroll to show up */
-}
-
 body {
   background: #333;
   margin: 0;
-  min-height: 1200px;
-  overflow: hidden; /* because screen bevel cause scroll to show up */
 }
 
-.sceeen-wrapper {
+html.mobile {
+  overflow-x: hidden; /* to disable horizontal scrolling caused by big touch buttons */
+  overflow-y: scroll;
+}
+
+.mobile body {
+  min-height: 1100px;
+  overflow: hidden; /* to disable horizontal scrolling caused by big touch buttons */
+}
+
+.screen-wrapper {
   width: 650px;
   margin: 0 auto;
   overflow: hidden; /* because screen bevel cause scroll to show up */

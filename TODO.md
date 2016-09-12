@@ -10,4 +10,4 @@
 - [x] pause on mobile
 - [x] fix colors of text in TRON mode
 - [x] change the way snake dissapear after comming back from TRON to SNAKE mode
-- [ ] check if overflow hidden can be done on screen wrapper instead of html(body) - make sure it works on mobile
+- [x] check if overflow hidden can be done on screen wrapper instead of html(body) - make sure it works on mobile
