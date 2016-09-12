@@ -129,39 +129,6 @@ canvas {
   height: 100px;
 }
 
-.controls button[data-action=mute] {
-  right: 0;
-}
-
-.controls button:after {
-  font-family: monospace;
-  font-size: 24px;
-  text-align: center;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  line-height: 100px;
-  text-shadow: #777 0 0 2px;
-}
-
-.controls button[data-action=mute]:after {
-  content: "MUTE";
-}
-
-.controls button[data-action=mute].on:after {
-  content: "UNMUTE";
-}
-
-/* TODO: add pause button? needs some changes in how pause works
-.controls button[data-action=pause]:after {
-  content: "PAUSE";
-}
-.controls button[data-action=pause].on:after {
-  content: "PLAY";
-}
-*/
-
 .controls button:focus {
   outline: none;
 }
@@ -169,7 +136,7 @@ canvas {
 .controls.hint button,
 .controls button.active,
 .controls button.on {
-  background: rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.2);
   outline: none;
 }
 
@@ -191,4 +158,33 @@ canvas {
 .controls button[data-action=right] {
   top: 175px;
   left: 400px;
+}
+
+.controls button[data-action=mute] {
+  right: 0;
+  background-position: 50% 50%;
+  background-size: 70px 80px;
+  background-repeat: no-repeat;
+}
+
+/*
+  SVG "SPEAKER WITH 3 SOUND WAVES" Uniode 🔊
+  http://www.fileformat.info/info/unicode/char/1f50a/index.htm
+
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" stroke="#000" fill-opacity="0.7" stroke-miterlimit="10" color-interpolation="auto" stroke-linecap="square" font-family="'Dialog'" font-size="12"><path stroke="none" d="M266.8 198.7q0 64.8-44 120.5l-10.2-8q41.2-51 41.2-112.5 0-60.2-41-112.4l10.2-8q43.8 55.6 43.8 120.4zm-31 0q0 54-36.3 101.3l-10.2-7.8q33.6-44 33.6-93.5 0-49.4-34-93.4l10.2-7.7q36.3 46.5 36.3 101zm-31 0q0 42.6-28.7 82l-10-7.7q26-35 26-74 0-38.4-26.2-74.4L176 117q29 39.5 29 82zM136.2 301l-66-61H28v-82.5h42l66-61V301z"/></svg>
+*/
+.controls button[data-action=mute] {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgNDAwIiBzdHJva2U9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC43IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGNvbG9yLWludGVycG9sYXRpb249ImF1dG8iIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIGZvbnQtZmFtaWx5PSInRGlhbG9nJyIgZm9udC1zaXplPSIxMiI+PHBhdGggc3Ryb2tlPSJub25lIiBkPSJNMjY2LjggMTk4LjdxMCA2NC44LTQ0IDEyMC41bC0xMC4yLThxNDEuMi01MSA0MS4yLTExMi41IDAtNjAuMi00MS0xMTIuNGwxMC4yLThxNDMuOCA1NS42IDQzLjggMTIwLjR6bS0zMSAwcTAgNTQtMzYuMyAxMDEuM2wtMTAuMi03LjhxMzMuNi00NCAzMy42LTkzLjUgMC00OS40LTM0LTkzLjRsMTAuMi03LjdxMzYuMyA0Ni41IDM2LjMgMTAxem0tMzEgMHEwIDQyLjYtMjguNyA4MmwtMTAtNy43cTI2LTM1IDI2LTc0IDAtMzguNC0yNi4yLTc0LjRMMTc2IDExN3EyOSAzOS41IDI5IDgyek0xMzYuMiAzMDFsLTY2LTYxSDI4di04Mi41aDQybDY2LTYxVjMwMXoiLz48L3N2Zz4=");
+
+}
+
+/*
+  SVG "SPEAKER WITH CANCELLATION STROKE" Uniode 🔇
+  http://www.fileformat.info/info/unicode/char/1f507/index.htm
+
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" stroke="#000" fill-opacity="0.7" stroke-miterlimit="10" color-interpolation="auto" stroke-linecap="square" font-family="'Dialog'" font-size="12"><path stroke="none" d="M266.8 198.7q0 64.8-44 120.5l-10.2-8q41.2-51 41.2-112.5 0-60.2-41-112.4l10.2-8q43.8 55.6 43.8 120.4zm-31 0q0 54-36.3 101.3l-10.2-7.8q33.6-44 33.6-93.5 0-49.4-34-93.4l10.2-7.7q36.3 46.5 36.3 101zm-31 0q0 42.6-28.7 82l-10-7.7q26-35 26-74 0-38.4-26.2-74.4L176 117q29 39.5 29 82zM136.2 301l-66-61H28v-82.5h42l66-61V301z"/></svg>
+*/
+.controls button[data-action=mute].on {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgNDAwIiBzdHJva2U9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC43IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGNvbG9yLWludGVycG9sYXRpb249ImF1dG8iIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIGZvbnQtZmFtaWx5PSInRGlhbG9nJyIgZm9udC1zaXplPSIxMiI+PHBhdGggc3Ryb2tlPSJub25lIiBkPSJNMjQ3LjYgMzA1LjdsLTExLjggMTEuOC02NS42LTY1LjZ2NDlMMTA0IDI0MEg2MnYtODIuNWgxNGwtNzYtNzYgMTEuOC0xMS44IDg3LjggODcuOGg0LjVsNjYuMy02MXYxMzEuN2w3Ny40IDc3LjV6Ii8+PC9zdmc+");
+  background-position: 20px 50%;
 }
