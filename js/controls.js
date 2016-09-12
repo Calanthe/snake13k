@@ -29,7 +29,7 @@ Snake.Controls.addListeners = function(callback) {
 	});
 
 	if (Snake.MOBILE) {
-		document.addEventListener("touchstart", function() {
+		document.getElementById('s').addEventListener("touchstart", function() {
 			callback('pause');
 		}, false);
 	}
