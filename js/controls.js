@@ -11,13 +11,13 @@ Snake.Controls.addListeners = function(callback) {
 
 		e.preventDefault();
 
-		if (keyCode === 37) { //during the game read only arrow keys
+		if (keyCode === 37 || keyCode === 65) { //during the game read only arrow keys or WASD
 			callback('left');
-		} else if (keyCode === 38) {
+		} else if (keyCode === 38 || keyCode === 87) {
 			callback('up');
-		} else if (keyCode === 39) {
+		} else if (keyCode === 39 || keyCode === 68) {
 			callback('right');
-		} else if (keyCode === 40) {
+		} else if (keyCode === 40 || keyCode === 83) {
 			callback('down');
 		} else if (keyCode === 77) { // M toggles mute
 			callback('mute');

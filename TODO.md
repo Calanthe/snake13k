@@ -3,7 +3,7 @@
 - [x] snake disappearing after game over
  - [x] make is smaller step by step
  - [x] make it glitch out gradually (different probability)
-- [ ] use WSAD keys to move snake too (for lefthanded people)
+- [x] use WSAD keys to move snake too (for lefthanded people)
 - [x] mute button on mobile to use some background icon image instead of text
 - [ ] uncomment buggubug random placement
 - [ ] mute on desktop work with M key but is not visible
