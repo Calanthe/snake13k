@@ -5,17 +5,9 @@
  - [x] make it glitch out gradually (different probability)
 - [x] use WSAD keys to move snake too (for lefthanded people)
 - [x] mute button on mobile to use some background icon image instead of text
-- [ ] uncomment buggubug random placement
-- [ ] mute on desktop work with M key but is not visible
+- [x] uncomment buggubug random placement
+- [x] mute on desktop work with M key but is not visible
 - [x] pause on mobile
 - [ ] fix colors of text in TRON mode
 - [x] change the way snake dissapear after comming back from TRON to SNAKE mode
 - [ ] check if overflow hidden can be done on screen wrapper instead of html(body) - make sure it works on mobile
-
-### CODE:
-
-- [ ] TODOs from code
-- [x] refactor colors to use something like color[mode].wall
-- [x] turn some long if/else into switches
-- [x] clean up quick and dirty prototyping, remove console.logs
-- [ ] check also other browsers like eg IE?, do it also after minification

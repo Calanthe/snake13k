@@ -35,8 +35,6 @@ Snake.Game.initStateValues = function() {
 	};
 };
 
-// TODO: wrap in function and turn to local vars?
-//       or make a 'class' with prototype
 Snake.Game.vars = {
 	then: null,
 	animationId: null
@@ -428,8 +426,7 @@ Snake.Game.findBuggyBugOnBoard = function() {
 };
 
 Snake.Game.addEdible = function() {
-	// TODO: random buggybug when we stop testing
-	if (this.state.level > 2 /*&& Math.random() < 0.3*/ && !this.findBuggyBugOnBoard().length) {
+	if (this.state.level > 2 && Math.random() < 0.3 && !this.findBuggyBugOnBoard().length) {
 		this.initBuggyBug();
 	}
 	this.initFood();
@@ -497,7 +494,6 @@ Snake.Game.onInput = function(action) {
 	if (this.state.pauseInput) return;
 
 	if (action === 'mute') {
-		// TODO: mute state is not visible in UI anywhere :(
 		this.sound.toggleMute();
 	} else if (action === 'pause') {
 		if (this.state.state === 'play') {
