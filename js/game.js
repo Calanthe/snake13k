@@ -150,17 +150,22 @@ Snake.Game.initBuggyBug = function() {
 Snake.Game.initEdible = function(type) {
 	var minX, maxX, minY, maxY, offset = 0;
 
+	var topWallY = this.state.borderOffset.top;
+	var bottomWallY = this.state.boardHeight - this.state.borderOffset.bottom - 1;
+	var leftWallX = this.state.borderOffset.left;
+	var rightWallX = this.state.boardWidth - this.state.borderOffset.right - 1;
+
 	if (this.state.level === 1) { // food on first level always inside of the board
 		offset = 1;
 	}
 
 	if (!this.state.holeInTheWall) {
 		// if there is no hole in the wall yet let food show on walls but not outside
-		minX = this.state.borderOffset.left + offset;
-		maxX = this.state.boardWidth - this.state.borderOffset.right - 1 - offset;
+		minX = leftWallX + offset;
+		maxX = rightWallX - offset;
 
-		minY = this.state.borderOffset.top + offset;
-		maxY = this.state.boardHeight - this.state.borderOffset.bottom - 1 - offset;
+		minY = topWallY + offset;
+		maxY = bottomWallY - offset;
 	} else {
 		// if there is a hole, edible can be outside of the board walls
 		minX = minY = 0;
@@ -189,24 +194,19 @@ Snake.Game.initEdible = function(type) {
 			|| (randomX === maxX && randomY === minY)
 			|| (randomX === maxX && randomY === maxY))
 		||
-			// also exclude top right corner of the wall
-			((randomX === this.state.boardWidth - this.state.borderOffset.right - 1 && randomY === offset.top)
-			// top left corner
-			|| (randomX === offset.left && randomY === offset.top)
-			// bottom right corner
-			|| (randomY === this.state.boardHeight - this.state.borderOffset.bottom - 1
-				&& randomX === this.state.boardWidth - this.state.borderOffset.right - 1)
-			// bottom left corner
-			|| (randomY === this.state.boardHeight - this.state.borderOffset.bottom - 1 && randomX === offset.left)));
+			((randomX === rightWallX && randomY === topWallY) // also exclude top right corner of the wall
+			|| (randomX === leftWallX && randomY === topWallY) // top left corner
+			|| (randomY === bottomWallY && randomX === rightWallX) // bottom right corner
+			|| (randomY === bottomWallY && randomX === leftWallX))); // bottom left corner
 
 	// if edible happens to be on wall glitch opposite wall so snake can go through
 	if (this.state.board[randomX][randomY].type === 'wall') {
-		this.board.glitchOppositeWall(randomX, randomY);
+		this.board.glitchOppositeWall(randomX, randomY, this.state);
 		this.state.holeInTheWall = true;
 
 		// if edible is a buggy bug and is located on the top or bottom wall, glitch another wall next to the previous one
-		if (type === 'buggybug' && (randomY === minY || randomY === maxY)) {
-			this.board.glitchOppositeWall(randomX + 1, randomY);
+		if (type === 'buggybug' && (randomY === topWallY || randomY === bottomWallY)) {
+			this.board.glitchOppositeWall(randomX + 1, randomY, this.state);
 		}
 	}
 
@@ -214,17 +214,19 @@ Snake.Game.initEdible = function(type) {
 		type: type
 	};
 
-	if (type === 'buggybug') { // buggybug's body has two parts
+	if (type === 'buggybug') {
+		if (this.state.board[randomX + 1][randomY].type === 'wall') { // glitch opposite wall even if only right part is on the wall
+			this.board.glitchOppositeWall(randomX + 1, randomY, this.state);
+			this.state.holeInTheWall = true;
+		}
+
+		// buggybug's body has two parts
 		var bugNo = this.random(1, 5);
 		this.state.board[randomX][randomY].body = 'bug' + bugNo + 'Left'; // info about the body part
 		this.state.board[randomX + 1][randomY] = {
 			type: type,
 			body: 'bug' + bugNo + 'Right' // info about the body part
 		};
-		if (this.state.board[randomX + 1][randomY].type === 'wall') { // glitch opposite wall even if only right part is on the wall
-			this.board.glitchOppositeWall(randomX + 1, randomY);
-			this.state.holeInTheWall = true;
-		}
 		var timeout = this.getDistanceFromHead(randomX, randomY) + 10;
 		timeout = timeout - (timeout % 10) + 10;
 		this.state.buggyBugTimeLeft = timeout;

@@ -26,15 +26,14 @@ Snake.Board.initBoard = function(state) {
 	}
 };
 
-Snake.Board.glitchOppositeWall = function(x, y) {
-	var oppositeCoords = this.getOppositeWallCoords(x, y);
+Snake.Board.glitchOppositeWall = function(x, y, state) {
+	var oppositeCoords = this.getOppositeWallCoords(x, y, state);
 	if (oppositeCoords) {
-		this.glitchSingleWall(oppositeCoords.x, oppositeCoords.y);
+		this.glitchSingleWall(oppositeCoords.x, oppositeCoords.y, state);
 	}
 };
 
-Snake.Board.getOppositeWallCoords = function(x, y) {
-	var state = Snake.Game.state;
+Snake.Board.getOppositeWallCoords = function(x, y, state) {
 	var coords;
 
 	var offset = state.borderOffset;
@@ -64,16 +63,8 @@ Snake.Board.getOppositeWallCoords = function(x, y) {
 	return coords;
 };
 
-Snake.Board.addSingleWall = function(x, y) {
-	Snake.Game.state.board[x][y].type = 'wall';
-};
-
-Snake.Board.removeSingleWall = function(x, y) {
-	Snake.Game.state.board[x][y].type = '';
-};
-
-Snake.Board.glitchSingleWall = function(x, y) {
-	if (Snake.Game.state.board[x][y].type === 'wall') {
-		Snake.Game.state.board[x][y].isGlitched = true;
+Snake.Board.glitchSingleWall = function(x, y, state) {
+	if (state.board[x][y].type === 'wall') {
+		state.board[x][y].isGlitched = true;
 	}
 };
